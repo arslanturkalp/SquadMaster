@@ -55,7 +55,11 @@
     <string name="competitive_mode">Ana Oyun</string>
     <string name="league_mode">Lig Modu</string>
 
-    <string name="rank_list_by_best_points">Ana Oyun Modundaki En Yüksek Puanlar</string>
+    <string name="rank_list_by_best_scores">Ana Oyun Modundaki En Yüksek Skorlar</string>
     <string name="rank_list_by_total_points">En Yüksek Toplam Puana Sahip Oyuncular</string>
-    <string name="high_score">Yüksek Puan Tablosu</string>
+    <string name="high_score">Puan Tablosu</string>
+
+    <string name="best_score">En İyi Skor</string>
+    <string name="total_point">Toplam Puan</string>
+    <string name="me">Ben</string>
 </resources>

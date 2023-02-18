@@ -54,8 +54,12 @@
 
     <string name="competitive_mode">Maın Game</string>
     <string name="league_mode">League Mode</string>
-    <string name="rank_list_by_best_points">Rank List by Best Points</string>
+    <string name="rank_list_by_best_scores">Rank List by Best Scores</string>
     <string name="rank_list_by_total_points">Rank List by Total Points</string>
     <string name="high_score">High Score Table</string>
+
+    <string name="best_score">Best Score</string>
+    <string name="total_point">Total Point</string>
+    <string name="me">Me</string>
 
 </resources>

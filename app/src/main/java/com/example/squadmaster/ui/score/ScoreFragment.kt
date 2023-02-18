@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.squadmaster.R
 import com.example.squadmaster.application.SessionManager.getUserID
 import com.example.squadmaster.databinding.FragmentScoreBinding
@@ -16,7 +17,7 @@ import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.utils.setVisibility
 import com.example.squadmaster.utils.showAlertDialogTheme
 
-class ScoreFragment: BaseFragment() {
+class ScoreFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val binding by lazy { FragmentScoreBinding.inflate(layoutInflater) }
 
@@ -36,10 +37,10 @@ class ScoreFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupObservers()
+        setupSwipeRefresh()
         setupRecyclerViews()
 
         viewModel.getUserPoint(getUserID())
-        viewModel.getRankList()
 
         homeFragment = HomeFragment()
 
@@ -66,7 +67,7 @@ class ScoreFragment: BaseFragment() {
                 is ScoreViewState.LoadingState -> showProgressDialog()
                 is ScoreViewState.SuccessState -> {
                     dismissProgressDialog()
-                    setVisibility(View.VISIBLE, binding.tvTitleBestPoints, binding.tvTitleTotalPoints)
+                    setVisibility(View.VISIBLE, binding.tvTitleBestScores, binding.tvTitleTotalPoints)
                     bestPointsAdapter.updateAdapter(state.response.data.userBestPoints)
                     totalPointsAdapter.updateAdapter(state.response.data.userTotalPoints)
                 }
@@ -79,11 +80,15 @@ class ScoreFragment: BaseFragment() {
                     state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
                 }
                 is ScoreViewState.UserPointState -> {
-
+                    dismissProgressDialog()
+                    binding.tvUserTotalPoint.text = state.response.data.point.toString()
+                    binding.tvUserBestScore.text = state.response.data.bestPoint.toString()
                 }
             }
         }
     }
+
+    private fun setupSwipeRefresh() = binding.swipeRefreshLayout.setOnRefreshListener(this)
 
     private fun setupRecyclerViews() {
         binding.rvBestPoints.apply {
@@ -94,5 +99,10 @@ class ScoreFragment: BaseFragment() {
             adapter = totalPointsAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
+    }
+
+    override fun onRefresh() {
+        binding.swipeRefreshLayout.isRefreshing = false
+        viewModel.getUserPoint(getUserID())
     }
 }

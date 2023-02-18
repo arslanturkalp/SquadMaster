@@ -1,57 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/green"
-    android:orientation="vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:background="@color/green">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/josefin_sans"
-        android:text="@string/high_score"
-        android:textColor="@color/white"
-        android:textSize="28sp" />
+        android:layout_height="match_parent"
+        android:background="@color/green">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTitleBestPoints"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/rank_list_by_best_points"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvBestPoints"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:itemCount="10"
-        tools:listitem="@layout/row_layout_score" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_white"
+                android:orientation="horizontal"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTitleTotalPoints"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/rank_list_by_total_points"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:visibility="gone"
-        tools:visibility="visible" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:padding="16dp"
+                    android:text="@string/me"
+                    android:textColor="@color/green"
+                    android:textSize="18sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTotalPoints"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:itemCount="4"
-        tools:listitem="@layout/row_layout_score" />
-</LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/total_point"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/green"
+                        android:textSize="11sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvUserTotalPoint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red"
+                        android:textSize="18sp"
+                        tools:text="50" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/best_score"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/green"
+                        android:textSize="11sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvUserBestScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red"
+                        android:textSize="18sp"
+                        tools:text="50" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/josefin_sans"
+                android:text="@string/high_score"
+                android:textColor="@color/white"
+                android:textSize="28sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTitleBestScores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/rank_list_by_best_scores"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBestPoints"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:itemCount="10"
+                tools:listitem="@layout/row_layout_score" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTitleTotalPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/rank_list_by_total_points"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTotalPoints"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:itemCount="4"
+                tools:listitem="@layout/row_layout_score" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

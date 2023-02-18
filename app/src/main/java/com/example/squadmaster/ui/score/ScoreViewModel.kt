@@ -14,7 +14,7 @@ class ScoreViewModel: BaseViewModel() {
     private val viewState = MutableLiveData<ScoreViewState>()
     val getViewState: LiveData<ScoreViewState> = viewState
 
-    fun getRankList() {
+    private fun getRankList() {
         compositeDisposable.addAll(
             remoteDataSource
                 .getRankList()
@@ -43,6 +43,7 @@ class ScoreViewModel: BaseViewModel() {
                         Status.SUCCESS -> {
                             val response = it.data!!
                             viewState.postValue(ScoreViewState.UserPointState(response))
+                            getRankList()
                         }
                         Status.ERROR -> viewState.postValue(ScoreViewState.ErrorState(it.message!!))
                     }
