@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">Squad Master</string>
+    <string name="search">Ara</string>
+
+    //ALERT DIALOG
+    <string name="info">Bilgi</string>
+    <string name="error">Hata</string>
+    <string name="warning">Uyarı</string>
+    <string name="done">Tamam</string>
+    <string name="cancel">Vazgeç</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="ok">OK</string>
+    <string name="correct_answer">Doğru Cevap</string>
+    <string name="wrong_answer">Yanlış Cevap</string>
+    <string name="back">Geri</string>
+
+    <string name="home">Ana Menü</string>
+    <string name="leagues">Ligler</string>
+    <string name="score">Skor</string>
+
+    <string name="start">Başla</string>
+    <string name="next_level">Sonraki Seviye</string>
+    <string name="restart">Yeniden Başla</string>
+    <string name="game_over">Oyun Bitti</string>
+    <string name="yellow_card">Sarı Kart</string>
+
+    <string name="formatted_score">Skor: %1$s</string>
+    <string name="formatted_wrong_answer">Maalesef doğru cevap %1$s değil. Puan almak için tekrar deneyin.</string>
+    <string name="insufficient_score">Yetersiz puan</string>
+    <string name="total_score">En İyi Puan: %1$s \n \n Toplam Puan: %2$s</string>
+
+    <string name="name">Ad</string>
+    <string name="surname">Soyad</string>
+    <string name="username">Kullanıcı Adı</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Şifre</string>
+
+    <string name="login">Giriş Yap</string>
+    <string name="register">Kayıt Ol</string>
+    <string name="txt_continue">Devam Et</string>
+    <string name="quit_game">Oyundan Çık</string>
+
+    <string name="remember_me">Beni Hatırla</string>
+    <string name="yellow_card_description">Sonraki yanlış cevabında oyun sonlanacak.</string>
+    <string name="score_not_save_reminder">Oyundan çıkman durumunda skorun kaydedilmeyecek.</string>
+    <string name="back_to_main_menu">Ana Menüye Dön</string>
+    <string name="game_close_alert">Oyun kapatılacaktır. Emin misiniz?</string>
+    <string name="close_game">Oyundan Çık</string>
+    <string name="select_answer">Cevap Seç</string>
+
+    <string name="show_flag">Oyuncunun Ülkesini Göster</string>
+    <string name="show_flag_description">Oyuncunun ülkesi 50 puan karşılığında gösterilecektir. Onaylıyor musunuz?</string>
+
+    <string name="competitive_mode">Ana Oyun</string>
+    <string name="league_mode">Lig Modu</string>
+
+    <string name="rank_list_by_best_points">Ana Oyun Modundaki En Yüksek Puanlar</string>
+    <string name="rank_list_by_total_points">En Yüksek Toplam Puana Sahip Oyuncular</string>
+    <string name="high_score">Yüksek Puan Tablosu</string>
+</resources>

@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">Squad Master</string>
+    <string name="search">Search</string>
+
+    //ALERT DIALOG
+    <string name="info">Info</string>
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="correct_answer">Correct Answer</string>
+    <string name="wrong_answer">Wrong Answer</string>
+    <string name="back">Back</string>
+
+    <string name="home">Home</string>
+    <string name="leagues">Leagues</string>
+    <string name="score">Score</string>
+
+    <string name="start">Start</string>
+    <string name="next_level">Next Level</string>
+    <string name="restart">Restart</string>
+    <string name="game_over">Game Over</string>
+    <string name="yellow_card">Yellow Card</string>
+
+    <string name="formatted_score">Score: %1$s</string>
+    <string name="formatted_wrong_answer">Unfortunately, the correct answer is not %1$s. Try again to get points.</string>
+    <string name="insufficient_score">Unsufficient point.</string>
+    <string name="total_score">Best Score: %1$s \n \n Total Score: %2$s</string>
+
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="username">User Name</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Password</string>
+
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="txt_continue">Continue</string>
+    <string name="quit_game">Quıt Game</string>
+
+    <string name="remember_me">Remember Me</string>
+    <string name="yellow_card_description">The next wrong answer will be game over.</string>
+    <string name="score_not_save_reminder">If you exit the game, your score will not be saved.</string>
+    <string name="back_to_main_menu">Back to Main Menu</string>
+    <string name="game_close_alert">The game will be closed. Are you sure?</string>
+    <string name="close_game">Close Game</string>
+    <string name="select_answer">Select Answer</string>
+
+    <string name="show_flag">Show Player\'s Country</string>
+    <string name="show_flag_description">The player\'s country will be displayed for 50 points. Do you confirm?</string>
+
+    <string name="competitive_mode">Maın Game</string>
+    <string name="league_mode">League Mode</string>
+    <string name="rank_list_by_best_points">Rank List by Best Points</string>
+    <string name="rank_list_by_total_points">Rank List by Total Points</string>
+    <string name="high_score">High Score Table</string>
+
+</resources>

@@ -1,0 +1,99 @@
+package com.example.squadmaster.ui.answer
+
+import BaseBottomSheetDialogFragment
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.example.squadmaster.R
+import com.example.squadmaster.application.SessionManager.updateRefreshToken
+import com.example.squadmaster.application.SessionManager.updateToken
+import com.example.squadmaster.databinding.FragmentAnswerBinding
+import com.example.squadmaster.ui.game.GameActivity
+import com.example.squadmaster.utils.showAlertDialogTheme
+
+class AnswerFragment : BaseBottomSheetDialogFragment() {
+
+    private val binding by lazy { FragmentAnswerBinding.inflate(layoutInflater) }
+
+    private val viewModel by viewModels<AnswerViewModel>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return binding.root.also {
+            arguments?.let { bundle ->
+                with(binding) {
+                    tvPlayerName.text = bundle.getString("KEY_PLAYER_NAME")
+                    ivPlayerPhoto.apply {
+                        Glide.with(context)
+                            .asBitmap()
+                            .load(bundle.getString("KEY_IMAGE_PATH"))
+                            .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                            .into(this)
+                    }
+
+                    btnNext.apply {
+                        text = if (bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")) { getString(R.string.next_level) } else { getString(R.string.txt_continue) }
+                        setOnClickListener {
+                            if (bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")) {
+                                context?.startActivity((GameActivity.createIntent(context)))
+                            } else {
+                                dismiss()
+                                requireActivity().onBackPressedDispatcher.onBackPressed()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.getViewState.observe(this) { state ->
+            when (state) {
+                is AnswerViewState.LoadingState -> showProgressDialog()
+                is AnswerViewState.ErrorState -> {
+                    dismissProgressDialog()
+                }
+                is AnswerViewState.WarningState -> {
+                    dismissProgressDialog()
+                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
+                }
+                is AnswerViewState.RefreshState -> {
+                    dismissProgressDialog()
+                    updateToken(state.response.data.token.accessToken)
+                    updateRefreshToken(state.response.data.token.refreshToken)
+                }
+                is AnswerViewState.UserPointState -> {}
+            }
+        }
+    }
+
+    companion object {
+
+        private const val KEY_PLAYER_NAME = "KEY_PLAYER_NAME"
+        private const val KEY_IMAGE_PATH = "KEY_IMAGE_PATH"
+
+        private const val KEY_IS_FROM_INFINITE_MODE = "KEY_IS_FROM_INFINITE_MODE"
+
+        fun newInstance(playerName: String, imagePath: String, isFromInfiniteMode: Boolean = false): AnswerFragment = AnswerFragment().apply {
+
+            this.isCancelable = false
+            arguments = Bundle().apply {
+                putString(KEY_PLAYER_NAME, playerName)
+                putString(KEY_IMAGE_PATH, imagePath)
+                putBoolean(KEY_IS_FROM_INFINITE_MODE, isFromInfiniteMode)
+            }
+        }
+    }
+}

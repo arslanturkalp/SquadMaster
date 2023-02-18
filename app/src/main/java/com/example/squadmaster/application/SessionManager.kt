@@ -1,0 +1,144 @@
+package com.example.squadmaster.application
+
+import android.nfc.cardemulation.HostApduService
+import com.orhanobut.hawk.Hawk
+
+object SessionManager {
+
+    private const val KEY_UNKNOWN_ANSWER = "KEY_UNKNOWN_ANSWER"
+    private const val KEY_UNKNOWN_IMAGE = "KEY_UNKNOWN_IMAGE"
+
+    private const val KEY_TOKEN = "KEY_TOKEN"
+    private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
+
+    private const val KEY_SCORE = "KEY_SCORE"
+    private const val KEY_WRONG_COUNT = "KEY_WRONG_COUNT"
+
+    private const val KEY_USER_ID = "KEY_USER_ID"
+    private const val KEY_USER_NAME = "KEY_USER_NAME"
+    private const val KEY_PASSWORD = "KEY_PASSWORD"
+
+    private var unknownAnswer: String = ""
+    private var unknownImage: String = ""
+    private var token: String = ""
+    private var refreshToken: String = ""
+
+    private var userID: Int = 0
+    private var score: Int = 0
+    private var wrongCount: Int = 0
+
+    private var userName: String = ""
+    private var password: String = ""
+
+    init {
+        unknownAnswer = Hawk.get(KEY_UNKNOWN_ANSWER, "")
+        unknownImage = Hawk.get(KEY_UNKNOWN_IMAGE, "")
+        token = Hawk.get(KEY_TOKEN, "")
+        refreshToken = Hawk.get(KEY_REFRESH_TOKEN, "")
+        userID = Hawk.get(KEY_USER_ID, 0)
+        score = Hawk.get(KEY_SCORE, 0)
+        wrongCount = Hawk.get(KEY_WRONG_COUNT, 0)
+        userName = Hawk.get(KEY_USER_NAME, "")
+        password = Hawk.get(KEY_PASSWORD, "")
+
+    }
+
+    fun updateUnknownAnswer(value: String) {
+        Hawk.put(KEY_UNKNOWN_ANSWER, value)
+        unknownAnswer = value
+    }
+
+    fun getUnknownAnswer() = unknownAnswer
+
+    fun clearUnknownAnswer() {
+        updateUnknownAnswer("")
+    }
+
+    fun updateUnknownImage(value: String) {
+        Hawk.put(KEY_UNKNOWN_IMAGE, value)
+        unknownImage = value
+    }
+
+    fun getUnknownImage() = unknownImage
+
+    fun clearUnknownImage() {
+        updateUnknownImage("")
+    }
+
+    fun updateToken(value: String) {
+        Hawk.put(KEY_TOKEN, value)
+        token = value
+    }
+
+    fun getToken() = token
+
+    fun clearToken() {
+        updateToken("")
+    }
+
+    fun updateRefreshToken(value: String) {
+        Hawk.put(KEY_REFRESH_TOKEN, value)
+        refreshToken = value
+    }
+
+    fun getRefreshToken() = refreshToken
+
+    fun clearRefreshToken() {
+        updateRefreshToken("")
+    }
+
+    fun updateUserID(value: Int) {
+        Hawk.put(KEY_USER_ID, value)
+        userID = value
+    }
+
+    fun getUserID() = userID
+
+    fun clearUserID() {
+        updateUserID(0)
+    }
+
+    fun updateScore(value: Int) {
+        Hawk.put(KEY_SCORE, value)
+        score = value
+    }
+
+    fun getScore() = score
+
+    fun clearScore() {
+        score = 0
+    }
+
+    fun updateWrongCount(value: Int) {
+        Hawk.put(KEY_WRONG_COUNT, value)
+        wrongCount = value
+    }
+
+    fun getWrongCount() = wrongCount
+
+    fun clearWrongCount() {
+        wrongCount = 0
+    }
+
+    fun updateUserName(value: String) {
+        Hawk.put(KEY_USER_NAME, value)
+        userName = value
+    }
+
+    fun getUserName() = userName
+
+    fun clearUserName() {
+        updateUserName("")
+    }
+
+    fun updatePassword(value: String) {
+        Hawk.put(KEY_PASSWORD, value)
+        password = value
+    }
+
+    fun getPassword() = password
+
+    fun clearPassword() {
+        updatePassword("")
+    }
+}
