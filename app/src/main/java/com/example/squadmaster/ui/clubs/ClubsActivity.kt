@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
+import com.example.squadmaster.application.SessionManager.getClubLevel
 import com.example.squadmaster.application.SessionManager.updateRefreshToken
 import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.databinding.FragmentClubsBinding
@@ -48,7 +49,8 @@ class ClubsActivity : BaseActivity() {
         setupObservers()
 
         val league = (intent.getDataExtra(EXTRAS_LEAGUE) as League)
-        viewModel.getSquadListByLeague(league.id)
+        viewModel.getSquadListByLeague(league.level, getClubLevel())
+
         binding.apply {
             tvLeagueName.text = league.name
             ivLeague.apply {
@@ -100,17 +102,17 @@ class ClubsActivity : BaseActivity() {
                 }
                 is GetSquadListViewState.RefreshState -> {
                     dismissProgressDialog()
-                    updateToken(state.response.data.token.accessToken)
-                    updateRefreshToken(state.response.data.token.refreshToken)
+                    updateToken(state.response.accessToken)
+                    updateRefreshToken(state.response.refreshToken)
 
-                    viewModel.getSquadListByLeague(1)
+                    viewModel.getSquadListByLeague(1, getClubLevel())
                 }
             }
         }
     }
 
     private fun showClubs(clubs: List<Club>) {
-        clubAdapter.updateAdapter(clubs.sortedBy { it.name })
+        clubAdapter.updateAdapter(clubs.sortedBy { it.level })
     }
 
     private fun openSquad(club: Club) {

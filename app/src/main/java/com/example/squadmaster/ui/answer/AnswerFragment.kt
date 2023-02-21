@@ -43,7 +43,7 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
                                 context?.startActivity((GameActivity.createIntent(context)))
                             } else {
                                 dismiss()
-                                requireActivity().onBackPressedDispatcher.onBackPressed()
+                                activity?.onBackPressedDispatcher?.onBackPressed()
                             }
                         }
                     }
@@ -71,10 +71,9 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
                 }
                 is AnswerViewState.RefreshState -> {
                     dismissProgressDialog()
-                    updateToken(state.response.data.token.accessToken)
-                    updateRefreshToken(state.response.data.token.refreshToken)
+                    updateToken(state.response.accessToken)
+                    updateRefreshToken(state.response.refreshToken)
                 }
-                is AnswerViewState.UserPointState -> {}
             }
         }
     }

@@ -2,6 +2,7 @@ package com.example.squadmaster.ui.clubs
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -33,12 +34,19 @@ class ClubAdapter(private val onClick: (Club) -> Unit) : RecyclerView.Adapter<Cl
 
             with(binding) {
 
-                itemView.setOnClickListener {
-                    onClick.invoke(item)
+                if (item.isLocked) {
+                    ivClubLogo.alpha = 0.1f
+                    ivLocked.visibility = View.VISIBLE
+                }
+
+                if (!item.isLocked) {
+                    itemView.setOnClickListener {
+                        onClick.invoke(item)
+                    }
                 }
 
                 tvClubName.text = item.name
-                tvClubName.textSize = if (item.name.length > 22 ) 11f else 12f
+                tvClubName.textSize = if (item.name.length > 22) 11f else 12f
                 ivClubLogo.apply {
                     Glide.with(context)
                         .asBitmap()

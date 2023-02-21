@@ -5,6 +5,7 @@ import com.example.squadmaster.data.models.Resource
 import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.network.requests.RegisterRequest
 import com.example.squadmaster.network.requests.UpdatePointRequest
+import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.leagueresponses.GetLeaguesResponse
 import com.example.squadmaster.network.responses.loginresponses.LoginResponse
 import com.example.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
@@ -69,7 +70,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun getSquadListByLeague(leagueID: Int): Observable<Resource<GetSquadListResponse>> {
+    fun getSquadListByLeague(leagueID: Int, userLevel: Int): Observable<Resource<GetSquadListResponse>> {
 
         return Observable.create { emitter ->
 
@@ -78,7 +79,7 @@ class RemoteDataSource {
             serviceProvider
                 .getRetrofit()
                 .create(SquadServices::class.java)
-                .getSquadListByLeague(leagueID)
+                .getSquadListByLeague(leagueID, userLevel)
                 .subscribe(
                     {
                         emitter.onNext(Resource.success(it))
@@ -94,7 +95,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun getLeagues(): Observable<Resource<GetLeaguesResponse>> {
+    fun getLeagues(userLevel: Int): Observable<Resource<GetLeaguesResponse>> {
 
         return Observable.create { emitter ->
 
@@ -103,7 +104,7 @@ class RemoteDataSource {
             serviceProvider
                 .getRetrofit()
                 .create(LeagueServices::class.java)
-                .getLeagues()
+                .getLeagues(userLevel)
                 .subscribe(
                     {
                         emitter.onNext(Resource.success(it))
@@ -169,7 +170,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun signInRefreshToken(refreshToken: String): Observable<Resource<LoginResponse>> {
+    fun signInRefreshToken(refreshToken: String): Observable<Resource<Token>> {
 
         return Observable.create { emitter ->
 
@@ -215,6 +216,7 @@ class RemoteDataSource {
                         emitter.onComplete()
                     }
                 )
+
         }
     }
 

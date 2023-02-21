@@ -56,12 +56,12 @@
                 android:id="@+id/tvTeamName"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:layout_weight="0.9"
+                android:layout_weight="0.8"
                 android:gravity="center_vertical"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 tools:text="Arsenal" />
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -77,7 +77,7 @@
                 android:id="@+id/tvScore"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0.6"
                 android:gravity="center_vertical|end"
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -246,74 +246,21 @@
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_alignParentBottom="true"
-        app:cardBackgroundColor="@color/pitch_green"
+        app:cardBackgroundColor="@color/green"
         app:cardCornerRadius="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:cardElevation="24dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPotentialAnswers"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/green"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/row_layout_player" />
-
-        <LinearLayout
-            android:id="@+id/llAnswer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/green"
-            android:elevation="16dp"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:visibility="gone">
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivUnknownPlayer"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/photo_border"
-                android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/etUnknownPlayerName"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_green_with_radius_ten"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:fontFamily="@font/sofia_sans"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:textColor="@color/white"
-                android:textIsSelectable="true"
-                tools:text="Ahmet" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:text="@string/ok"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/green"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/white"
-                app:strokeWidth="1dp" />
-
-        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

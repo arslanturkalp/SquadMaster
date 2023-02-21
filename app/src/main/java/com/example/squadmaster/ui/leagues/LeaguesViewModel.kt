@@ -16,7 +16,7 @@ class LeaguesViewModel: BaseViewModel() {
     fun getLeagues() {
         compositeDisposable.addAll(
             remoteDataSource
-                .getLeagues()
+                .getLeagues(0)
                 .applyThreads()
                 .subscribe {
                     when (it.status) {

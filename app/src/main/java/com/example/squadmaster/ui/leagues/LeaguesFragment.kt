@@ -9,11 +9,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.squadmaster.R
-import com.example.squadmaster.application.SessionManager
+import com.example.squadmaster.application.SessionManager.updateRefreshToken
+import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.databinding.FragmentLeaguesBinding
 import com.example.squadmaster.network.responses.item.League
 import com.example.squadmaster.ui.clubs.ClubsActivity
-import com.example.squadmaster.ui.home.HomeFragment
 import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.utils.showAlertDialogTheme
 
@@ -24,8 +24,6 @@ class LeaguesFragment: BaseFragment() {
     private val viewModel by viewModels<LeaguesViewModel>()
 
     private val leagueAdapter by lazy { LeaguesAdapter { openClubs(it) } }
-
-    private val homeFragment = HomeFragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -51,11 +49,10 @@ class LeaguesFragment: BaseFragment() {
     }
 
     private fun backToMainMenu() {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragmentContainerView, homeFragment, "HomeTag")
-        transaction.commit()
-        transaction.addToBackStack(null)
-        (activity as MainActivity).setItemInNavigation(homeFragment)
+        (activity as MainActivity).apply {
+            showFragment(homeFragment)
+            setItemInNavigation(homeFragment)
+        }
     }
 
     private fun setupRecyclerViews() {
@@ -76,6 +73,7 @@ class LeaguesFragment: BaseFragment() {
                 }
                 is LeaguesViewState.ErrorState -> {
                     dismissProgressDialog()
+                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
                 }
                 is LeaguesViewState.WarningState -> {
                     dismissProgressDialog()
@@ -83,8 +81,8 @@ class LeaguesFragment: BaseFragment() {
                 }
                 is LeaguesViewState.RefreshState -> {
                     dismissProgressDialog()
-                    SessionManager.updateToken(state.response.data.token.accessToken)
-                    SessionManager.updateRefreshToken(state.response.data.token.refreshToken)
+                    updateToken(state.response.data.token.accessToken)
+                    updateRefreshToken(state.response.data.token.refreshToken)
                 }
             }
         }
@@ -95,6 +93,6 @@ class LeaguesFragment: BaseFragment() {
     }
 
     private fun showLeagues(leagues: List<League>) {
-        leagueAdapter.updateAdapter(leagues.sortedBy { it.id })
+        leagueAdapter.updateAdapter(leagues.sortedBy { it.name })
     }
 }

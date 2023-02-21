@@ -5,5 +5,7 @@ data class Club(
     val leagueID: Int,
     val name: String,
     val shortName: String,
-    val imagePath: String?
+    val imagePath: String?,
+    val level: Int,
+    val isLocked: Boolean
 )

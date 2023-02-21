@@ -2,6 +2,7 @@ package com.example.squadmaster.network.services
 
 import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.network.requests.RegisterRequest
+import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.loginresponses.LoginResponse
 import io.reactivex.Single
 import retrofit2.http.Body
@@ -18,5 +19,5 @@ interface LoginServices {
     fun register(@Body registerRequest: RegisterRequest): Single<Boolean>
 
     @GET("Login/RefreshTokenLogin")
-    fun refreshTokenLogin(@Query("refreshToken") refreshToken: String): Single<LoginResponse>
+    fun refreshTokenLogin(@Query("refreshToken") refreshToken: String): Single<Token>
 }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -15,14 +14,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
-import com.example.squadmaster.application.SessionManager
+import com.example.squadmaster.adapter.PotentialAnswersAdapter
+import com.example.squadmaster.application.SessionManager.clearIsShowedFlag
 import com.example.squadmaster.application.SessionManager.clearScore
 import com.example.squadmaster.application.SessionManager.clearUnknownAnswer
 import com.example.squadmaster.application.SessionManager.clearWrongCount
+import com.example.squadmaster.application.SessionManager.getIsShowedFlag
 import com.example.squadmaster.application.SessionManager.getScore
 import com.example.squadmaster.application.SessionManager.getUserID
 import com.example.squadmaster.application.SessionManager.getWrongCount
+import com.example.squadmaster.application.SessionManager.updateIsShowedFlag
+import com.example.squadmaster.application.SessionManager.updateRefreshToken
 import com.example.squadmaster.application.SessionManager.updateScore
+import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.application.SessionManager.updateUnknownAnswer
 import com.example.squadmaster.application.SessionManager.updateUnknownImage
 import com.example.squadmaster.application.SessionManager.updateWrongCount
@@ -34,10 +38,8 @@ import com.example.squadmaster.network.responses.item.PotentialAnswer
 import com.example.squadmaster.ui.answer.AnswerFragment
 import com.example.squadmaster.ui.gameover.GameOverFragment
 import com.example.squadmaster.ui.main.MainActivity
-import com.example.squadmaster.adapter.PotentialAnswersAdapter
 import com.example.squadmaster.ui.yellowcard.YellowCardFragment
 import com.example.squadmaster.utils.*
-import com.example.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.google.android.flexbox.*
 
 class GameActivity : BaseActivity() {
@@ -52,15 +54,14 @@ class GameActivity : BaseActivity() {
     private val attackingMiddleAdapter by lazy { GameAdapter() }
     private val forwardAdapter by lazy { GameAdapter() }
 
-    private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter { controlAnswer(it) } }
+    private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter(false) { controlAnswer(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        checkLanguage(this)
-
         clearUnknownAnswer()
+        clearIsShowedFlag()
 
         setupRecyclerViews()
         setupObservers()
@@ -70,6 +71,8 @@ class GameActivity : BaseActivity() {
         viewModel.getSquad()
 
         binding.apply {
+            tvTeamName.apply { textSize = if (text.length > 23) 11f else if (text.length > 17) 12f else 14f }
+
             tvScore.text = getScore().toString()
             ivPause.setOnClickListener {
                 backToMainMenu()
@@ -144,8 +147,8 @@ class GameActivity : BaseActivity() {
                 }
                 is GameViewState.RefreshState -> {
                     dismissProgressDialog()
-                    SessionManager.updateToken(state.response.data.token.accessToken)
-                    SessionManager.updateRefreshToken(state.response.data.token.refreshToken)
+                    updateToken(state.response.accessToken)
+                    updateRefreshToken(state.response.refreshToken)
 
                     viewModel.getSquad()
                 }
@@ -166,7 +169,6 @@ class GameActivity : BaseActivity() {
 
     private fun showWrongAnswerAnimation() {
         updateWrongCount(getWrongCount() + 1)
-        binding.etUnknownPlayerName.startAnimation(AnimationUtils.loadAnimation(this@GameActivity, R.anim.shake))
         when (getWrongCount()) {
             1 -> binding.ivWrongThird.alpha = 0.2f
             2 -> binding.ivWrongSecond.alpha = 0.2f
@@ -194,6 +196,7 @@ class GameActivity : BaseActivity() {
         attackingMiddleAdapter.updateAdapter(squad.filter { it.positionID == 10 || it.positionID == 9 })
         forwardAdapter.updateAdapter(ifTwoWinger(squad.filter { it.positionTypeID == PositionTypeIdStatus.FORWARD.value && it.positionID != 10 } as ArrayList<Player>))
 
+        binding.cdAnswer.visibility = View.VISIBLE
         potentialAnswersAdapter.updateAdapter(potentialAnswers)
     }
 
@@ -211,36 +214,32 @@ class GameActivity : BaseActivity() {
 
             setVisibility(View.VISIBLE, ivFootballPitch, ivFootballGoal, llHalfSquare, tvAnswerTitle)
 
-            ivUnknownPlayer.apply {
-                setImageResource(R.drawable.ic_question_mark)
-                setColorFilter(ContextCompat.getColor(ivUnknownPlayer.context, R.color.green))
-                setBackgroundColor(ContextCompat.getColor(this.context, R.color.white))
-            }
-
             ivFlag.setOnClickListener {
-                showAlertDialogTheme(
-                    title = getString(R.string.show_flag),
-                    contentMessage = getString(R.string.show_flag_description),
-                    showNegativeButton = true,
-                    positiveButtonTitle = getString(R.string.yes),
-                    negativeButtonTitle = getString(R.string.no),
-                    onPositiveButtonClick = {
+                if (!getIsShowedFlag()) {
+                    showAlertDialogTheme(
+                        title = getString(R.string.show_flag),
+                        contentMessage = getString(R.string.show_flag_description),
+                        showNegativeButton = true,
+                        positiveButtonTitle = getString(R.string.yes),
+                        negativeButtonTitle = getString(R.string.no),
+                        onPositiveButtonClick = {
 
-                        if (getScore() >= 50) {
-                            ivFlag.apply {
-                                setBackgroundColor(ContextCompat.getColor(context, R.color.green))
-                                Glide.with(context)
-                                    .asBitmap()
-                                    .load("https://countryflagsapi.com/png/${ifContains(unknownPlayer.nationality)}")
-                                    .into(this)
-                            }
-                            updateScore(getScore() - 50)
-                            tvScore.text = getScore().toString()
+                            if (getScore() >= 30) {
+                                ivFlag.apply {
+                                    setBackgroundColor(ContextCompat.getColor(context, R.color.green))
+                                    Glide.with(context)
+                                        .asBitmap()
+                                        .load("https://flagcdn.com/56x42/${ifContains(unknownPlayer.nationality.lowercase())}.png")
+                                        .into(this)
+                                }
+                                updateIsShowedFlag(true)
+                                updateScore(getScore() - 30)
+                                tvScore.text = getScore().toString()
 
-                        }
-                        else Toast.makeText(this@GameActivity, getString(R.string.insufficient_score), Toast.LENGTH_SHORT).show()
-                    },
-                    onNegativeButtonClick = { dismissProgressDialog() })
+                            } else Toast.makeText(this@GameActivity, getString(R.string.insufficient_score), Toast.LENGTH_SHORT).show()
+                        },
+                        onNegativeButtonClick = { dismissProgressDialog() })
+                }
             }
         }
     }
@@ -265,6 +264,6 @@ class GameActivity : BaseActivity() {
     private fun navigateToGameOver(score: Int) = GameOverFragment.apply { newInstance(score = score).show(this@GameActivity) }
 
     companion object {
-        fun createIntent(context: Context?): Intent = Intent(context, GameActivity::class.java)
+        fun createIntent(context: Context?): Intent { return Intent(context, GameActivity::class.java) }
     }
 }

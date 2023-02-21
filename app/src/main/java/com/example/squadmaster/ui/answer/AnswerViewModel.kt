@@ -4,7 +4,7 @@ import BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.squadmaster.data.enums.Status
-import com.example.squadmaster.network.responses.loginresponses.LoginResponse
+import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.example.squadmaster.utils.applyThreads
 
@@ -36,6 +36,5 @@ sealed class AnswerViewState {
     object LoadingState : AnswerViewState()
     data class ErrorState(val message: String) : AnswerViewState()
     data class WarningState(val message: String?) : AnswerViewState()
-    data class RefreshState(val response: LoginResponse) : AnswerViewState()
-    data class UserPointState(val response: UserPointResponse) : AnswerViewState()
+    data class RefreshState(val response: Token) : AnswerViewState()
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.squadmaster.application.SessionManager.getRefreshToken
 import com.example.squadmaster.data.enums.Status
 import com.example.squadmaster.network.requests.UpdatePointRequest
-import com.example.squadmaster.network.responses.loginresponses.LoginResponse
+import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.example.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.example.squadmaster.utils.applyThreads
@@ -96,6 +96,6 @@ sealed class GetSquadViewState {
     data class SuccessState(val response: GetFirstElevenBySquadResponse) : GetSquadViewState()
     data class ErrorState(val message: String) : GetSquadViewState()
     data class WarningState(val message: String?) : GetSquadViewState()
-    data class RefreshState(val response: LoginResponse) : GetSquadViewState()
+    data class RefreshState(val response: Token) : GetSquadViewState()
     data class UserPointState(val response: UserPointResponse) : GetSquadViewState()
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.squadmaster.application.SessionManager
 import com.example.squadmaster.data.enums.Status
 import com.example.squadmaster.network.requests.UpdatePointRequest
-import com.example.squadmaster.network.responses.loginresponses.LoginResponse
+import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.example.squadmaster.utils.applyThreads
 
@@ -62,7 +62,7 @@ class GameViewModel: BaseViewModel() {
                 .subscribe {
                     when (it.status) {
                         Status.LOADING -> viewState.postValue(GameViewState.ScoreLoadingState)
-                        Status.SUCCESS -> { viewState.postValue(GameViewState.UpdateState) }
+                        Status.SUCCESS -> viewState.postValue(GameViewState.UpdateState)
                         Status.ERROR -> viewState.postValue(GameViewState.ErrorState(it.message!!))
                     }
                 }
@@ -78,5 +78,5 @@ sealed class GameViewState {
     data class SuccessState(val response: GetFirstElevenBySquadResponse) : GameViewState()
     data class ErrorState(val message: String) : GameViewState()
     data class WarningState(val message: String?) : GameViewState()
-    data class RefreshState(val response: LoginResponse) : GameViewState()
+    data class RefreshState(val response: Token) : GameViewState()
 }

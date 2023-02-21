@@ -3,10 +3,10 @@ package com.example.squadmaster.ui.clubs
 import BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.squadmaster.application.SessionManager
+import com.example.squadmaster.application.SessionManager.getRefreshToken
 import com.example.squadmaster.data.enums.Status
 import com.example.squadmaster.network.responses.item.Club
-import com.example.squadmaster.network.responses.loginresponses.LoginResponse
+import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.utils.applyThreads
 
 class ClubsViewModel : BaseViewModel() {
@@ -27,17 +27,17 @@ class ClubsViewModel : BaseViewModel() {
                             viewState.postValue(GetSquadListViewState.SuccessState(response.data))
                         }
                         Status.ERROR -> {
-                            refreshTokenLogin(SessionManager.getRefreshToken())
+                            refreshTokenLogin(getRefreshToken())
                         }
                     }
                 }
         )
     }
 
-    fun getSquadListByLeague(leagueID: Int) {
+    fun getSquadListByLeague(leagueID: Int, userLevel: Int) {
         compositeDisposable.addAll(
             remoteDataSource
-                .getSquadListByLeague(leagueID)
+                .getSquadListByLeague(leagueID, userLevel)
                 .applyThreads()
                 .subscribe {
                     when (it.status) {
@@ -47,7 +47,7 @@ class ClubsViewModel : BaseViewModel() {
                             viewState.postValue(GetSquadListViewState.SuccessState(response.data))
                         }
                         Status.ERROR -> {
-                            refreshTokenLogin(SessionManager.getRefreshToken())
+                            refreshTokenLogin(getRefreshToken())
                         }
                     }
                 }
@@ -78,5 +78,5 @@ sealed class GetSquadListViewState {
     data class SuccessState(val response: List<Club>) : GetSquadListViewState()
     data class ErrorState(val message: String) : GetSquadListViewState()
     data class WarningState(val message: String?) : GetSquadListViewState()
-    data class RefreshState(val response: LoginResponse) : GetSquadListViewState()
+    data class RefreshState(val response: Token) : GetSquadListViewState()
 }

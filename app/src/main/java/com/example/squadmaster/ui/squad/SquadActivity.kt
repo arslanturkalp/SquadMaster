@@ -15,8 +15,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
 import com.example.squadmaster.adapter.PotentialAnswersAdapter
+import com.example.squadmaster.application.SessionManager.clearIsShowedFlag
 import com.example.squadmaster.application.SessionManager.clearUnknownAnswer
+import com.example.squadmaster.application.SessionManager.getClubLevel
+import com.example.squadmaster.application.SessionManager.getIsShowedFlag
 import com.example.squadmaster.application.SessionManager.getUserID
+import com.example.squadmaster.application.SessionManager.updateClubLevel
+import com.example.squadmaster.application.SessionManager.updateIsShowedFlag
 import com.example.squadmaster.application.SessionManager.updateRefreshToken
 import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.application.SessionManager.updateUnknownAnswer
@@ -36,13 +41,13 @@ class SquadActivity : BaseActivity() {
 
     private val viewModel by viewModels<SquadViewModel>()
 
-    private val goalkeeperAdapter by lazy { SquadAdapter {} }
-    private val defenceAdapter by lazy { SquadAdapter {} }
-    private val middleAdapter by lazy { SquadAdapter {} }
-    private val attackingMiddleAdapter by lazy { SquadAdapter {} }
-    private val forwardAdapter by lazy { SquadAdapter {} }
+    private val goalkeeperAdapter by lazy { SquadAdapter() }
+    private val defenceAdapter by lazy { SquadAdapter() }
+    private val middleAdapter by lazy { SquadAdapter() }
+    private val attackingMiddleAdapter by lazy { SquadAdapter() }
+    private val forwardAdapter by lazy { SquadAdapter() }
 
-    private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter { controlAnswer(it) } }
+    private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter(false) { controlAnswer(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +56,7 @@ class SquadActivity : BaseActivity() {
         checkLanguage(this)
 
         clearUnknownAnswer()
+        clearIsShowedFlag()
 
         setupRecyclerViews()
         setupObservers()
@@ -66,8 +72,8 @@ class SquadActivity : BaseActivity() {
             svGeneral.postDelayed({ svGeneral.fullScroll(ScrollView.FOCUS_DOWN) }, 350)
             ivPause.setOnClickListener {
                 showAlertDialogTheme(
-                    title = "Ana Menüye Dön",
-                    contentMessage = "Puan almadan ana menüye yönlendiriliyorsunuz.",
+                    title = getString(R.string.back_to_main_menu),
+                    contentMessage = getString(R.string.back_to_menu_description),
                     showNegativeButton = true,
                     positiveButtonTitle = getString(R.string.yes),
                     negativeButtonTitle = getString(R.string.no),
@@ -128,8 +134,8 @@ class SquadActivity : BaseActivity() {
                 }
                 is GetSquadViewState.RefreshState -> {
                     dismissProgressDialog()
-                    updateToken(state.response.data.token.accessToken)
-                    updateRefreshToken(state.response.data.token.refreshToken)
+                    updateToken(state.response.accessToken)
+                    updateRefreshToken(state.response.refreshToken)
 
                     viewModel.getSquad(intent.getDataExtra(EXTRAS_SQUAD_NAME))
                 }
@@ -158,6 +164,7 @@ class SquadActivity : BaseActivity() {
         attackingMiddleAdapter.updateAdapter(squad.filter { it.positionID == 10 || it.positionID == 9 })
         forwardAdapter.updateAdapter(ifTwoWinger(squad.filter { it.positionTypeID == 4 && it.positionID != 10 } as ArrayList<Player>))
 
+        binding.cdAnswer.visibility = View.VISIBLE
         potentialAnswersAdapter.updateAdapter(potentialAnswers)
     }
 
@@ -177,35 +184,30 @@ class SquadActivity : BaseActivity() {
 
             setVisibility(View.VISIBLE, ivFootballPitch, ivFootballGoal, llHalfSquare, tvAnswerTitle)
 
-            ivUnknownPlayer.apply {
-                setImageResource(R.drawable.ic_question_mark)
-                setColorFilter(ContextCompat.getColor(ivUnknownPlayer.context, R.color.green))
-
-                setBackgroundColor(ContextCompat.getColor(this.context, R.color.white))
-            }
-
             ivFlag.setOnClickListener {
-                showAlertDialogTheme(
-                    title = getString(R.string.show_flag),
-                    contentMessage = getString(R.string.show_flag_description),
-                    showNegativeButton = true,
-                    positiveButtonTitle = getString(R.string.yes),
-                    negativeButtonTitle = getString(R.string.no),
-                    onPositiveButtonClick = {
+                if (!getIsShowedFlag()) {
+                    showAlertDialogTheme(
+                        title = getString(R.string.show_flag),
+                        contentMessage = getString(R.string.show_flag_description),
+                        showNegativeButton = true,
+                        positiveButtonTitle = getString(R.string.yes),
+                        negativeButtonTitle = getString(R.string.no),
+                        onPositiveButtonClick = {
 
-                        if (binding.tvScore.text.toString().toInt() >= 50) {
-                            ivFlag.apply {
-                                setBackgroundColor(ContextCompat.getColor(context, R.color.green))
-                                Glide.with(context)
-                                    .asBitmap()
-                                    .load("https://countryflagsapi.com/png/${ifContains(unknownPlayer.nationality)}")
-                                    .into(this)
-                            }
-                            viewModel.updatePoint(UpdatePointRequest(getUserID(), -50))
-                        }
-                        else Toast.makeText(this@SquadActivity, getString(R.string.insufficient_score), Toast.LENGTH_SHORT).show()
-                    },
-                    onNegativeButtonClick = { dismissProgressDialog() })
+                            if (binding.tvScore.text.toString().toInt() >= 30) {
+                                ivFlag.apply {
+                                    setBackgroundColor(ContextCompat.getColor(context, R.color.green))
+                                    Glide.with(context)
+                                        .asBitmap()
+                                        .load("https://flagcdn.com/56x42/${ifContains(unknownPlayer.nationality.lowercase())}.png")
+                                        .into(this)
+                                }
+                                updateIsShowedFlag(true)
+                                viewModel.updatePoint(UpdatePointRequest(getUserID(), -30))
+                            } else Toast.makeText(this@SquadActivity, getString(R.string.insufficient_score), Toast.LENGTH_SHORT).show()
+                        },
+                        onNegativeButtonClick = { dismissProgressDialog() })
+                }
             }
         }
     }
@@ -213,6 +215,7 @@ class SquadActivity : BaseActivity() {
     private fun controlAnswer(potentialAnswer: PotentialAnswer) {
         binding.apply {
             if (potentialAnswer.isAnswer) {
+                updateClubLevel(getClubLevel() + 1)
                 viewModel.updatePoint(UpdatePointRequest(getUserID(), 10))
                 updateUnknownAnswer(potentialAnswer.displayName)
                 updateUnknownImage(potentialAnswer.imagePath)
@@ -222,10 +225,9 @@ class SquadActivity : BaseActivity() {
                     title = getString(R.string.wrong_answer),
                     contentMessage = String.format(getString(R.string.formatted_wrong_answer), potentialAnswer.displayName),
                     showNegativeButton = true,
-                    positiveButtonTitle = "Yeniden Dene (5 Point)",
-                    negativeButtonTitle = "Geri Dön",
+                    positiveButtonTitle = getString(R.string.try_again),
+                    negativeButtonTitle = getString(R.string.back),
                     onPositiveButtonClick = {
-                        viewModel.updatePoint(UpdatePointRequest(getUserID(), -5))
                         dismissProgressDialog()
                     },
                     onNegativeButtonClick = { onBackPressedDispatcher.onBackPressed() }

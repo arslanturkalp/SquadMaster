@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
 import com.example.squadmaster.application.SessionManager
 import com.example.squadmaster.application.SessionManager.getUnknownAnswer
+import com.example.squadmaster.application.SessionManager.getUnknownImage
 import com.example.squadmaster.databinding.RowLayoutPlayerBinding
 import com.example.squadmaster.network.responses.item.Player
 import com.example.squadmaster.utils.ifContains
@@ -39,16 +40,15 @@ class GameAdapter : RecyclerView.Adapter<GameAdapter.SquadViewHolder>() {
         fun bind(item: Player) {
 
             val circularProgressDrawable = CircularProgressDrawable(itemView.context)
-            circularProgressDrawable.apply {
-                strokeWidth = 5f
-                centerRadius = 30f
-            }
+            circularProgressDrawable.strokeWidth = 5f
+            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.start()
 
             with(binding) {
                 ivFlag.apply {
                     Glide.with(context)
                         .asBitmap()
-                        .load("https://countryflagsapi.com/png/${ifContains(item.nationality)}")
+                        .load("https://flagcdn.com/56x42/${ifContains(item.nationality.lowercase())}.png")
                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                         .placeholder(circularProgressDrawable)
                         .into(this)
@@ -56,6 +56,7 @@ class GameAdapter : RecyclerView.Adapter<GameAdapter.SquadViewHolder>() {
 
                 if (!item.isVisible) {
                     ivFlag.visibility = View.GONE
+
                     ivPlayer.apply {
                         setImageResource(R.drawable.ic_question_mark)
                         setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.green))
@@ -68,7 +69,7 @@ class GameAdapter : RecyclerView.Adapter<GameAdapter.SquadViewHolder>() {
 
                             Glide.with(context)
                                 .asBitmap()
-                                .load(SessionManager.getUnknownImage())
+                                .load(getUnknownImage())
                                 .skipMemoryCache(true)
                                 .placeholder(circularProgressDrawable)
                                 .into(this)
@@ -79,7 +80,7 @@ class GameAdapter : RecyclerView.Adapter<GameAdapter.SquadViewHolder>() {
                 } else {
                     tvPlayerName.apply {
                         text = item.displayName
-                        textSize = if (item.displayName.length > 22) 11f else 12f
+                        textSize = if (item.displayName.length > 23) 10f else if(item.displayName.length > 17) 11f else 12f
                     }
 
                     ivPlayer.apply {

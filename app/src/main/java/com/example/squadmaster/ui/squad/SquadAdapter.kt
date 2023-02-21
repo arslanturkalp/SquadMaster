@@ -17,7 +17,7 @@ import com.example.squadmaster.databinding.RowLayoutPlayerBinding
 import com.example.squadmaster.network.responses.item.Player
 import com.example.squadmaster.utils.ifContains
 
-class SquadAdapter(private val onClick: () -> Unit) : RecyclerView.Adapter<SquadAdapter.SquadViewHolder>() {
+class SquadAdapter : RecyclerView.Adapter<SquadAdapter.SquadViewHolder>() {
 
     private val dataList: MutableList<Player> = mutableListOf()
 
@@ -47,8 +47,9 @@ class SquadAdapter(private val onClick: () -> Unit) : RecyclerView.Adapter<Squad
                 ivFlag.apply {
                     Glide.with(context)
                         .asBitmap()
-                        .load("https://countryflagsapi.com/png/${ifContains(item.nationality)}")
+                        .load("https://flagcdn.com/56x42/${ifContains(item.nationality.lowercase())}.png")
                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .placeholder(circularProgressDrawable)
                         .into(this)
                 }
 
@@ -58,10 +59,7 @@ class SquadAdapter(private val onClick: () -> Unit) : RecyclerView.Adapter<Squad
                     ivPlayer.apply {
                         setImageResource(R.drawable.ic_question_mark)
                         setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.green))
-                        setOnClickListener { onClick.invoke() }
                     }
-
-                    tvPlayerName.setOnClickListener { onClick.invoke() }
 
                     if (getUnknownAnswer() != "") {
                         tvPlayerName.text = getUnknownAnswer()

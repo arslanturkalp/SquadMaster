@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="80dp"
     android:layout_height="110dp"
     android:layout_marginStart="8dp"
@@ -11,20 +12,31 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:background="@drawable/bg_white"
-        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivClubLogo"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            tools:src="@drawable/ic_flag"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLocked"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_lock"
+            android:visibility="gone"
             android:layout_gravity="center" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvClubName"
