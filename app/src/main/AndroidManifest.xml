@@ -17,6 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8478732006421140~5491429397"/>
+
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true">

@@ -14,7 +14,6 @@ import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.application.SessionManager.updateUserID
 import com.example.squadmaster.databinding.ActivityStartBinding
 import com.example.squadmaster.network.requests.LoginRequest
-import com.example.squadmaster.ui.clubs.ClubsActivity
 import com.example.squadmaster.ui.login.LoginActivity
 import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.ui.register.RegisterActivity
@@ -23,7 +22,7 @@ import com.example.squadmaster.utils.getDataExtra
 import com.example.squadmaster.utils.setVisibility
 import com.example.squadmaster.utils.showAlertDialogTheme
 
-class StartActivity() : BaseActivity() {
+class StartActivity : BaseActivity() {
 
     private val binding by lazy { ActivityStartBinding.inflate(layoutInflater) }
 
@@ -44,7 +43,7 @@ class StartActivity() : BaseActivity() {
         }
 
         if (getUserName() != "" && getPassword() != "") {
-            binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnSignUp) }
+            binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnSignUp, btnLoginAsGuest) }
             viewModel.signIn(LoginRequest(username = getUserName(), password = getPassword()))
         }
         binding.apply {

@@ -83,12 +83,12 @@ dependencies {
     //Flexbox
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
-    //Worker
-    implementation "androidx.work:work-runtime-ktx:2.7.1"
-
     //Lottie
     implementation "com.airbnb.android:lottie:5.2.0"
 
     //SwipeRefreshLayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    //GoogleAdMob
+    implementation 'com.google.android.gms:play-services-ads:21.5.0'
 }

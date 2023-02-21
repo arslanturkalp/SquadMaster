@@ -21,6 +21,9 @@ import com.example.squadmaster.ui.settings.SettingsFragment
 import com.example.squadmaster.ui.start.StartActivity
 import com.example.squadmaster.utils.setVisibility
 import com.example.squadmaster.utils.showAlertDialogTheme
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 
 class HomeFragment : BaseFragment() {
 
@@ -37,6 +40,13 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupObservers()
+
+        val configuration = RequestConfiguration.Builder().setTestDeviceIds(listOf("03B094AA787BDF5746C59E26B9356600"))
+        MobileAds.setRequestConfiguration(configuration.build())
+        MobileAds.initialize(requireContext()) {}
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
         if (getUserID() != 13) {
             viewModel.getUserPoint(getUserID())
