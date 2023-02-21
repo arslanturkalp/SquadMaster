@@ -6,11 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.squadmaster.data.enums.Status
 import com.example.squadmaster.network.responses.userpointresponses.GetRankListResponse
 import com.example.squadmaster.network.responses.userpointresponses.UserPointResponse
-import com.example.squadmaster.ui.home.HomeViewState
 import com.example.squadmaster.utils.applyThreads
 
-class ScoreViewModel: BaseViewModel() {
-    
+class ScoreViewModel : BaseViewModel() {
+
     private val viewState = MutableLiveData<ScoreViewState>()
     val getViewState: LiveData<ScoreViewState> = viewState
 
@@ -42,8 +41,8 @@ class ScoreViewModel: BaseViewModel() {
                         Status.LOADING -> viewState.postValue(ScoreViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(ScoreViewState.UserPointState(response))
                             getRankList()
+                            viewState.postValue(ScoreViewState.UserPointState(response))
                         }
                         Status.ERROR -> viewState.postValue(ScoreViewState.ErrorState(it.message!!))
                     }

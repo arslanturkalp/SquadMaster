@@ -17,9 +17,9 @@ class MainActivity : BaseActivity() {
 
     private val fragmentList: MutableList<Fragment> = mutableListOf()
 
-    private val homeFragment = HomeFragment()
-    private val leaguesFragment = LeaguesFragment()
-    private val scoreFragment = ScoreFragment()
+    val homeFragment = HomeFragment()
+    val leaguesFragment = LeaguesFragment()
+    val scoreFragment = ScoreFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun showFragment(selectedFragment: Fragment) {
+    fun showFragment(selectedFragment: Fragment) {
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
@@ -86,22 +86,18 @@ class MainActivity : BaseActivity() {
 
     fun setItemInNavigation(fragment: Fragment) {
         binding.bottomNavigationView.apply {
-            if (fragment.tag == "HomeTag") {
-                menu.getItem(0).isChecked = true
-                showFragment(homeFragment)
+            if (fragment == homeFragment) {
+                this.menu.getItem(0).isChecked = true
             }
-            if (fragment.tag == "LeagueTag") {
-                menu.getItem(1).isChecked = true
-                showFragment(leaguesFragment)
+            if (fragment == leaguesFragment) {
+                this.menu.getItem(1).isChecked = true
             }
-            if (fragment.tag == "ScoreTag") {
-                menu.getItem(2).isChecked = true
-                showFragment(scoreFragment)
+            if (fragment == scoreFragment) {
+                this.menu.getItem(2).isChecked = true
             }
         }
 
     }
-
 
     private fun getFragmentTag(fragment: Fragment): String = fragment.javaClass.simpleName
 
