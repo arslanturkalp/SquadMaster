@@ -13,6 +13,7 @@
     <string name="ok">OK</string>
     <string name="correct_answer">Correct Answer</string>
     <string name="wrong_answer">Wrong Answer</string>
+    <string name="try_again">Try Again</string>
     <string name="back">Back</string>
 
     <string name="home">Home</string>
@@ -45,6 +46,7 @@
     <string name="yellow_card_description">The next wrong answer will be game over.</string>
     <string name="score_not_save_reminder">If you exit the game, your score will not be saved.</string>
     <string name="back_to_main_menu">Back to Main Menu</string>
+    <string name="back_to_menu_description">You are directed to the main menu without receiving points.</string>
     <string name="game_close_alert">The game will be closed. Are you sure?</string>
     <string name="close_game">Close Game</string>
     <string name="select_answer">Select Answer</string>
@@ -62,4 +64,5 @@
     <string name="total_point">Total Point</string>
     <string name="me">Me</string>
 
+    <string name="language">Language</string>
 </resources>

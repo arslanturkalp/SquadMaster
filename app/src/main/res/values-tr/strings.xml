@@ -13,6 +13,7 @@
     <string name="ok">OK</string>
     <string name="correct_answer">Doğru Cevap</string>
     <string name="wrong_answer">Yanlış Cevap</string>
+    <string name="try_again">Yeniden Dene</string>
     <string name="back">Geri</string>
 
     <string name="home">Ana Menü</string>
@@ -45,6 +46,7 @@
     <string name="yellow_card_description">Sonraki yanlış cevabında oyun sonlanacak.</string>
     <string name="score_not_save_reminder">Oyundan çıkman durumunda skorun kaydedilmeyecek.</string>
     <string name="back_to_main_menu">Ana Menüye Dön</string>
+    <string name="back_to_menu_description">Puan almadan ana menüye yönlendiriliyorsunuz.</string>
     <string name="game_close_alert">Oyun kapatılacaktır. Emin misiniz?</string>
     <string name="close_game">Oyundan Çık</string>
     <string name="select_answer">Cevap Seç</string>
@@ -54,7 +56,6 @@
 
     <string name="competitive_mode">Ana Oyun</string>
     <string name="league_mode">Lig Modu</string>
-
     <string name="rank_list_by_best_scores">Ana Oyun Modundaki En Yüksek Skorlar</string>
     <string name="rank_list_by_total_points">En Yüksek Toplam Puana Sahip Oyuncular</string>
     <string name="high_score">Puan Tablosu</string>
@@ -62,4 +63,6 @@
     <string name="best_score">En İyi Skor</string>
     <string name="total_point">Toplam Puan</string>
     <string name="me">Ben</string>
+
+    <string name="language">Dil</string>
 </resources>
