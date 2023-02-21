@@ -18,6 +18,8 @@ import com.example.squadmaster.databinding.FragmentHomeBinding
 import com.example.squadmaster.ui.game.GameActivity
 import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.ui.settings.SettingsFragment
+import com.example.squadmaster.ui.start.StartActivity
+import com.example.squadmaster.utils.setVisibility
 import com.example.squadmaster.utils.showAlertDialogTheme
 
 class HomeFragment : BaseFragment() {
@@ -36,9 +38,27 @@ class HomeFragment : BaseFragment() {
 
         setupObservers()
 
-        viewModel.getUserPoint(getUserID())
+        if (getUserID() != 13) {
+            viewModel.getUserPoint(getUserID())
+        }
 
         binding.apply {
+
+            if (getUserID() == 13) {
+                setVisibility(View.GONE, cvLeague, cvScore)
+                tvSignOut.text = getString(R.string.login_or_register)
+                cvSignOut.setOnClickListener { requireContext().startActivity(StartActivity.createIntent(true, requireContext())) }
+            } else {
+                cvSignOut.setOnClickListener {
+                    showAlertDialogTheme(getString(R.string.logout), getString(R.string.logout_alert), showNegativeButton = true, onPositiveButtonClick = {
+                        clearUserName()
+                        clearPassword()
+                        clearScore()
+                        clearClubLevel()
+                        requireContext().startActivity(StartActivity.createIntent(false, requireContext()))
+                    })
+                }
+            }
 
             tvScore.text = getString(R.string.score)
 
@@ -63,23 +83,15 @@ class HomeFragment : BaseFragment() {
                     setItemInNavigation(leaguesFragment)
                 }
             }
-
-            cvClose.setOnClickListener {
-                showAlertDialogTheme(getString(R.string.close_game), getString(R.string.game_close_alert), showNegativeButton = true, onPositiveButtonClick = {
-                    clearUserName()
-                    clearPassword()
-                    clearScore()
-                    clearClubLevel()
-                    this@HomeFragment.activity?.finishAndRemoveTask()
-                })
-            }
         }
 
         requireActivity()
             .onBackPressedDispatcher
             .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    return
+                    if (getUserID() != 13) { return } else {
+                        showAlertDialogTheme(getString(R.string.quit_game), getString(R.string.game_close_alert), showNegativeButton = true, onPositiveButtonClick = { activity?.finishAndRemoveTask() })
+                    }
                 }
             })
     }

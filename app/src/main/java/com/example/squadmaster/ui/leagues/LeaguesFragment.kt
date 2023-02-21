@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.squadmaster.R
+import com.example.squadmaster.application.SessionManager.getUserID
 import com.example.squadmaster.application.SessionManager.updateRefreshToken
 import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.databinding.FragmentLeaguesBinding
@@ -33,11 +34,14 @@ class LeaguesFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupObservers()
         setupRecyclerViews()
 
-        setupObservers()
-
-        viewModel.getLeagues()
+        if (getUserID() != 13){
+            binding.rvLeagues.visibility = View.VISIBLE
+            binding.llShowLeague.visibility = View.GONE
+            viewModel.getLeagues()
+        }
 
         requireActivity()
             .onBackPressedDispatcher
@@ -61,7 +65,6 @@ class LeaguesFragment: BaseFragment() {
             layoutManager = GridLayoutManager(context, 2)
         }
     }
-
 
     private fun setupObservers() {
         viewModel.getViewState.observe(viewLifecycleOwner) { state ->

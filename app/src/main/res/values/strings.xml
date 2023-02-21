@@ -39,8 +39,11 @@
 
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="login_as_guest">Login as Guest</string>
+    <string name="login_as_guest_description">If you login as a guest, your scores will not be recorded and you will be deprived of many services such as not being able to compete with other users.</string>
     <string name="txt_continue">Continue</string>
-    <string name="quit_game">Quıt Game</string>
+    <string name="logout">Sign Out</string>
+    <string name="quit_game">Quit Game</string>
 
     <string name="remember_me">Remember Me</string>
     <string name="yellow_card_description">The next wrong answer will be game over.</string>
@@ -48,13 +51,18 @@
     <string name="back_to_main_menu">Back to Main Menu</string>
     <string name="back_to_menu_description">You are directed to the main menu without receiving points.</string>
     <string name="game_close_alert">The game will be closed. Are you sure?</string>
+    <string name="logout_alert">The user will be logged out. Are you sure?</string>
     <string name="close_game">Close Game</string>
     <string name="select_answer">Select Answer</string>
 
     <string name="show_flag">Show Player\'s Country</string>
     <string name="show_flag_description">The player\'s country will be displayed for 50 points. Do you confirm?</string>
 
-    <string name="competitive_mode">Maın Game</string>
+    <string name="show_score">Login or register to compete with other users.</string>
+    <string name="show_league">Login or register to play league mode.</string>
+    <string name="login_or_register">Login or Register</string>
+
+    <string name="competitive_mode">Main Game</string>
     <string name="league_mode">League Mode</string>
     <string name="rank_list_by_best_scores">Rank List by Best Scores</string>
     <string name="rank_list_by_total_points">Rank List by Total Points</string>

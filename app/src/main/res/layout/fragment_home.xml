@@ -51,7 +51,6 @@
                     android:padding="32dp"
                     android:text="@string/competitive_mode"
                     android:textAlignment="center"
-                    android:textAllCaps="true"
                     android:textColor="@color/green"
                     android:textSize="24sp" />
 
@@ -79,7 +78,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="16dp"
-                    android:textAllCaps="true"
                     android:textSize="22sp"
                     tools:text="Best Score: 50 \n \n Total Score: 3000" />
 
@@ -100,7 +98,6 @@
                     android:gravity="center"
                     android:padding="16dp"
                     android:text="@string/league_mode"
-                    android:textAllCaps="true"
                     android:textSize="22sp" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -108,10 +105,11 @@
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvClose"
+            android:id="@+id/cvSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             app:cardElevation="8dp">
 
             <LinearLayout
@@ -120,13 +118,13 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSignOut"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sofia_sans"
                     android:padding="32dp"
-                    android:text="@string/quit_game"
+                    android:text="@string/logout"
                     android:textAlignment="center"
-                    android:textAllCaps="true"
                     android:textColor="@color/green"
                     android:textSize="24sp" />
 

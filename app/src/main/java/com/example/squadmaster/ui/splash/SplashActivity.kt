@@ -50,7 +50,7 @@ class SplashActivity : BaseActivity() {
 
     private fun goToStart() {
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(StartActivity.createIntent(this))
+            startActivity(StartActivity.createIntent(false,this))
         }, 2600)
     }
 

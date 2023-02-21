@@ -39,7 +39,10 @@
 
     <string name="login">Giriş Yap</string>
     <string name="register">Kayıt Ol</string>
+    <string name="login_as_guest">Ziyaretçi Olarak Giriş Yap</string>
+    <string name="login_as_guest_description">Ziyaretçi olarak giriş yapmanız durumunda skorlarınız kaydedilmeyecek ve başka kullanıcılarla mücadele edememe gibi birçok hizmetten mahrum kalacaksınız.</string>
     <string name="txt_continue">Devam Et</string>
+    <string name="logout">Çıkış Yap</string>
     <string name="quit_game">Oyundan Çık</string>
 
     <string name="remember_me">Beni Hatırla</string>
@@ -48,11 +51,16 @@
     <string name="back_to_main_menu">Ana Menüye Dön</string>
     <string name="back_to_menu_description">Puan almadan ana menüye yönlendiriliyorsunuz.</string>
     <string name="game_close_alert">Oyun kapatılacaktır. Emin misiniz?</string>
+    <string name="logout_alert">Kullanıcıdan çıkış yapılacaktır. Emin misiniz?</string>
     <string name="close_game">Oyundan Çık</string>
     <string name="select_answer">Cevap Seç</string>
 
     <string name="show_flag">Oyuncunun Ülkesini Göster</string>
     <string name="show_flag_description">Oyuncunun ülkesi 50 puan karşılığında gösterilecektir. Onaylıyor musunuz?</string>
+
+    <string name="show_score">Diğer kullanıcılarla yarışmak için giriş yap veya kayıt ol.</string>
+    <string name="show_league">Lig modunu oynamak için giriş yap veya kayıt ol.</string>
+    <string name="login_or_register">Giriş Yap veya Kayıt Ol</string>
 
     <string name="competitive_mode">Ana Oyun</string>
     <string name="league_mode">Lig Modu</string>

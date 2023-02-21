@@ -59,4 +59,25 @@
         app:cornerRadius="8dp"
         app:strokeColor="@color/white"
         app:strokeWidth="1dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLoginAsGuest"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/bg_ripple_effect"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/login_as_guest"
+        android:textAllCaps="false"
+        android:textColor="@color/green"
+        app:backgroundTint="@color/white"
+        app:cornerRadius="8dp"
+        app:strokeColor="@color/green"
+        app:strokeWidth="1dp" />
 </LinearLayout>

@@ -12,6 +12,7 @@ import com.example.squadmaster.R
 import com.example.squadmaster.application.SessionManager.getUserID
 import com.example.squadmaster.databinding.FragmentScoreBinding
 import com.example.squadmaster.ui.main.MainActivity
+import com.example.squadmaster.ui.start.StartActivity
 import com.example.squadmaster.utils.setVisibility
 import com.example.squadmaster.utils.showAlertDialogTheme
 
@@ -35,9 +36,16 @@ class ScoreFragment: BaseFragment() {
         setupObservers()
         setupRecyclerViews()
 
-        viewModel.getUserPoint(getUserID())
+        if (getUserID() != 13){
+            binding.svScore.visibility = View.VISIBLE
+            binding.llShowScore.visibility = View.GONE
+            viewModel.getUserPoint(getUserID())
+        }
 
-        binding.ivRefresh.setOnClickListener { viewModel.getUserPoint(getUserID()) }
+        binding.apply {
+            ivRefresh.setOnClickListener { viewModel.getUserPoint(getUserID()) }
+            btnLoginOrRegister.setOnClickListener { requireContext().startActivity(StartActivity.createIntent(true, requireContext())) }
+        }
 
         requireActivity()
             .onBackPressedDispatcher

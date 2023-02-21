@@ -181,7 +181,9 @@ class GameActivity : BaseActivity() {
         if (getWrongCount() == 3) {
             navigateToGameOver(getScore())
             if (getScore() != 0) {
-                viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
+                if (getUserID() != 13) {
+                    viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
+                }
             }
             clearWrongCount()
             clearScore()
