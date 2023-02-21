@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SquadMaster"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="tiramisu">
 
         <activity
             android:name=".ui.splash.SplashActivity"
@@ -60,8 +60,7 @@
         <activity
             android:name=".ui.game.GameActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateVisible"
-            android:noHistory="true">
+            android:windowSoftInputMode="adjustUnspecified">
         </activity>
 
         <activity
