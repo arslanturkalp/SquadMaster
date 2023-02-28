@@ -40,15 +40,13 @@ android {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
-    implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //Android
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
@@ -77,18 +75,25 @@ dependencies {
     implementation 'com.orhanobut:hawk:2.0.1'
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.14.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    implementation 'com.github.bumptech.glide:glide:4.15.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
 
     //Flexbox
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     //Lottie
-    implementation "com.airbnb.android:lottie:5.2.0"
+    implementation "com.airbnb.android:lottie:6.0.0"
 
     //SwipeRefreshLayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     //GoogleAdMob
     implementation 'com.google.android.gms:play-services-ads:21.5.0'
+
+    //ViewPager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    //EventBus
+    implementation "org.greenrobot:eventbus:3.3.1"
+
 }
