@@ -29,22 +29,7 @@ class LoginActivity : BaseActivity() {
 
         binding.apply {
             btnLogin.setOnClickListener {
-                if (cbRememberMe.isChecked) {
-                    viewModel.login(username = etUserName.text.toString(), password = etPassword.text.toString())
-                } else {
-                    showAlertDialogTheme(
-                        title = getString(R.string.warning),
-                        contentMessage = getString(R.string.remember_me_reminder),
-                        showNegativeButton = true,
-                        negativeButtonTitle = getString(R.string.login),
-                        onNegativeButtonClick = { viewModel.login(username = etUserName.text.toString(), password = etPassword.text.toString()) },
-                        positiveButtonTitle = getString(R.string.back),
-                        onPositiveButtonClick = {
-                            cbRememberMe.isChecked = true
-                            dismissProgressDialog()
-                        }
-                    )
-                }
+                viewModel.login(username = etUserName.text.toString(), password = etPassword.text.toString())
             }
         }
     }

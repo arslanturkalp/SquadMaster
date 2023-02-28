@@ -32,17 +32,27 @@
             android:textColor="@color/white"
             android:textSize="16sp" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etUserName"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/bg_green_with_radius_ten"
-            android:fontFamily="@font/sofia_sans"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:maxLines="1"
-            android:padding="8dp"
-            android:textColor="@color/white" />
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="none"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeWidth="1dp">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etUserName"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_green_with_radius_ten"
+                android:fontFamily="@font/sofia_sans"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/color_cursor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
@@ -53,27 +63,30 @@
             android:textColor="@color/white"
             android:textSize="16sp" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etPassword"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/bg_green_with_radius_ten"
-            android:fontFamily="@font/sofia_sans"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:padding="8dp"
-            android:textColor="@color/white" />
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cbRememberMe"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="8dp"
-            android:buttonTint="@color/white"
-            android:text="@string/remember_me"
-            android:textColor="@color/white" />
+            app:boxBackgroundMode="none"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeWidth="1dp"
+            app:endIconDrawable="@drawable/show_password_selector"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_green_with_radius_ten"
+                android:fontFamily="@font/sofia_sans"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/color_cursor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
