@@ -120,11 +120,17 @@ class ClubsActivity : BaseActivity() {
         clubs.forEach { club ->
             club.isPassed = false
         }
-        clubs.forEach { club ->
-            if (!club.isLocked) {
-                club.isPassed = true
+        if (clubs.count { !it.isLocked } > 1 ) {
+            clubs.forEach { club ->
+                if (!club.isLocked) {
+                    club.isPassed = true
+                }
             }
         }
+        if (clubs.count { it.isLocked } > 0) {
+            clubs.last { !it.isLocked }.isPassed = false
+        }
+
         clubAdapter.updateAdapter(clubs.sortedBy { it.level })
     }
 
