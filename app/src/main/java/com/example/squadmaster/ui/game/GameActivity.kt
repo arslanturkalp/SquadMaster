@@ -80,6 +80,7 @@ class GameActivity : BaseActivity() {
         viewModel.getSquad()
 
         binding.apply {
+            ivFlag.visibility = View.VISIBLE
             tvTeamName.apply { textSize = if (text.length > 23) 11f else if (text.length > 17) 12f else 14f }
 
             tvScore.text = getScore().toString()
