@@ -13,13 +13,12 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="green">#4E6C50</color>
-    <color name="red">#820000</color>
-    <color name="yellow">#F9A825</color>
+    <color name="red">#A00434</color>
+    <color name="yellow">#F4AC0C</color>
     <color name="pitch_green">#7eaf34</color>
 
     <color name="blue_1">#0A2647</color>
     <color name="blue_2">#144272</color>
     <color name="blue_3">#205295</color>
     <color name="blue_4">#2C74B3</color>
-
 </resources>

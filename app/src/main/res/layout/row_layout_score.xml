@@ -13,6 +13,21 @@
     android:orientation="horizontal">
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start|center_vertical"
+        android:padding="16dp"
+        android:textColor="@color/green"
+        android:textSize="18sp"
+        tools:text="1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -4,12 +4,16 @@ import BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.squadmaster.R
+import com.example.squadmaster.application.SessionManager.getIsShowedTutorial
+import com.example.squadmaster.application.SessionManager.updateIsShowedTutorial
 import com.example.squadmaster.databinding.ActivityMainBinding
 import com.example.squadmaster.ui.home.HomeFragment
 import com.example.squadmaster.ui.leagues.LeaguesFragment
 import com.example.squadmaster.ui.score.ScoreFragment
+import com.example.squadmaster.ui.slide.SlideFragment
 
 class MainActivity : BaseActivity() {
 
@@ -20,13 +24,21 @@ class MainActivity : BaseActivity() {
     val homeFragment = HomeFragment()
     val leaguesFragment = LeaguesFragment()
     val scoreFragment = ScoreFragment()
+    private val slideFragment = SlideFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initFragments()
-        showFragment(fragmentList.first())
+        if (!getIsShowedTutorial()){
+            showFragment(fragmentList.last())
+            binding.bottomNavigationView.visibility = View.GONE
+            updateIsShowedTutorial(true)
+        } else{
+            showFragment(fragmentList.first())
+            binding.bottomNavigationView.visibility = View.VISIBLE
+        }
         setupBottomNavigationView()
     }
 
@@ -35,6 +47,7 @@ class MainActivity : BaseActivity() {
             add(homeFragment)
             add(leaguesFragment)
             add(scoreFragment)
+            add(slideFragment)
         }
     }
 

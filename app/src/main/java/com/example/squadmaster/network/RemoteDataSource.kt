@@ -2,6 +2,7 @@ package com.example.squadmaster.network
 
 import android.annotation.SuppressLint
 import com.example.squadmaster.data.models.Resource
+import com.example.squadmaster.network.requests.LevelPassRequest
 import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.network.requests.RegisterRequest
 import com.example.squadmaster.network.requests.UpdatePointRequest
@@ -10,10 +11,13 @@ import com.example.squadmaster.network.responses.leagueresponses.GetLeaguesRespo
 import com.example.squadmaster.network.responses.loginresponses.LoginResponse
 import com.example.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.example.squadmaster.network.responses.squadresponses.GetSquadListResponse
+import com.example.squadmaster.network.responses.unlocksquadresponses.LevelPassResponse
 import com.example.squadmaster.network.responses.userpointresponses.GetRankListResponse
 import com.example.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.example.squadmaster.network.services.*
 import io.reactivex.Observable
+import okhttp3.Response
+import okhttp3.ResponseBody
 
 class RemoteDataSource {
 
@@ -70,7 +74,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun getSquadListByLeague(leagueID: Int, userLevel: Int): Observable<Resource<GetSquadListResponse>> {
+    fun getSquadListByLeague(leagueID: Int, userID: Int): Observable<Resource<GetSquadListResponse>> {
 
         return Observable.create { emitter ->
 
@@ -79,7 +83,7 @@ class RemoteDataSource {
             serviceProvider
                 .getRetrofit()
                 .create(SquadServices::class.java)
-                .getSquadListByLeague(leagueID, userLevel)
+                .getSquadListByLeague(leagueID, userID)
                 .subscribe(
                     {
                         emitter.onNext(Resource.success(it))
@@ -95,7 +99,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun getLeagues(userLevel: Int): Observable<Resource<GetLeaguesResponse>> {
+    fun getLeagues(userID: Int): Observable<Resource<GetLeaguesResponse>> {
 
         return Observable.create { emitter ->
 
@@ -104,7 +108,7 @@ class RemoteDataSource {
             serviceProvider
                 .getRetrofit()
                 .create(LeagueServices::class.java)
-                .getLeagues(userLevel)
+                .getLeagues(userID)
                 .subscribe(
                     {
                         emitter.onNext(Resource.success(it))
@@ -281,6 +285,31 @@ class RemoteDataSource {
                 .getRetrofit()
                 .create(PlayerServices::class.java)
                 .getFirstElevenByRandomSquad()
+                .subscribe(
+                    {
+                        emitter.onNext(Resource.success(it))
+                        emitter.onComplete()
+                    },
+                    {
+                        it.printStackTrace()
+                        emitter.onNext(Resource.error(it.message!!))
+                        emitter.onComplete()
+                    }
+                )
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    fun levelPass(levelPassRequest: LevelPassRequest): Observable<Resource<LevelPassResponse>> {
+
+        return Observable.create { emitter ->
+
+            emitter.onNext(Resource.loading())
+
+            serviceProvider
+                .getRetrofit()
+                .create(UnlockSquadServices::class.java)
+                .levelPass(levelPassRequest)
                 .subscribe(
                     {
                         emitter.onNext(Resource.success(it))

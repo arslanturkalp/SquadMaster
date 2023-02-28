@@ -21,8 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:weightSum="2">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivWrongFirst"
@@ -71,17 +71,18 @@
                 android:layout_weight="0.1"
                 android:background="@drawable/bg_white"
                 android:src="@drawable/ic_flag"
+                android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvScore"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="0.6"
                 android:gravity="center_vertical|end"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:layout_marginEnd="8dp"
                 tools:text="200" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -102,8 +103,8 @@
         android:layout_above="@id/cdAnswer"
         android:layout_below="@id/cvTeam"
         android:background="@drawable/football_pitch"
-        android:scrollbars="vertical"
-        android:fadeScrollbars="false">
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical">
 
         <FrameLayout
             android:id="@+id/flGeneral"
@@ -243,21 +244,21 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cdAnswer"
+        style="@style/AnswerCardView"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_alignParentBottom="true"
-        app:cardBackgroundColor="@color/green"
-        app:cardCornerRadius="16dp"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:cardElevation="24dp">
+        app:cardBackgroundColor="@color/green"
+        app:cardElevation="24dp"
+        tools:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPotentialAnswers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="center"
+            android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/row_layout_player" />

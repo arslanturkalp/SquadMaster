@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
-import com.example.squadmaster.application.SessionManager
 import com.example.squadmaster.application.SessionManager.getUnknownAnswer
 import com.example.squadmaster.application.SessionManager.getUnknownImage
 import com.example.squadmaster.databinding.RowLayoutPlayerBinding

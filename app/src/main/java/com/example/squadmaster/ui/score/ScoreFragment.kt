@@ -10,11 +10,17 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.squadmaster.R
 import com.example.squadmaster.application.SessionManager.getUserID
+import com.example.squadmaster.application.SessionManager.getUserName
+import com.example.squadmaster.application.SessionManager.updateRefreshToken
+import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.databinding.FragmentScoreBinding
 import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.ui.start.StartActivity
 import com.example.squadmaster.utils.setVisibility
 import com.example.squadmaster.utils.showAlertDialogTheme
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 
 class ScoreFragment: BaseFragment() {
 
@@ -39,6 +45,7 @@ class ScoreFragment: BaseFragment() {
         if (getUserID() != 13){
             binding.svScore.visibility = View.VISIBLE
             binding.llShowScore.visibility = View.GONE
+            binding.tvUserName.text = getUserName()
             viewModel.getUserPoint(getUserID())
         }
 
@@ -70,6 +77,7 @@ class ScoreFragment: BaseFragment() {
                 is ScoreViewState.SuccessState -> {
                     dismissProgressDialog()
                     setVisibility(View.VISIBLE, binding.tvTitleBestScores, binding.tvTitleTotalPoints)
+                    loadBannerAd()
                     bestPointsAdapter.updateAdapter(state.response.data.userBestPoints)
                     totalPointsAdapter.updateAdapter(state.response.data.userTotalPoints)
                 }
@@ -86,6 +94,11 @@ class ScoreFragment: BaseFragment() {
                     binding.tvUserTotalPoint.text = state.response.data.point.toString()
                     binding.tvUserBestScore.text = state.response.data.bestPoint.toString()
                 }
+                is ScoreViewState.RefreshState -> {
+                    updateToken(state.response.accessToken)
+                    updateRefreshToken(state.response.refreshToken)
+                    viewModel.getUserPoint(getUserID())
+                }
             }
         }
     }
@@ -99,5 +112,14 @@ class ScoreFragment: BaseFragment() {
             adapter = totalPointsAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
+    }
+
+    private fun loadBannerAd() {
+        val configuration = RequestConfiguration.Builder().setTestDeviceIds(listOf("03B094AA787BDF5746C59E26B9356600"))
+        MobileAds.setRequestConfiguration(configuration.build())
+        MobileAds.initialize(requireContext()) {}
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 }

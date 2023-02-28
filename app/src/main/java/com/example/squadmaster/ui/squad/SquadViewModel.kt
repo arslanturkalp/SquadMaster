@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.squadmaster.application.SessionManager.getRefreshToken
 import com.example.squadmaster.data.enums.Status
+import com.example.squadmaster.network.requests.LevelPassRequest
 import com.example.squadmaster.network.requests.UpdatePointRequest
 import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
+import com.example.squadmaster.network.responses.unlocksquadresponses.LevelPassResponse
 import com.example.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.example.squadmaster.utils.applyThreads
 
@@ -31,7 +33,9 @@ class SquadViewModel : BaseViewModel() {
                                 else -> viewState.postValue(GetSquadViewState.WarningState(response.message))
                             }
                         }
-                        Status.ERROR -> { refreshTokenLogin(getRefreshToken()) }
+                        Status.ERROR -> {
+                            refreshTokenLogin(getRefreshToken())
+                        }
                     }
                 }
         )
@@ -81,7 +85,26 @@ class SquadViewModel : BaseViewModel() {
                 .subscribe {
                     when (it.status) {
                         Status.LOADING -> viewState.postValue(GetSquadViewState.UserPointLoadingState)
-                        Status.SUCCESS -> { viewState.postValue(GetSquadViewState.UpdateState)}
+                        Status.SUCCESS -> {
+                            viewState.postValue(GetSquadViewState.UpdateState)
+                        }
+                        Status.ERROR -> viewState.postValue(GetSquadViewState.ErrorState(it.message!!))
+                    }
+                }
+        )
+    }
+
+    fun levelPass(levelPassRequest: LevelPassRequest) {
+        compositeDisposable.addAll(
+            remoteDataSource
+                .levelPass(levelPassRequest)
+                .applyThreads()
+                .subscribe {
+                    when (it.status) {
+                        Status.LOADING -> viewState.postValue(GetSquadViewState.UserPointLoadingState)
+                        Status.SUCCESS -> {
+                            viewState.postValue(GetSquadViewState.LevelPassState(it.data!!))
+                        }
                         Status.ERROR -> viewState.postValue(GetSquadViewState.ErrorState(it.message!!))
                     }
                 }
@@ -93,6 +116,7 @@ sealed class GetSquadViewState {
     object LoadingState : GetSquadViewState()
     object UserPointLoadingState : GetSquadViewState()
     object UpdateState : GetSquadViewState()
+    data class LevelPassState(val response: LevelPassResponse) : GetSquadViewState()
     data class SuccessState(val response: GetFirstElevenBySquadResponse) : GetSquadViewState()
     data class ErrorState(val message: String) : GetSquadViewState()
     data class WarningState(val message: String?) : GetSquadViewState()

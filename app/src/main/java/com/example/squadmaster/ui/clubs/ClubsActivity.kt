@@ -16,9 +16,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
-import com.example.squadmaster.application.SessionManager.getClubLevel
+import com.example.squadmaster.application.SessionManager.getUserID
 import com.example.squadmaster.application.SessionManager.updateRefreshToken
 import com.example.squadmaster.application.SessionManager.updateToken
+import com.example.squadmaster.data.models.MessageEvent
 import com.example.squadmaster.databinding.FragmentClubsBinding
 import com.example.squadmaster.network.responses.item.Club
 import com.example.squadmaster.network.responses.item.League
@@ -26,6 +27,9 @@ import com.example.squadmaster.ui.squad.SquadActivity
 import com.example.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.example.squadmaster.utils.getDataExtra
 import com.example.squadmaster.utils.showAlertDialogTheme
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class ClubsActivity : BaseActivity() {
@@ -48,8 +52,8 @@ class ClubsActivity : BaseActivity() {
 
         setupObservers()
 
-        val league = (intent.getDataExtra(EXTRAS_LEAGUE) as League)
-        viewModel.getSquadListByLeague(league.level, getClubLevel())
+        val league = intent.getDataExtra<League>(EXTRAS_LEAGUE)
+        viewModel.getSquadListByLeague(league.id, getUserID())
 
         binding.apply {
             tvLeagueName.text = league.name
@@ -105,18 +109,46 @@ class ClubsActivity : BaseActivity() {
                     updateToken(state.response.accessToken)
                     updateRefreshToken(state.response.refreshToken)
 
-                    viewModel.getSquadListByLeague(1, getClubLevel())
+                    viewModel.getSquadListByLeague(intent.getDataExtra<League>(EXTRAS_LEAGUE).id, getUserID())
                 }
             }
         }
     }
 
     private fun showClubs(clubs: List<Club>) {
+
+        clubs.forEach { club ->
+            club.isPassed = false
+        }
+        clubs.forEach { club ->
+            if (!club.isLocked) {
+                club.isPassed = true
+            }
+        }
         clubAdapter.updateAdapter(clubs.sortedBy { it.level })
     }
 
     private fun openSquad(club: Club) {
-        startActivity((SquadActivity.createIntent(this, club.name)))
+        startActivity((SquadActivity.createIntent(this, club, club.isPassed!!)))
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: MessageEvent) {
+        val league = intent.getDataExtra<League>(EXTRAS_LEAGUE)
+
+        if (event.message == "League Update") {
+            viewModel.getSquadListByLeague(league.id, getUserID())
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     companion object {

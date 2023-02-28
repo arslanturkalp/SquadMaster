@@ -40,13 +40,14 @@ class ClubAdapter(private val onClick: (Club) -> Unit) : RecyclerView.Adapter<Cl
                 }
 
                 if (!item.isLocked) {
+                    ivClubLogo.alpha = 1f
+                    ivLocked.visibility = View.GONE
+
                     itemView.setOnClickListener {
                         onClick.invoke(item)
                     }
                 }
 
-                tvClubName.text = item.name
-                tvClubName.textSize = if (item.name.length > 22) 11f else 12f
                 ivClubLogo.apply {
                     Glide.with(context)
                         .asBitmap()
@@ -54,6 +55,9 @@ class ClubAdapter(private val onClick: (Club) -> Unit) : RecyclerView.Adapter<Cl
                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                         .into(this)
                 }
+                tvClubName.text = item.name
+                tvClubName.textSize = if (item.name.length > 22) 11f else 12f
+
             }
         }
     }

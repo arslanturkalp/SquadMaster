@@ -5,8 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class League(
+    val id: Int,
     val name: String,
     val imagePath: String,
-    val level: Int,
+    val point: Int,
     val isLocked: Boolean
 ): Parcelable

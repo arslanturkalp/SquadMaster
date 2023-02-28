@@ -12,7 +12,6 @@ import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.application.SessionManager.updateUserID
 import com.example.squadmaster.application.SessionManager.updateUserName
 import com.example.squadmaster.databinding.ActivityLoginBinding
-import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.utils.showAlertDialogTheme
 
@@ -31,10 +30,21 @@ class LoginActivity : BaseActivity() {
         binding.apply {
             btnLogin.setOnClickListener {
                 if (cbRememberMe.isChecked) {
-                    updateUserName(etUserName.text.toString())
-                    updatePassword(etPassword.text.toString())
+                    viewModel.login(username = etUserName.text.toString(), password = etPassword.text.toString())
+                } else {
+                    showAlertDialogTheme(
+                        title = getString(R.string.warning),
+                        contentMessage = getString(R.string.remember_me_reminder),
+                        showNegativeButton = true,
+                        negativeButtonTitle = getString(R.string.login),
+                        onNegativeButtonClick = { viewModel.login(username = etUserName.text.toString(), password = etPassword.text.toString()) },
+                        positiveButtonTitle = getString(R.string.back),
+                        onPositiveButtonClick = {
+                            cbRememberMe.isChecked = true
+                            dismissProgressDialog()
+                        }
+                    )
                 }
-                viewModel.signIn(LoginRequest(username = etUserName.text.toString(), password = etPassword.text.toString()))
             }
         }
     }
@@ -48,6 +58,10 @@ class LoginActivity : BaseActivity() {
                     updateToken(state.response.data.token.accessToken)
                     updateRefreshToken(state.response.data.token.refreshToken)
                     updateUserID(state.response.data.id)
+
+                    updateUserName(binding.etUserName.text.toString())
+                    updatePassword(binding.etPassword.text.toString())
+
                     goToMain()
                 }
                 is LoginViewState.ErrorState -> {
@@ -57,6 +71,10 @@ class LoginActivity : BaseActivity() {
                 is LoginViewState.WarningState -> {
                     dismissProgressDialog()
                     state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
+                }
+                is LoginViewState.ValidationState -> {
+                    dismissProgressDialog()
+                    showAlertDialogTheme(title = getString(R.string.warning), contentMessage = state.validationErrorList.joinToString(separator = "\n") { getString(it) })
                 }
             }
         }

@@ -3,14 +3,14 @@ package com.example.squadmaster.ui.game
 import BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.squadmaster.application.SessionManager
+import com.example.squadmaster.application.SessionManager.getRefreshToken
 import com.example.squadmaster.data.enums.Status
 import com.example.squadmaster.network.requests.UpdatePointRequest
 import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.example.squadmaster.utils.applyThreads
 
-class GameViewModel: BaseViewModel() {
+class GameViewModel : BaseViewModel() {
 
     private val viewState = MutableLiveData<GameViewState>()
     val getViewState: LiveData<GameViewState> = viewState
@@ -30,7 +30,7 @@ class GameViewModel: BaseViewModel() {
                                 else -> viewState.postValue(GameViewState.WarningState(response.message))
                             }
                         }
-                        Status.ERROR -> { refreshTokenLogin(SessionManager.getRefreshToken()) }
+                        Status.ERROR -> { refreshTokenLogin(getRefreshToken()) }
                     }
                 }
         )
@@ -63,12 +63,11 @@ class GameViewModel: BaseViewModel() {
                     when (it.status) {
                         Status.LOADING -> viewState.postValue(GameViewState.ScoreLoadingState)
                         Status.SUCCESS -> viewState.postValue(GameViewState.UpdateState)
-                        Status.ERROR -> viewState.postValue(GameViewState.ErrorState(it.message!!))
+                        Status.ERROR -> { refreshTokenLogin(getRefreshToken()) }
                     }
                 }
         )
     }
-
 }
 
 sealed class GameViewState {

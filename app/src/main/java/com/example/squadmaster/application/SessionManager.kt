@@ -7,15 +7,13 @@ object SessionManager {
     private const val KEY_UNKNOWN_ANSWER = "KEY_UNKNOWN_ANSWER"
     private const val KEY_UNKNOWN_IMAGE = "KEY_UNKNOWN_IMAGE"
     private const val KEY_IS_SHOWED_FLAG = "KEY_IS_SHOWED_FLAG"
+    private const val KEY_IS_SHOWED_TUTORIAL = "KEY_IS_SHOWED_TUTORIAL"
 
     private const val KEY_TOKEN = "KEY_TOKEN"
     private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
 
     private const val KEY_SCORE = "KEY_SCORE"
     private const val KEY_WRONG_COUNT = "KEY_WRONG_COUNT"
-
-    private const val KEY_CLUB_LEVEL = "KEY_CLUB_LEVEL"
-    private const val KEY_LEAGUE_LEVEL = "KEY_LEAGUE_LEVEL"
 
     private const val KEY_USER_ID = "KEY_USER_ID"
     private const val KEY_USER_NAME = "KEY_USER_NAME"
@@ -30,13 +28,11 @@ object SessionManager {
     private var score: Int = 0
     private var wrongCount: Int = 0
 
-    private var clubLevel: Int = 1
-    private var leagueLevel: Int = 1
-
     private var userName: String = ""
     private var password: String = ""
 
     private var isShowedFlag: Boolean = false
+    private var isShowedTutorial: Boolean = false
 
     init {
         unknownAnswer = Hawk.get(KEY_UNKNOWN_ANSWER, "")
@@ -46,11 +42,10 @@ object SessionManager {
         userID = Hawk.get(KEY_USER_ID, 0)
         score = Hawk.get(KEY_SCORE, 0)
         wrongCount = Hawk.get(KEY_WRONG_COUNT, 0)
-        clubLevel = Hawk.get(KEY_CLUB_LEVEL, 1)
-        leagueLevel = Hawk.get(KEY_LEAGUE_LEVEL, 1)
         userName = Hawk.get(KEY_USER_NAME, "")
         password = Hawk.get(KEY_PASSWORD, "")
         isShowedFlag = Hawk.get(KEY_IS_SHOWED_FLAG, false)
+        isShowedTutorial = Hawk.get(KEY_IS_SHOWED_TUTORIAL, false)
 
     }
 
@@ -131,17 +126,6 @@ object SessionManager {
         wrongCount = 0
     }
 
-    fun updateClubLevel(value: Int) {
-        Hawk.put(KEY_CLUB_LEVEL, value)
-        clubLevel = value
-    }
-
-    fun getClubLevel() = clubLevel
-
-    fun clearClubLevel() {
-        clubLevel = 1
-    }
-
     fun updateUserName(value: String) {
         Hawk.put(KEY_USER_NAME, value)
         userName = value
@@ -173,5 +157,16 @@ object SessionManager {
 
     fun clearIsShowedFlag() {
         updateIsShowedFlag(false)
+    }
+
+    fun updateIsShowedTutorial(value: Boolean) {
+        Hawk.put(KEY_IS_SHOWED_TUTORIAL, value)
+        isShowedTutorial = value
+    }
+
+    fun getIsShowedTutorial() = isShowedTutorial
+
+    fun clearIsShowedTutorial() {
+        updateIsShowedTutorial(false)
     }
 }

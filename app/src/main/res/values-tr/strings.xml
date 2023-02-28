@@ -20,7 +20,7 @@
     <string name="leagues">Ligler</string>
     <string name="score">Skor</string>
 
-    <string name="start">Başla</string>
+    <string name="start_game">Oyuna Başla</string>
     <string name="next_level">Sonraki Seviye</string>
     <string name="restart">Yeniden Başla</string>
     <string name="game_over">Oyun Bitti</string>
@@ -31,11 +31,11 @@
     <string name="insufficient_score">Yetersiz puan</string>
     <string name="total_score">En İyi Puan: %1$s \n \n Toplam Puan: %2$s</string>
 
-    <string name="name">Ad</string>
+    <string name="name">*Ad</string>
     <string name="surname">Soyad</string>
-    <string name="username">Kullanıcı Adı</string>
-    <string name="email">E-Mail</string>
-    <string name="password">Şifre</string>
+    <string name="username">*Kullanıcı Adı</string>
+    <string name="email">*E-Mail</string>
+    <string name="password">*Şifre</string>
 
     <string name="login">Giriş Yap</string>
     <string name="register">Kayıt Ol</string>
@@ -56,7 +56,7 @@
     <string name="select_answer">Cevap Seç</string>
 
     <string name="show_flag">Oyuncunun Ülkesini Göster</string>
-    <string name="show_flag_description">Oyuncunun ülkesi 50 puan karşılığında gösterilecektir. Onaylıyor musunuz?</string>
+    <string name="show_flag_description">Oyuncunun ülkesi 20 puan karşılığında gösterilecektir. Onaylıyor musunuz?</string>
 
     <string name="show_score">Diğer kullanıcılarla yarışmak için giriş yap veya kayıt ol.</string>
     <string name="show_league">Lig modunu oynamak için giriş yap veya kayıt ol.</string>
@@ -70,7 +70,14 @@
 
     <string name="best_score">En İyi Skor</string>
     <string name="total_point">Toplam Puan</string>
-    <string name="me">Ben</string>
 
     <string name="language">Dil</string>
+    <string name="remember_me_reminder">Beni hatırla seçeneğini işaretleyerek uygulamaya bir dahaki girişinizde direkt anasayfaya yönlendirilebilirsiniz.</string>
+
+    <string name="name_empty_warning">Lütfen isim giriniz.</string>
+    <string name="username_empty_warning">Lütfen kullanıcı adınızı giriniz.</string>
+    <string name="password_empty_warning">Lütfen şifrenizi giriniz.</string>
+    <string name="email_empty_warning">Lütfen e-mail giriniz.</string>
+
+    <string name="club_is_passed">Bu kulübü zaten tamamladın.</string>
 </resources>

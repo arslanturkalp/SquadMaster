@@ -50,7 +50,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="36dp"
+                    android:src="@drawable/ic_main" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
@@ -60,7 +67,7 @@
                     android:text="@string/competitive_mode"
                     android:textAlignment="center"
                     android:textColor="@color/green"
-                    android:textSize="24sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
@@ -80,14 +87,57 @@
                 android:layout_weight="0.5"
                 app:cardElevation="8dp">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvScore"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:textSize="22sp"
-                    tools:text="Best Score: 50 \n \n Total Score: 3000" />
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_coin" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvTotalScore"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="22sp"
+                            tools:text="0" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_best_score" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvBestScore"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="22sp"
+                            tools:text="0" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -100,13 +150,27 @@
                 android:layout_weight="0.5"
                 app:cardElevation="8dp">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="@string/league_mode"
-                    android:textSize="22sp" />
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_clubs_enabled" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:text="@string/league_mode"
+                        android:textSize="22sp" />
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -123,7 +187,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivSignOut"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="32dp"
+                    android:src="@drawable/ic_logout" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvSignOut"
@@ -134,7 +206,7 @@
                     android:text="@string/logout"
                     android:textAlignment="center"
                     android:textColor="@color/green"
-                    android:textSize="24sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 

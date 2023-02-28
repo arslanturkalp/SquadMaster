@@ -10,6 +10,8 @@ import android.os.Looper
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
+import androidx.core.content.ContextCompat
+import com.example.squadmaster.R
 import com.example.squadmaster.databinding.ActivitySplashBinding
 import com.example.squadmaster.ui.start.StartActivity
 import com.example.squadmaster.utils.LangUtils.Companion.checkLanguage
@@ -24,34 +26,26 @@ class SplashActivity : BaseActivity() {
         setContentView(binding.root)
 
         checkLanguage(this)
-
-        val rotate = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        rotate.duration = 2600
-        rotate.interpolator = LinearInterpolator()
-
-        binding.apply {
-            imageView.startAnimation(rotate)
-        }
-
+        setNavigationBarColor()
+        rotateBall()
         goToStart()
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun setNavigationBarColor() {
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.green)
+    }
 
+    private fun rotateBall() {
         val rotate = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        rotate.duration = 2600
+        rotate.duration = 3000
         rotate.interpolator = LinearInterpolator()
-
-        binding.apply {
-            imageView.startAnimation(rotate)
-        }
+        binding.imageView.startAnimation(rotate)
     }
 
     private fun goToStart() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(StartActivity.createIntent(false,this))
-        }, 2600)
+        }, 2500)
     }
 
     companion object {

@@ -3,6 +3,7 @@ package com.example.squadmaster.ui.leagues
 import BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.squadmaster.application.SessionManager.getUserID
 import com.example.squadmaster.data.enums.Status
 import com.example.squadmaster.network.responses.item.League
 import com.example.squadmaster.network.responses.loginresponses.LoginResponse
@@ -16,7 +17,7 @@ class LeaguesViewModel: BaseViewModel() {
     fun getLeagues() {
         compositeDisposable.addAll(
             remoteDataSource
-                .getLeagues(0)
+                .getLeagues(getUserID())
                 .applyThreads()
                 .subscribe {
                     when (it.status) {

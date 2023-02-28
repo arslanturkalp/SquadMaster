@@ -13,7 +13,7 @@ class LangUtils {
 
         fun checkLanguage(context: Context) {
             val appLanguage = getCurrentAppLanguage(context)
-            val savedAppLanguage = Hawk.get(KEY_APP_LANG, "tr")
+            val savedAppLanguage = Hawk.get(KEY_APP_LANG, "en")
 
             if (savedAppLanguage != null && savedAppLanguage != appLanguage) {
                 changeLanguage(context, savedAppLanguage)

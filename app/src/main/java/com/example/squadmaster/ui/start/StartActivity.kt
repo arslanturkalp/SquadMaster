@@ -7,16 +7,23 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import com.example.squadmaster.R
+import com.example.squadmaster.application.Constants.ADMIN_PASSWORD
+import com.example.squadmaster.application.Constants.ADMIN_USER
+import com.example.squadmaster.application.SessionManager.clearPassword
+import com.example.squadmaster.application.SessionManager.clearUserName
 import com.example.squadmaster.application.SessionManager.getPassword
 import com.example.squadmaster.application.SessionManager.getUserName
+import com.example.squadmaster.application.SessionManager.updatePassword
 import com.example.squadmaster.application.SessionManager.updateRefreshToken
 import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.application.SessionManager.updateUserID
+import com.example.squadmaster.application.SessionManager.updateUserName
 import com.example.squadmaster.databinding.ActivityStartBinding
 import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.ui.login.LoginActivity
 import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.ui.register.RegisterActivity
+import com.example.squadmaster.ui.splash.SplashActivity
 import com.example.squadmaster.utils.addOnBackPressedListener
 import com.example.squadmaster.utils.getDataExtra
 import com.example.squadmaster.utils.setVisibility
@@ -43,16 +50,27 @@ class StartActivity : BaseActivity() {
         }
 
         if (getUserName() != "" && getPassword() != "") {
-            binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnSignUp, btnLoginAsGuest) }
-            viewModel.signIn(LoginRequest(username = getUserName(), password = getPassword()))
+            if (!intent.getDataExtra<Boolean>(EXTRAS_FROM_GUEST)) {
+                binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnSignUp, btnLoginAsGuest) }
+                viewModel.signIn(LoginRequest(username = getUserName(), password = getPassword()))
+            }
         }
+
         binding.apply {
             btnLogin.setOnClickListener { startActivity(LoginActivity.createIntent(this@StartActivity)) }
             btnSignUp.setOnClickListener { startActivity(RegisterActivity.createIntent(this@StartActivity)) }
             btnLoginAsGuest.setOnClickListener {
-                showAlertDialogTheme(getString(R.string.login_as_guest), getString(R.string.login_as_guest_description), showNegativeButton = true, negativeButtonTitle = getString(R.string.yes), positiveButtonTitle = getString(R.string.no), onNegativeButtonClick = {
-                    viewModel.signIn(LoginRequest(username = "admin", password = "admin1234"))
-                })
+                showAlertDialogTheme(
+                    getString(R.string.login_as_guest),
+                    getString(R.string.login_as_guest_description),
+                    showNegativeButton = true,
+                    negativeButtonTitle = getString(R.string.yes),
+                    positiveButtonTitle = getString(R.string.no),
+                    onNegativeButtonClick = {
+                        viewModel.signIn(LoginRequest(username = ADMIN_USER, password = ADMIN_PASSWORD))
+                        updateUserName(ADMIN_USER)
+                        updatePassword(ADMIN_PASSWORD)
+                    })
             }
         }
     }
@@ -63,18 +81,24 @@ class StartActivity : BaseActivity() {
                 is StartViewState.LoadingState -> showProgressDialog()
                 is StartViewState.SuccessState -> {
                     dismissProgressDialog()
-                    updateToken(state.response.data.token.accessToken)
-                    updateRefreshToken(state.response.data.token.refreshToken)
-                    updateUserID(state.response.data.id)
+                    state.response.data.apply {
+                        updateToken(token.accessToken)
+                        updateRefreshToken(token.refreshToken)
+                        updateUserID(id)
+                    }
                     goToMain()
-                }
-                is StartViewState.ErrorState -> {
-                    dismissProgressDialog()
-                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
+
                 }
                 is StartViewState.WarningState -> {
                     dismissProgressDialog()
                     state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
+                    clearUserName()
+                    clearPassword()
+                    startActivity(SplashActivity.createIntent(this, false))
+                }
+                is StartViewState.ErrorState -> {
+                    dismissProgressDialog()
+                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
                 }
             }
         }

@@ -101,7 +101,7 @@
             android:background="@drawable/bg_green_with_radius_ten"
             android:fontFamily="@font/sofia_sans"
             android:imeOptions="actionNext"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:maxLines="1"
             android:padding="8dp"
             android:textColor="@color/white" />
@@ -149,4 +149,5 @@
             app:strokeColor="@color/white"
             app:strokeWidth="1dp" />
     </LinearLayout>
+
 </ScrollView>

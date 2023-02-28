@@ -31,22 +31,22 @@
             android:id="@+id/ivPlayerPhoto"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:scaleType="centerCrop"
             android:background="@color/white"
-            app:strokeColor="@color/white"
             android:elevation="4dp"
             android:padding="3dp"
-            app:strokeWidth="1dp"
+            android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:srcCompat="@drawable/ic_launcher_background"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
-            app:lottie_rawRes="@raw/star"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true"/>
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/star" />
 
     </LinearLayout>
 
@@ -57,8 +57,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:textSize="18sp"
         android:textColor="@color/green"
+        android:textSize="18sp"
         tools:text="Victor Osimhen" />
 
     <com.google.android.material.button.MaterialButton
@@ -71,6 +71,7 @@
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="@string/next_level"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         app:backgroundTint="@color/green"
         app:cornerRadius="16dp" />

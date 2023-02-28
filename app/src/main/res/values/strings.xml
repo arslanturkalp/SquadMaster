@@ -20,7 +20,7 @@
     <string name="leagues">Leagues</string>
     <string name="score">Score</string>
 
-    <string name="start">Start</string>
+    <string name="start_game">Start Game</string>
     <string name="next_level">Next Level</string>
     <string name="restart">Restart</string>
     <string name="game_over">Game Over</string>
@@ -31,11 +31,11 @@
     <string name="insufficient_score">Unsufficient point.</string>
     <string name="total_score">Best Score: %1$s \n \n Total Score: %2$s</string>
 
-    <string name="name">Name</string>
+    <string name="name">*Name</string>
     <string name="surname">Surname</string>
-    <string name="username">User Name</string>
-    <string name="email">E-Mail</string>
-    <string name="password">Password</string>
+    <string name="username">*User Name</string>
+    <string name="email">*E-Mail</string>
+    <string name="password">*Password</string>
 
     <string name="login">Login</string>
     <string name="register">Register</string>
@@ -56,7 +56,7 @@
     <string name="select_answer">Select Answer</string>
 
     <string name="show_flag">Show Player\'s Country</string>
-    <string name="show_flag_description">The player\'s country will be displayed for 50 points. Do you confirm?</string>
+    <string name="show_flag_description">The player\'s country will be displayed for 20 points. Do you confirm?</string>
 
     <string name="show_score">Login or register to compete with other users.</string>
     <string name="show_league">Login or register to play league mode.</string>
@@ -70,7 +70,14 @@
 
     <string name="best_score">Best Score</string>
     <string name="total_point">Total Point</string>
-    <string name="me">Me</string>
 
     <string name="language">Language</string>
+    <string name="remember_me_reminder">You can be directed to the homepage the next time you log in to the application by checking the Remember Me option.</string>
+
+    <string name="name_empty_warning">Please enter your name.</string>
+    <string name="username_empty_warning">Please enter your username.</string>
+    <string name="password_empty_warning">Please enter your password.</string>
+    <string name="email_empty_warning">Please enter your e-mail.</string>
+
+    <string name="club_is_passed">You have already completed this club.</string>
 </resources>

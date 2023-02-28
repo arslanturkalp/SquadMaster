@@ -3,9 +3,12 @@ package com.example.squadmaster.ui.score
 import BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.squadmaster.application.SessionManager.getRefreshToken
 import com.example.squadmaster.data.enums.Status
+import com.example.squadmaster.network.responses.item.Token
 import com.example.squadmaster.network.responses.userpointresponses.GetRankListResponse
 import com.example.squadmaster.network.responses.userpointresponses.UserPointResponse
+import com.example.squadmaster.ui.home.HomeViewState
 import com.example.squadmaster.utils.applyThreads
 
 class ScoreViewModel : BaseViewModel() {
@@ -44,6 +47,26 @@ class ScoreViewModel : BaseViewModel() {
                             viewState.postValue(ScoreViewState.UserPointState(response))
                             getRankList()
                         }
+                        Status.ERROR -> {
+                            refreshTokenLogin(getRefreshToken())
+                        }
+                    }
+                }
+        )
+    }
+
+    private fun refreshTokenLogin(refreshToken: String) {
+        compositeDisposable.addAll(
+            remoteDataSource
+                .signInRefreshToken(refreshToken)
+                .applyThreads()
+                .subscribe {
+                    when (it.status) {
+                        Status.LOADING -> viewState.postValue(ScoreViewState.LoadingState)
+                        Status.SUCCESS -> {
+                            val response = it.data!!
+                            viewState.postValue(ScoreViewState.RefreshState(response))
+                        }
                         Status.ERROR -> viewState.postValue(ScoreViewState.ErrorState(it.message!!))
                     }
                 }
@@ -58,4 +81,5 @@ sealed class ScoreViewState {
     data class ErrorState(val message: String) : ScoreViewState()
     data class WarningState(val message: String?) : ScoreViewState()
     data class UserPointState(val response: UserPointResponse) : ScoreViewState()
+    data class RefreshState(val response: Token) : ScoreViewState()
 }

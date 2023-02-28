@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.example.squadmaster.R
 import com.example.squadmaster.application.Constants
 import com.example.squadmaster.databinding.FragmentSettingsBinding
 import com.example.squadmaster.ui.splash.SplashActivity
@@ -25,7 +26,6 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setFlags()
     }
 
@@ -35,7 +35,7 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
         with(binding) {
             ivTurkish.apply {
                 Glide.with(context)
-                    .load("https://flagsapi.com/TR/shiny/64.png")
+                    .load(R.drawable.ic_turkish)
                     .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(this)
 
@@ -43,7 +43,7 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
             }
             ivEnglish.apply {
                 Glide.with(context)
-                    .load("https://flagsapi.com/GB/shiny/64.png")
+                    .load(R.drawable.ic_english)
                     .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(this)
 

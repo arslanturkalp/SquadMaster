@@ -18,5 +18,5 @@ data class Player(
     val weight: String?,
     val imagePath: String,
     val squadImagePath: String,
-    val isVisible: Boolean
+    var isVisible: Boolean
 ) : Parcelable

@@ -34,10 +34,10 @@ class ClubsViewModel : BaseViewModel() {
         )
     }
 
-    fun getSquadListByLeague(leagueID: Int, userLevel: Int) {
+    fun getSquadListByLeague(leagueID: Int, userID: Int) {
         compositeDisposable.addAll(
             remoteDataSource
-                .getSquadListByLeague(leagueID, userLevel)
+                .getSquadListByLeague(leagueID, userID)
                 .applyThreads()
                 .subscribe {
                     when (it.status) {

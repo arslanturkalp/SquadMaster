@@ -8,5 +8,5 @@ import retrofit2.http.Query
 interface LeagueServices {
 
     @GET("League/GetLeagues")
-    fun getLeagues(@Query("userLevel") userLevel: Int): Single<GetLeaguesResponse>
+    fun getLeagues(@Query("userID") userID: Int): Single<GetLeaguesResponse>
 }

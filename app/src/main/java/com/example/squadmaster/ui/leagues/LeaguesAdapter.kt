@@ -2,6 +2,7 @@ package com.example.squadmaster.ui.leagues
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -9,6 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.databinding.RowLayoutLeagueBinding
 import com.example.squadmaster.network.responses.item.League
+import com.example.squadmaster.utils.setVisibility
 
 class LeaguesAdapter(private val onClick: (League) -> Unit) : RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder>() {
 
@@ -33,8 +35,17 @@ class LeaguesAdapter(private val onClick: (League) -> Unit) : RecyclerView.Adapt
 
             with(binding) {
 
-                itemView.setOnClickListener {
-                    onClick.invoke(item)
+                if (item.isLocked) {
+                    ivLeague.alpha = 0.1f
+                    setVisibility(View.VISIBLE, ivLocked, llPoint)
+                    tvLeagueName.visibility = View.GONE
+                } else {
+                    ivLeague.alpha = 1f
+                    setVisibility(View.GONE, ivLocked, llPoint)
+                    tvLeagueName.visibility = View.VISIBLE
+                    itemView.setOnClickListener {
+                        onClick.invoke(item)
+                    }
                 }
 
                 ivLeague.apply {
@@ -44,8 +55,8 @@ class LeaguesAdapter(private val onClick: (League) -> Unit) : RecyclerView.Adapt
                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                         .into(this)
                 }
-
                 tvLeagueName.text = item.name
+                tvPoint.text = item.point.toString()
             }
         }
     }

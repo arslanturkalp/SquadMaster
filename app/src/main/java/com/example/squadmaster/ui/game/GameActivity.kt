@@ -32,6 +32,7 @@ import com.example.squadmaster.application.SessionManager.updateUnknownAnswer
 import com.example.squadmaster.application.SessionManager.updateUnknownImage
 import com.example.squadmaster.application.SessionManager.updateWrongCount
 import com.example.squadmaster.application.SquadMasterApp.Companion.TAG
+import com.example.squadmaster.data.enums.PositionIdStatus
 import com.example.squadmaster.data.enums.PositionTypeIdStatus
 import com.example.squadmaster.databinding.ActivitySquadBinding
 import com.example.squadmaster.network.requests.UpdatePointRequest
@@ -44,7 +45,6 @@ import com.example.squadmaster.ui.yellowcard.YellowCardFragment
 import com.example.squadmaster.utils.*
 import com.google.android.flexbox.*
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -88,15 +88,15 @@ class GameActivity : BaseActivity() {
             }
             svGeneral.postDelayed({ svGeneral.fullScroll(ScrollView.FOCUS_DOWN) }, 350)
             when (getWrongCount()) {
-                1 -> binding.ivWrongThird.alpha = 0.2f
+                1 -> ivWrongThird.alpha = 0.2f
                 2 -> {
-                    binding.ivWrongThird.alpha = 0.2f
-                    binding.ivWrongSecond.alpha = 0.2f
+                    ivWrongThird.alpha = 0.2f
+                    ivWrongSecond.alpha = 0.2f
                 }
                 3 -> {
-                    binding.ivWrongThird.alpha = 0.2f
-                    binding.ivWrongSecond.alpha = 0.2f
-                    binding.ivWrongFirst.alpha = 0.2f
+                    ivWrongThird.alpha = 0.2f
+                    ivWrongSecond.alpha = 0.2f
+                    ivWrongFirst.alpha = 0.2f
                 }
                 else -> clearWrongCount()
             }
@@ -144,8 +144,10 @@ class GameActivity : BaseActivity() {
                 is GameViewState.LoadingState -> showProgressDialog()
                 is GameViewState.SuccessState -> {
                     dismissProgressDialog()
-                    setList(state.response.data.playerList, state.response.data.potentialAnswerList)
-                    binding.tvTeamName.text = state.response.data.squad.name
+                    with(state.response.data) {
+                        setList(playerList, potentialAnswerList)
+                        binding.tvTeamName.text = squad.name
+                    }
                 }
                 is GameViewState.ErrorState -> {
                     dismissProgressDialog()
@@ -156,9 +158,10 @@ class GameActivity : BaseActivity() {
                 }
                 is GameViewState.RefreshState -> {
                     dismissProgressDialog()
-                    updateToken(state.response.accessToken)
-                    updateRefreshToken(state.response.refreshToken)
-
+                    with(state.response) {
+                        updateToken(accessToken)
+                        updateRefreshToken(refreshToken)
+                    }
                     viewModel.getSquad()
                 }
                 else -> {}
@@ -173,7 +176,8 @@ class GameActivity : BaseActivity() {
             showNegativeButton = true,
             positiveButtonTitle = getString(R.string.yes),
             negativeButtonTitle = getString(R.string.no),
-            onPositiveButtonClick = { startActivity(MainActivity.createIntent(this@GameActivity)) })
+            onPositiveButtonClick = { startActivity(MainActivity.createIntent(this@GameActivity)) }
+        )
     }
 
     private fun showWrongAnswerAnimation() {
@@ -189,15 +193,11 @@ class GameActivity : BaseActivity() {
         }
         if (getWrongCount() == 3) {
             navigateToGameOver(getScore())
-            if (getScore() != 0) {
-                if (getUserID() != 13) {
-                    viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
-                }
+            if (getScore() != 0 && getUserID() != 13) {
+                viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
             }
             if (mInterstitialAd != null) {
                 mInterstitialAd?.show(this)
-            } else {
-                Log.d("TAG", "The interstitial ad wasn't ready yet.")
             }
             clearWrongCount()
             clearScore()
@@ -208,9 +208,9 @@ class GameActivity : BaseActivity() {
         setupUI(squad)
         goalkeeperAdapter.updateAdapter(squad.filter { it.positionTypeID == PositionTypeIdStatus.GOALKEEPER.value })
         defenceAdapter.updateAdapter(ifTwoBack(squad.filter { it.positionTypeID == PositionTypeIdStatus.DEFENCE.value } as ArrayList<Player>))
-        middleAdapter.updateAdapter(squad.filter { it.positionTypeID == PositionTypeIdStatus.MIDFIELDER.value && it.positionID != 9 })
-        attackingMiddleAdapter.updateAdapter(squad.filter { it.positionID == 10 || it.positionID == 9 })
-        forwardAdapter.updateAdapter(ifTwoWinger(squad.filter { it.positionTypeID == PositionTypeIdStatus.FORWARD.value && it.positionID != 10 } as ArrayList<Player>))
+        middleAdapter.updateAdapter(squad.filter { it.positionTypeID == PositionTypeIdStatus.MIDFIELDER.value && it.positionID != PositionIdStatus.ON.value })
+        attackingMiddleAdapter.updateAdapter(squad.filter { it.positionID == PositionIdStatus.FA.value || it.positionID == PositionIdStatus.ON.value })
+        forwardAdapter.updateAdapter(ifTwoWinger(squad.filter { it.positionTypeID == PositionTypeIdStatus.FORWARD.value && it.positionID != PositionIdStatus.FA.value } as ArrayList<Player>))
 
         binding.cdAnswer.visibility = View.VISIBLE
         potentialAnswersAdapter.updateAdapter(potentialAnswers)
@@ -239,8 +239,7 @@ class GameActivity : BaseActivity() {
                         positiveButtonTitle = getString(R.string.yes),
                         negativeButtonTitle = getString(R.string.no),
                         onPositiveButtonClick = {
-
-                            if (getScore() >= 30) {
+                            if (getScore() >= 20) {
                                 ivFlag.apply {
                                     setBackgroundColor(ContextCompat.getColor(context, R.color.green))
                                     Glide.with(context)
@@ -249,7 +248,7 @@ class GameActivity : BaseActivity() {
                                         .into(this)
                                 }
                                 updateIsShowedFlag(true)
-                                updateScore(getScore() - 30)
+                                updateScore(getScore() - 20)
                                 tvScore.text = getScore().toString()
 
                             } else Toast.makeText(this@GameActivity, getString(R.string.insufficient_score), Toast.LENGTH_SHORT).show()
@@ -282,29 +281,7 @@ class GameActivity : BaseActivity() {
     private fun loadAds() {
         val adRequest = AdRequest.Builder().build()
 
-        mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
-            override fun onAdClicked() {
-                // Called when a click is recorded for an ad.
-                Log.d(TAG, "Ad was clicked.")
-            }
-
-            override fun onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
-                Log.d(TAG, "Ad dismissed fullscreen content.")
-                mInterstitialAd = null
-            }
-
-            override fun onAdImpression() {
-                // Called when an impression is recorded for an ad.
-                Log.d(TAG, "Ad recorded an impression.")
-            }
-
-            override fun onAdShowedFullScreenContent() {
-                // Called when ad is shown.
-                Log.d(TAG, "Ad showed fullscreen content.")
-            }
-        }
-        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Log.d(TAG, adError.toString())
                 mInterstitialAd = null
@@ -318,6 +295,8 @@ class GameActivity : BaseActivity() {
     }
 
     companion object {
-        fun createIntent(context: Context?): Intent { return Intent(context, GameActivity::class.java) }
+        fun createIntent(context: Context?): Intent {
+            return Intent(context, GameActivity::class.java)
+        }
     }
 }

@@ -13,6 +13,6 @@ interface SquadServices {
     fun getSquadList(): Single<GetSquadListResponse>
 
     @GET("Squad/GetSquadListByLeague")
-    fun getSquadListByLeague(@Query("leagueID") leagueID: Int, @Query("userLevel") userLevel: Int): Single<GetSquadListResponse>
+    fun getSquadListByLeague(@Query("leagueID") leagueID: Int, @Query("userID") userID: Int): Single<GetSquadListResponse>
 
 }

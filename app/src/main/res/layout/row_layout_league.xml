@@ -12,19 +12,66 @@
     android:foreground="@drawable/bg_ripple_effect"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivLeague"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLocked"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_lock"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLeague"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp" />
+
+    </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvLeagueName"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:gravity="center"
         android:textColor="@color/green"
+        android:visibility="gone"
         tools:text="Premier League" />
+
+    <LinearLayout
+        android:id="@+id/llPoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_coin" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/green"
+            android:textSize="18sp"
+            tools:text="500" />
+    </LinearLayout>
 </LinearLayout>

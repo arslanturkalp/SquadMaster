@@ -12,9 +12,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
 import com.example.squadmaster.application.SessionManager.updateRefreshToken
 import com.example.squadmaster.application.SessionManager.updateToken
+import com.example.squadmaster.data.models.MessageEvent
 import com.example.squadmaster.databinding.FragmentAnswerBinding
 import com.example.squadmaster.ui.game.GameActivity
 import com.example.squadmaster.utils.showAlertDialogTheme
+import org.greenrobot.eventbus.EventBus
 
 class AnswerFragment : BaseBottomSheetDialogFragment() {
 
@@ -42,7 +44,7 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
                             if (bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")) {
                                 context?.startActivity((GameActivity.createIntent(context)))
                             } else {
-                                dismiss()
+                                EventBus.getDefault().post(MessageEvent("League Update"))
                                 activity?.onBackPressedDispatcher?.onBackPressed()
                             }
                         }

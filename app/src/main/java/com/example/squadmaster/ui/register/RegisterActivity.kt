@@ -6,10 +6,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.example.squadmaster.R
+import com.example.squadmaster.application.Constants.ADMIN_PASSWORD
+import com.example.squadmaster.application.Constants.ADMIN_USER
 import com.example.squadmaster.application.SessionManager.updateToken
 import com.example.squadmaster.databinding.ActivityRegisterBinding
 import com.example.squadmaster.network.requests.LoginRequest
-import com.example.squadmaster.network.requests.RegisterRequest
 import com.example.squadmaster.ui.login.LoginActivity
 import com.example.squadmaster.utils.showAlertDialogTheme
 
@@ -27,7 +28,7 @@ class RegisterActivity : BaseActivity() {
 
         binding.apply {
             btnSignUp.setOnClickListener {
-                viewModel.loginAdmin(LoginRequest("admin", "admin1234"))
+                viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
             }
         }
     }
@@ -56,16 +57,17 @@ class RegisterActivity : BaseActivity() {
 
                     binding.apply {
                         viewModel.register(
-                            RegisterRequest(
-                                name = etName.text.toString(),
-                                surname = etSurname.text.toString(),
-                                username = etUserName.text.toString(),
-                                email = etMail.text.toString(),
-                                password = etPassword.text.toString(),
-                                roleID = 2
-                            )
+                            name = etName.text.toString(),
+                            surname = etSurname.text.toString(),
+                            username = etUserName.text.toString(),
+                            email = etMail.text.toString(),
+                            password = etPassword.text.toString()
                         )
                     }
+                }
+                is RegisterViewState.ValidationState -> {
+                    dismissProgressDialog()
+                    showAlertDialogTheme(title = getString(R.string.warning), contentMessage = state.validationErrorList.joinToString(separator = "\n") { getString(it) })
                 }
             }
         }

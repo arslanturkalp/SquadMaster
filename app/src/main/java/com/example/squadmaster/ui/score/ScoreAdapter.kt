@@ -1,7 +1,6 @@
 package com.example.squadmaster.ui.score
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -19,7 +18,7 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreAdapter.ScoreViewHolder = ScoreViewHolder(RowLayoutScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    override fun onBindViewHolder(holder: ScoreAdapter.ScoreViewHolder, position: Int) = holder.bind(dataList[position])
+    override fun onBindViewHolder(holder: ScoreAdapter.ScoreViewHolder, position: Int) = holder.bind(dataList[position], position)
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateAdapter(list: List<RankItem>) {
@@ -30,13 +29,15 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
     inner class ScoreViewHolder(private val binding: RowLayoutScoreBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: RankItem) {
+        fun bind(item: RankItem, position: Int) {
             with(binding) {
+                tvPosition.text = (position + 1).toString()
                 tvUserName.text = item.userViewModel.name
                 tvScore.text = item.point.toString()
 
                 if (item.userID == getUserID()) {
                     itemView.setBackgroundResource(R.drawable.bg_green_with_radius_ten)
+                    tvPosition.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                     tvUserName.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                     tvScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                 }
