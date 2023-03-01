@@ -6,9 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -182,11 +185,13 @@ class GameActivity : BaseActivity() {
     }
 
     private fun showWrongAnswerAnimation() {
+
+
         updateWrongCount(getWrongCount() + 1)
         when (getWrongCount()) {
-            1 -> binding.ivWrongThird.alpha = 0.2f
-            2 -> binding.ivWrongSecond.alpha = 0.2f
-            3 -> binding.ivWrongFirst.alpha = 0.2f
+            1 -> setBlinkAnimation(binding.ivWrongThird)
+            2 -> setBlinkAnimation(binding.ivWrongSecond)
+            3 -> setBlinkAnimation(binding.ivWrongFirst)
         }
 
         if (getWrongCount() == 2) {
@@ -203,6 +208,20 @@ class GameActivity : BaseActivity() {
             clearWrongCount()
             clearScore()
         }
+    }
+
+    private fun setBlinkAnimation(imageView: AppCompatImageView) {
+        val anim = AlphaAnimation(1.0f, 0.2f)
+        anim.duration = 500
+        anim.repeatMode = Animation.REVERSE
+        anim.repeatCount = 2
+
+        imageView.startAnimation(anim)
+        anim.setAnimationListener(object: Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) { imageView.alpha = 0.2f }
+            override fun onAnimationRepeat(animation: Animation?) {}
+        })
     }
 
     private fun setList(squad: List<Player>, potentialAnswers: List<PotentialAnswer>) {
