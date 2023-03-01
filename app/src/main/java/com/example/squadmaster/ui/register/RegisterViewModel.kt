@@ -10,16 +10,19 @@ import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.network.requests.RegisterRequest
 import com.example.squadmaster.network.responses.loginresponses.LoginResponse
 import com.example.squadmaster.utils.applyThreads
-import com.google.android.material.checkbox.MaterialCheckBox
 
-class RegisterViewModel: BaseViewModel() {
+class RegisterViewModel : BaseViewModel() {
 
     private val viewState = MutableLiveData<RegisterViewState>()
     val getViewState: LiveData<RegisterViewState> = viewState
 
+    private var containsLower: Boolean = false
+    private var containsUpper: Boolean = false
+    private var containsDigit: Boolean = false
+
     fun register(name: String, surname: String, username: String, password: String, email: String) {
         registerValidation(name, username, password, email)
-        when (getErrorList().isNotEmpty()){
+        when (getErrorList().isNotEmpty()) {
             true -> viewState.postValue(RegisterViewState.ValidationState(getErrorList()))
             false -> requestRegister(RegisterRequest(name, surname, username, password, email))
         }
@@ -50,7 +53,7 @@ class RegisterViewModel: BaseViewModel() {
                 .applyThreads()
                 .subscribe {
                     when (it.status) {
-                        Status.LOADING -> viewState.postValue(RegisterViewState.LoadingState)
+                        Status.LOADING -> {}
                         Status.SUCCESS -> {
                             val response = it.data!!
                             viewState.postValue(RegisterViewState.AdminState(response))
@@ -78,6 +81,19 @@ class RegisterViewModel: BaseViewModel() {
 
         if (TextUtils.isEmpty(email.trim())) {
             addError(R.string.email_empty_warning)
+        }
+
+        if (!TextUtils.isEmpty(password)) {
+            password.forEach {
+                val char = it
+                if (char.isLowerCase()) containsLower = true
+                if (char.isUpperCase()) containsUpper = true
+                if (char.isDigit()) containsDigit = true
+            }
+
+            if (!containsLower || !containsUpper || !containsDigit || password.length < 8) {
+                addError(R.string.password_validation)
+            }
         }
     }
 }

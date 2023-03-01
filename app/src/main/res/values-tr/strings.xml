@@ -81,4 +81,5 @@
 
     <string name="club_is_passed">Bu kulübü zaten tamamladın.</string>
     <string name="membership">Üyelik sözleşmesini okudum ve onaylıyorum.</string>
+    <string name="password_validation">Şifreniz en az 1 büyük, 1 küçük karakter, 1 rakam içermeli ve en az 8 karakterden oluşmalıdır.</string>
 </resources>

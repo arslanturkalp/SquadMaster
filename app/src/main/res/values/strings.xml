@@ -81,4 +81,5 @@
 
     <string name="club_is_passed">You have already completed this club.</string>
     <string name="membership">I have read and approve the membership agreement.</string>
+    <string name="password_validation">Your password must contain at least 1 uppercase, 1 lowercase, 1 digit character and must be at least 8 characters.</string>
 </resources>

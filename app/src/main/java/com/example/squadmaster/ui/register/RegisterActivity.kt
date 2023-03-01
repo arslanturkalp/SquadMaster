@@ -26,9 +26,19 @@ class RegisterActivity : BaseActivity() {
 
         setupObservers()
 
+        viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
+
         binding.apply {
             btnSignUp.setOnClickListener {
-                viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
+                binding.apply {
+                    viewModel.register(
+                        name = etName.text.toString(),
+                        surname = etSurname.text.toString(),
+                        username = etUserName.text.toString(),
+                        email = etMail.text.toString(),
+                        password = etPassword.text.toString()
+                    )
+                }
             }
         }
     }
@@ -52,18 +62,7 @@ class RegisterActivity : BaseActivity() {
                     state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
                 }
                 is RegisterViewState.AdminState -> {
-                    dismissProgressDialog()
                     updateToken(state.response.data.token.accessToken)
-
-                    binding.apply {
-                        viewModel.register(
-                            name = etName.text.toString(),
-                            surname = etSurname.text.toString(),
-                            username = etUserName.text.toString(),
-                            email = etMail.text.toString(),
-                            password = etPassword.text.toString()
-                        )
-                    }
                 }
                 is RegisterViewState.ValidationState -> {
                     dismissProgressDialog()
