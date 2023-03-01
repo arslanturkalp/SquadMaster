@@ -1,6 +1,6 @@
 package com.example.squadmaster.ui.clubs
 
-import BaseActivity
+import com.example.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color

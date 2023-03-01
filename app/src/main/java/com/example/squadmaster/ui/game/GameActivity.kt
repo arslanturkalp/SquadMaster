@@ -1,6 +1,6 @@
 package com.example.squadmaster.ui.game
 
-import BaseActivity
+import com.example.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle

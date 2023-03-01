@@ -87,6 +87,7 @@ class LeaguesFragment : BaseFragment() {
                 is LeaguesViewState.SuccessState -> {
                     dismissProgressDialog()
                     showLeagues(state.response)
+                    binding.tvTitleLeagues.visibility = View.VISIBLE
                     loadBannerAd()
                 }
                 is LeaguesViewState.ErrorState -> {

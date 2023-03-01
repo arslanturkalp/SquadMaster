@@ -1,3 +1,5 @@
+package com.example.squadmaster.ui.base
+
 import androidx.appcompat.app.AppCompatActivity
 import com.example.squadmaster.ui.generic.GenericProgressDialog
 

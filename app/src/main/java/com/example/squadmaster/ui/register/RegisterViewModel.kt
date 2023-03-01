@@ -10,6 +10,7 @@ import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.network.requests.RegisterRequest
 import com.example.squadmaster.network.responses.loginresponses.LoginResponse
 import com.example.squadmaster.utils.applyThreads
+import com.google.android.material.checkbox.MaterialCheckBox
 
 class RegisterViewModel: BaseViewModel() {
 

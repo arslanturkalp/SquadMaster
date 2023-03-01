@@ -1,10 +1,11 @@
 package com.example.squadmaster.ui.login
 
-import BaseActivity
+import com.example.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import com.example.squadmaster.R
 import com.example.squadmaster.application.SessionManager.updatePassword
 import com.example.squadmaster.application.SessionManager.updateRefreshToken
@@ -25,6 +26,7 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setNavigationBarColor()
         setupObservers()
 
         binding.apply {
@@ -67,6 +69,10 @@ class LoginActivity : BaseActivity() {
 
     private fun goToMain() {
         startActivity(MainActivity.createIntent(this))
+    }
+
+    private fun setNavigationBarColor() {
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.green)
     }
 
     companion object {

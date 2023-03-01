@@ -80,4 +80,5 @@
     <string name="email_empty_warning">Please enter your e-mail.</string>
 
     <string name="club_is_passed">You have already completed this club.</string>
+    <string name="membership">I have read and approve the membership agreement.</string>
 </resources>

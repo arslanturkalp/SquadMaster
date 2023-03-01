@@ -1,6 +1,6 @@
 package com.example.squadmaster.ui.splash
 
-import BaseActivity
+import com.example.squadmaster.ui.base.BaseActivity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent

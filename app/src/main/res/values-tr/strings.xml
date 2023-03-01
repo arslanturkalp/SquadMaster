@@ -80,4 +80,5 @@
     <string name="email_empty_warning">Lütfen e-mail giriniz.</string>
 
     <string name="club_is_passed">Bu kulübü zaten tamamladın.</string>
+    <string name="membership">Üyelik sözleşmesini okudum ve onaylıyorum.</string>
 </resources>

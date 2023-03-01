@@ -76,7 +76,7 @@ class ScoreFragment: BaseFragment() {
                 is ScoreViewState.LoadingState -> showProgressDialog()
                 is ScoreViewState.SuccessState -> {
                     dismissProgressDialog()
-                    setVisibility(View.VISIBLE, binding.tvTitleBestScores, binding.tvTitleTotalPoints)
+                    setVisibility(View.VISIBLE, binding.llTitleBestScores, binding.llTitleTotalPoints, binding.tvTitleHighScore, binding.llMyScore)
                     loadBannerAd()
                     bestPointsAdapter.updateAdapter(state.response.data.userBestPoints)
                     totalPointsAdapter.updateAdapter(state.response.data.userTotalPoints)

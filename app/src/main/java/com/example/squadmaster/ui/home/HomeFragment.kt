@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.LinearInterpolator
-import android.view.animation.RotateAnimation
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import com.example.squadmaster.R
@@ -129,7 +126,12 @@ class HomeFragment : BaseFragment() {
     private fun setupObservers() {
         viewModel.getViewState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is HomeViewState.LoadingState -> {}
+                is HomeViewState.LoadingState -> {
+                    binding.apply {
+                        tvBestScore.text = 0.toString()
+                        tvTotalScore.text = 0.toString()
+                    }
+                }
                 is HomeViewState.UserPointState -> {
                     binding.apply {
                         tvBestScore.text = state.response.data.bestPoint.toString()

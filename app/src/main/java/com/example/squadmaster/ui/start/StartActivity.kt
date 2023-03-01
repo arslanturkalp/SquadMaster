@@ -1,11 +1,12 @@
 package com.example.squadmaster.ui.start
 
-import BaseActivity
+import com.example.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import com.example.squadmaster.R
 import com.example.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.example.squadmaster.application.Constants.ADMIN_USER
@@ -39,6 +40,7 @@ class StartActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setNavigationBarColor()
         setupObservers()
 
         if (intent.getDataExtra(EXTRAS_FROM_GUEST)) {
@@ -106,6 +108,10 @@ class StartActivity : BaseActivity() {
 
     private fun goToMain() {
         startActivity(MainActivity.createIntent(this))
+    }
+
+    private fun setNavigationBarColor() {
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.green)
     }
 
     companion object {
