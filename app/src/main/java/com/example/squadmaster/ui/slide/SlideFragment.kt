@@ -46,10 +46,9 @@ class SlideFragment : BaseFragment() {
             }
         })
 
-        list.add(SlideModel("A", R.drawable.ic_coin))
-        list.add(SlideModel("B", R.drawable.ic_best_score))
-        list.add(SlideModel("C", R.drawable.ic_flag))
-
+        list.add(SlideModel(getString(R.string.slide_first_main_mode), R.drawable.screen_main_mode))
+        list.add(SlideModel(getString(R.string.slide_two_league_mode), R.drawable.screen_league_mode))
+        list.add(SlideModel(getString(R.string.slide_third_score), R.drawable.screen_score))
         slidePagerAdapter.updateAdapter(list)
     }
 

@@ -12,6 +12,7 @@ import com.example.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.example.squadmaster.application.Constants.ADMIN_USER
 import com.example.squadmaster.application.SessionManager.clearPassword
 import com.example.squadmaster.application.SessionManager.clearUserName
+import com.example.squadmaster.application.SessionManager.getIsShowedTutorial
 import com.example.squadmaster.application.SessionManager.getPassword
 import com.example.squadmaster.application.SessionManager.getUserName
 import com.example.squadmaster.application.SessionManager.updatePassword
@@ -24,7 +25,9 @@ import com.example.squadmaster.network.requests.LoginRequest
 import com.example.squadmaster.ui.login.LoginActivity
 import com.example.squadmaster.ui.main.MainActivity
 import com.example.squadmaster.ui.register.RegisterActivity
+import com.example.squadmaster.ui.settings.SettingsFragment
 import com.example.squadmaster.ui.splash.SplashActivity
+import com.example.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.example.squadmaster.utils.addOnBackPressedListener
 import com.example.squadmaster.utils.getDataExtra
 import com.example.squadmaster.utils.setVisibility
@@ -39,6 +42,10 @@ class StartActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        if (!getIsShowedTutorial()) {
+            SettingsFragment().show(supportFragmentManager, "")
+        }
 
         setNavigationBarColor()
         setupObservers()

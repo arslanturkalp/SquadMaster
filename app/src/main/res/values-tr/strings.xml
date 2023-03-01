@@ -72,6 +72,7 @@
     <string name="total_point">Toplam Puan</string>
 
     <string name="language">Dil</string>
+    <string name="about">Hakkında</string>
     <string name="remember_me_reminder">Beni hatırla seçeneğini işaretleyerek uygulamaya bir dahaki girişinizde direkt anasayfaya yönlendirilebilirsiniz.</string>
 
     <string name="name_empty_warning">Lütfen isim giriniz.</string>
@@ -82,4 +83,8 @@
     <string name="club_is_passed">Bu kulübü zaten tamamladın.</string>
     <string name="membership">Üyelik sözleşmesini okudum ve onaylıyorum.</string>
     <string name="password_validation">Şifreniz en az 1 büyük, 1 küçük karakter, 1 rakam içermeli ve en az 8 karakterden oluşmalıdır.</string>
+    <string name="slide_first_main_mode">İlk 11 içerisinde sadece bir oyuncu eksik ve doğru cevabı 5 cevap içerisinden bulmaya çalış!</string>
+    <string name="slide_two_league_mode">Avrupa\'nın 5 büyük ligi, Türkiye Ligi ve diğer liglerdeki takımlardan oluşan lig modunda tüm liglerin kilidini açmak için mücadele et.</string>
+    <string name="slide_third_score">Ana oyun modu rekoru ile toplam puan tablosunda kıyasıya rekabet.</string>
+    <string name="point_25">25 Puan kazandınız!</string>
 </resources>

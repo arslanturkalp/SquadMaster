@@ -72,6 +72,7 @@
     <string name="total_point">Total Point</string>
 
     <string name="language">Language</string>
+    <string name="about">About</string>
     <string name="remember_me_reminder">You can be directed to the homepage the next time you log in to the application by checking the Remember Me option.</string>
 
     <string name="name_empty_warning">Please enter your name.</string>
@@ -82,4 +83,8 @@
     <string name="club_is_passed">You have already completed this club.</string>
     <string name="membership">I have read and approve the membership agreement.</string>
     <string name="password_validation">Your password must contain at least 1 uppercase, 1 lowercase, 1 digit character and must be at least 8 characters.</string>
+    <string name="slide_first_main_mode">Only one player is missing in the first 11 and try to find the correct answer from the 5 answers!</string>
+    <string name="slide_two_league_mode">Compete to unlock all leagues in the league mode, which consists of teams from Europe\'s 5 big leagues, Turkish League and other leagues.</string>
+    <string name="slide_third_score">Compete fiercely on the overall scoreboard with the main game mode record.</string>
+    <string name="point_25">25 Point won!</string>
 </resources>

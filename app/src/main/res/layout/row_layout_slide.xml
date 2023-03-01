@@ -12,15 +12,17 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivPhoto"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_height="550dp"
+        android:scaleType="centerInside"
+        tools:src="@drawable/screen_main_mode" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/josefin_sans"
         android:justificationMode="inter_word"
         android:textAlignment="center"
         android:textColor="@color/white"

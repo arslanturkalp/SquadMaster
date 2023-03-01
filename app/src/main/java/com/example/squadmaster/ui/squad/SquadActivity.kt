@@ -1,6 +1,5 @@
 package com.example.squadmaster.ui.squad
 
-import com.example.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -36,6 +35,7 @@ import com.example.squadmaster.network.responses.item.Club
 import com.example.squadmaster.network.responses.item.Player
 import com.example.squadmaster.network.responses.item.PotentialAnswer
 import com.example.squadmaster.ui.answer.AnswerFragment
+import com.example.squadmaster.ui.base.BaseActivity
 import com.example.squadmaster.utils.*
 import com.example.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.google.android.flexbox.*
@@ -65,7 +65,6 @@ class SquadActivity : BaseActivity() {
         setContentView(binding.root)
 
         checkLanguage(this)
-
         clearUnknownAnswer()
         clearIsShowedFlag()
 
@@ -262,13 +261,16 @@ class SquadActivity : BaseActivity() {
                 ))
                 updateUnknownAnswer(potentialAnswer.displayName)
                 updateUnknownImage(potentialAnswer.imagePath)
-                navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName)
+                navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName + " + " + getString(R.string.point_25))
             } else {
                 showAlertDialogTheme(
                     title = getString(R.string.wrong_answer),
                     contentMessage = String.format(getString(R.string.formatted_wrong_answer), potentialAnswer.displayName),
                     positiveButtonTitle = getString(R.string.try_again),
-                    onPositiveButtonClick = { onBackPressedDispatcher.onBackPressed() }
+                    onPositiveButtonClick = {
+                        onBackPressedDispatcher.onBackPressed()
+                        EventBus.getDefault().post(MessageEvent("Wrong Answer"))
+                    }
                 )
             }
         }

@@ -10,8 +10,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.squadmaster.R
 import com.example.squadmaster.application.Constants
+import com.example.squadmaster.application.SessionManager.getIsShowedTutorial
 import com.example.squadmaster.databinding.FragmentSettingsBinding
 import com.example.squadmaster.ui.splash.SplashActivity
+import com.example.squadmaster.utils.LangUtils.Companion.checkLanguage
+import com.example.squadmaster.utils.showAlertDialogTheme
 import com.orhanobut.hawk.Hawk
 import java.util.*
 
@@ -26,7 +29,17 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        checkLanguage(requireContext())
         setFlags()
+
+        if (!getIsShowedTutorial()) {
+            binding.btnAbout.visibility = View.GONE
+        }
+        binding.btnAbout.setOnClickListener {
+            dismiss()
+            showAlertDialogTheme(getString(R.string.app_name), "Umtual Games 2023©")
+        }
     }
 
     private fun setFlags() {

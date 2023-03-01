@@ -40,11 +40,11 @@ class ClubsActivity : BaseActivity() {
 
     private val clubAdapter by lazy { ClubAdapter { openSquad(it) } }
 
+    private var lastLockedClub: Club? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        checkLanguage(this)
 
         setStatusBarColor()
 
@@ -120,7 +120,7 @@ class ClubsActivity : BaseActivity() {
         clubs.forEach { club ->
             club.isPassed = false
         }
-        if (clubs.count { !it.isLocked } > 1 ) {
+        if (clubs.count { !it.isLocked } > 1) {
             clubs.forEach { club ->
                 if (!club.isLocked) {
                     club.isPassed = true
@@ -130,6 +130,8 @@ class ClubsActivity : BaseActivity() {
         if (clubs.count { it.isLocked } > 0) {
             clubs.last { !it.isLocked }.isPassed = false
         }
+
+        lastLockedClub = clubs.last { !it.isLocked }
 
         clubAdapter.updateAdapter(clubs.sortedBy { it.level })
     }
@@ -144,6 +146,10 @@ class ClubsActivity : BaseActivity() {
 
         if (event.message == "League Update") {
             viewModel.getSquadListByLeague(league.id, getUserID())
+        }
+
+        if (event.message == "Wrong Answer") {
+            openSquad(lastLockedClub!!)
         }
     }
 
