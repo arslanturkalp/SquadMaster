@@ -21,6 +21,10 @@ import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import com.umtualgames.squadmaster.data.models.MessageEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class ScoreFragment: BaseFragment() {
 
@@ -121,5 +125,22 @@ class ScoreFragment: BaseFragment() {
 
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: MessageEvent) {
+        if (event.message == "League Update") {
+            viewModel.getUserPoint(getUserID())
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 }
