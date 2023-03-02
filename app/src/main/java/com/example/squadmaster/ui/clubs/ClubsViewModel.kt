@@ -24,7 +24,7 @@ class ClubsViewModel : BaseViewModel() {
                         Status.LOADING -> viewState.postValue(GetSquadListViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(GetSquadListViewState.SuccessState(response.data))
+                            viewState.postValue(GetSquadListViewState.SuccessState(response.data, false))
                         }
                         Status.ERROR -> {
                             refreshTokenLogin(getRefreshToken())
@@ -34,7 +34,7 @@ class ClubsViewModel : BaseViewModel() {
         )
     }
 
-    fun getSquadListByLeague(leagueID: Int, userID: Int) {
+    fun getSquadListByLeague(leagueID: Int, userID: Int, levelPass: Boolean = false) {
         compositeDisposable.addAll(
             remoteDataSource
                 .getSquadListByLeague(leagueID, userID)
@@ -44,7 +44,7 @@ class ClubsViewModel : BaseViewModel() {
                         Status.LOADING -> viewState.postValue(GetSquadListViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(GetSquadListViewState.SuccessState(response.data))
+                            viewState.postValue(GetSquadListViewState.SuccessState(response.data, levelPass))
                         }
                         Status.ERROR -> {
                             refreshTokenLogin(getRefreshToken())
@@ -75,7 +75,7 @@ class ClubsViewModel : BaseViewModel() {
 
 sealed class GetSquadListViewState {
     object LoadingState : GetSquadListViewState()
-    data class SuccessState(val response: List<Club>) : GetSquadListViewState()
+    data class SuccessState(val response: List<Club>, val levelPass: Boolean) : GetSquadListViewState()
     data class ErrorState(val message: String) : GetSquadListViewState()
     data class WarningState(val message: String?) : GetSquadListViewState()
     data class RefreshState(val response: Token) : GetSquadListViewState()

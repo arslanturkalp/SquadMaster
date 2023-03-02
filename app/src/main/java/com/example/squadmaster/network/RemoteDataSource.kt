@@ -16,8 +16,6 @@ import com.example.squadmaster.network.responses.userpointresponses.GetRankListR
 import com.example.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.example.squadmaster.network.services.*
 import io.reactivex.Observable
-import okhttp3.Response
-import okhttp3.ResponseBody
 
 class RemoteDataSource {
 

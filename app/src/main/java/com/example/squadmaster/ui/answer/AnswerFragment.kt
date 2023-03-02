@@ -38,12 +38,21 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
                             .into(this)
                     }
 
+                    if (bundle.getBoolean("KEY_IS_UNLOCKED_CLUB")) {
+                        this@AnswerFragment.isCancelable = true
+                        tvTitle.text = getString(R.string.club_unlocked)
+                    }
+
                     btnNext.apply {
                         text = if (bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")) { getString(R.string.next_level) } else { getString(R.string.txt_continue) }
                         setOnClickListener {
                             if (bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")) {
                                 context?.startActivity((GameActivity.createIntent(context)))
-                            } else {
+                            }
+                            else if (bundle.getBoolean("KEY_IS_UNLOCKED_CLUB")) {
+                                dismiss()
+                            }
+                            else {
                                 EventBus.getDefault().post(MessageEvent("League Update"))
                                 activity?.onBackPressedDispatcher?.onBackPressed()
                             }
@@ -86,14 +95,16 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
         private const val KEY_IMAGE_PATH = "KEY_IMAGE_PATH"
 
         private const val KEY_IS_FROM_INFINITE_MODE = "KEY_IS_FROM_INFINITE_MODE"
+        private const val KEY_IS_UNLOCKED_CLUB = "KEY_IS_UNLOCKED_CLUB"
 
-        fun newInstance(playerName: String, imagePath: String, isFromInfiniteMode: Boolean = false): AnswerFragment = AnswerFragment().apply {
+        fun newInstance(playerName: String, imagePath: String, isFromInfiniteMode: Boolean = false, isUnlockedClub: Boolean = false): AnswerFragment = AnswerFragment().apply {
 
             this.isCancelable = false
             arguments = Bundle().apply {
                 putString(KEY_PLAYER_NAME, playerName)
                 putString(KEY_IMAGE_PATH, imagePath)
                 putBoolean(KEY_IS_FROM_INFINITE_MODE, isFromInfiniteMode)
+                putBoolean(KEY_IS_UNLOCKED_CLUB, isUnlockedClub)
             }
         }
     }

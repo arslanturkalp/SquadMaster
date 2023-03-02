@@ -1,6 +1,5 @@
 package com.example.squadmaster.ui.clubs
 
-import com.example.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -23,8 +22,9 @@ import com.example.squadmaster.data.models.MessageEvent
 import com.example.squadmaster.databinding.FragmentClubsBinding
 import com.example.squadmaster.network.responses.item.Club
 import com.example.squadmaster.network.responses.item.League
+import com.example.squadmaster.ui.answer.AnswerFragment
+import com.example.squadmaster.ui.base.BaseActivity
 import com.example.squadmaster.ui.squad.SquadActivity
-import com.example.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.example.squadmaster.utils.getDataExtra
 import com.example.squadmaster.utils.showAlertDialogTheme
 import org.greenrobot.eventbus.EventBus
@@ -95,7 +95,7 @@ class ClubsActivity : BaseActivity() {
                 is GetSquadListViewState.SuccessState -> {
                     dismissProgressDialog()
                     binding.llTeam.visibility = View.VISIBLE
-                    showClubs(state.response)
+                    showClubs(state.response, state.levelPass)
                 }
                 is GetSquadListViewState.ErrorState -> {
                     dismissProgressDialog()
@@ -115,7 +115,7 @@ class ClubsActivity : BaseActivity() {
         }
     }
 
-    private fun showClubs(clubs: List<Club>) {
+    private fun showClubs(clubs: List<Club>, levelPass: Boolean) {
 
         clubs.forEach { club ->
             club.isPassed = false
@@ -133,6 +133,10 @@ class ClubsActivity : BaseActivity() {
 
         lastLockedClub = clubs.last { !it.isLocked }
 
+        if (levelPass) {
+            AnswerFragment.newInstance(lastLockedClub!!.name, lastLockedClub!!.imagePath!!, isUnlockedClub = true).show(supportFragmentManager, "")
+        }
+
         clubAdapter.updateAdapter(clubs.sortedBy { it.level })
     }
 
@@ -145,7 +149,7 @@ class ClubsActivity : BaseActivity() {
         val league = intent.getDataExtra<League>(EXTRAS_LEAGUE)
 
         if (event.message == "League Update") {
-            viewModel.getSquadListByLeague(league.id, getUserID())
+            viewModel.getSquadListByLeague(league.id, getUserID(), true)
         }
 
         if (event.message == "Wrong Answer") {

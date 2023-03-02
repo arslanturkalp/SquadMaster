@@ -160,10 +160,7 @@ class SquadActivity : BaseActivity() {
                     viewModel.getUserPoint(getUserID())
                 }
                 is GetSquadViewState.LevelPassState -> {
-                    if (state.response.statusCode == 200) {
-                        sendEvent()
-                    } else {
-                        sendEvent()
+                    if (state.response.statusCode == 200) { } else {
                         showAlertDialogTheme(getString(R.string.warning), getString(R.string.club_is_passed))
                     }
                 }
