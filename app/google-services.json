@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "639125678412",
+    "project_id": "squad-master-948a7",
+    "storage_bucket": "squad-master-948a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639125678412:android:7785016887b2600bd587e9",
+        "android_client_info": {
+          "package_name": "com.umtualgames.squadmaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639125678412-i1gg6s9lnee87fccuheag26fsagn78o1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9gbIz0KGGmZAHWDGVEtm294CN_kRfipU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639125678412-i1gg6s9lnee87fccuheag26fsagn78o1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

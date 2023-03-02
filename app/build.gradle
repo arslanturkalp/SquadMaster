@@ -3,14 +3,16 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
-    namespace 'com.example.squadmaster'
+    namespace 'com.umtualgames.squadmaster'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.squadmaster"
+        applicationId "com.umtualgames.squadmaster"
         minSdk 23
         targetSdk 33
         versionCode 1
@@ -98,5 +100,14 @@ dependencies {
 
     //EventBus
     implementation "org.greenrobot:eventbus:3.3.1"
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.2.2')
+
+    //Analytics
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    //Crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
 }
