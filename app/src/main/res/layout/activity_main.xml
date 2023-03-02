@@ -9,22 +9,21 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         tools:layout="@layout/fragment_home" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemIconSize="20dp"
-        app:elevation="16dp"
-        android:background="@drawable/bg_bottom_navigation"
-        app:itemTextColor="@color/material_dynamic_neutral40"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/navigation"
         android:visibility="visible"
-        tools:itemIconTint=" " />
+        app:elevation="16dp"
+        app:itemBackground="@drawable/bg_bottom_navigation"
+        app:itemIconSize="20dp"
+        app:itemTextColor="@color/green"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/navigation" />
 
 </LinearLayout>
