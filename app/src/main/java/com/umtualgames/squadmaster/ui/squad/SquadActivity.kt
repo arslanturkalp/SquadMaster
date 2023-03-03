@@ -13,6 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.flexbox.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.adapter.PotentialAnswersAdapter
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.clearUnknownAnswer
@@ -27,6 +33,7 @@ import com.umtualgames.squadmaster.application.SquadMasterApp
 import com.umtualgames.squadmaster.data.enums.PositionIdStatus
 import com.umtualgames.squadmaster.data.enums.PositionTypeIdStatus
 import com.umtualgames.squadmaster.data.models.MessageEvent
+import com.umtualgames.squadmaster.databinding.ActivitySquadBinding
 import com.umtualgames.squadmaster.network.requests.LevelPassRequest
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.Club
@@ -36,13 +43,6 @@ import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.utils.*
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
-import com.google.android.flexbox.*
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.databinding.ActivitySquadBinding
 import org.greenrobot.eventbus.EventBus
 
 class SquadActivity : BaseActivity() {

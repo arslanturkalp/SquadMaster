@@ -173,16 +173,7 @@
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cbMembership"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:buttonTint="@color/white"
-            android:text="@string/membership"
-            android:textColor="@color/white" />
-
+        
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
