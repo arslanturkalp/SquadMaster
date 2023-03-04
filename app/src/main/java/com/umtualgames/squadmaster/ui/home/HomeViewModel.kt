@@ -47,7 +47,7 @@ class HomeViewModel: BaseViewModel() {
                         Status.LOADING -> viewState.postValue(HomeViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(HomeViewState.RefreshState(response))
+                            viewState.postValue(HomeViewState.RefreshState(response.data.token))
                         }
                         Status.ERROR -> viewState.postValue(HomeViewState.ErrorState(it.message!!))
                     }

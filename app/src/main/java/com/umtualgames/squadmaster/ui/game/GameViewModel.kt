@@ -46,7 +46,7 @@ class GameViewModel : BaseViewModel() {
                         Status.LOADING -> viewState.postValue(GameViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(GameViewState.RefreshState(response))
+                            viewState.postValue(GameViewState.RefreshState(response.data.token))
                         }
                         Status.ERROR -> viewState.postValue(GameViewState.ErrorState(it.message!!))
                     }

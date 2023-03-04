@@ -51,7 +51,7 @@ class SquadViewModel : BaseViewModel() {
                         Status.LOADING -> viewState.postValue(GetSquadViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(GetSquadViewState.RefreshState(response))
+                            viewState.postValue(GetSquadViewState.RefreshState(response.data.token))
                         }
                         Status.ERROR -> viewState.postValue(GetSquadViewState.ErrorState(it.message!!))
                     }

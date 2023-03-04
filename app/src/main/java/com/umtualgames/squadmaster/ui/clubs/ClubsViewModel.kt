@@ -64,7 +64,7 @@ class ClubsViewModel : BaseViewModel() {
                         Status.LOADING -> viewState.postValue(GetSquadListViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(GetSquadListViewState.RefreshState(response))
+                            viewState.postValue(GetSquadListViewState.RefreshState(response.data.token))
                         }
                         Status.ERROR -> viewState.postValue(GetSquadListViewState.ErrorState(it.message!!))
                     }

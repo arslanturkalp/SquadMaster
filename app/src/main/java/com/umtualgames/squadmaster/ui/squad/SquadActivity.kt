@@ -238,7 +238,7 @@ class SquadActivity : BaseActivity() {
     }
 
     private fun controlAnswer(potentialAnswer: PotentialAnswer) {
-        val level = intent.getDataExtra<Club>(EXTRAS_SQUAD).level
+        val level = intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueOrder
         binding.apply {
             if (potentialAnswer.isAnswer) {
                 if (level == 5 || level == 10 || level == 15 || level == 18) {

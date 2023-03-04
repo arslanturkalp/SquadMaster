@@ -9,6 +9,8 @@ import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.leagueresponses.GetLeaguesResponse
 import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.network.responses.loginresponses.RefreshTokenResponse
+import com.umtualgames.squadmaster.network.responses.loginresponses.RegisterResponse
 import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.umtualgames.squadmaster.network.responses.squadresponses.GetSquadListResponse
 import com.umtualgames.squadmaster.network.responses.unlocksquadresponses.LevelPassResponse
@@ -150,7 +152,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun register(registerRequest: RegisterRequest): Observable<Resource<Boolean>> {
+    fun register(registerRequest: RegisterRequest): Observable<Resource<RegisterResponse>> {
 
         return Observable.create { emitter ->
 
@@ -175,7 +177,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun signInRefreshToken(refreshToken: String): Observable<Resource<Token>> {
+    fun signInRefreshToken(refreshToken: String): Observable<Resource<RefreshTokenResponse>> {
 
         return Observable.create { emitter ->
 

@@ -22,7 +22,7 @@ class AnswerViewModel: BaseViewModel() {
                         Status.LOADING -> viewState.postValue(AnswerViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(AnswerViewState.RefreshState(response))
+                            viewState.postValue(AnswerViewState.RefreshState(response.data.token))
                         }
                         Status.ERROR -> viewState.postValue(AnswerViewState.ErrorState(it.message!!))
                     }

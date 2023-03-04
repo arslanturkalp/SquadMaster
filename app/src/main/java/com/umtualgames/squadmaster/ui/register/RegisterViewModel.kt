@@ -9,6 +9,7 @@ import com.umtualgames.squadmaster.data.enums.Status
 import com.umtualgames.squadmaster.network.requests.LoginRequest
 import com.umtualgames.squadmaster.network.requests.RegisterRequest
 import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.network.responses.loginresponses.RegisterResponse
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class RegisterViewModel : BaseViewModel() {
@@ -100,7 +101,7 @@ class RegisterViewModel : BaseViewModel() {
 
 sealed class RegisterViewState {
     object LoadingState : RegisterViewState()
-    data class SuccessState(val response: Boolean) : RegisterViewState()
+    data class SuccessState(val response: RegisterResponse) : RegisterViewState()
     data class AdminState(val response: LoginResponse) : RegisterViewState()
     data class ErrorState(val message: String) : RegisterViewState()
     data class WarningState(val message: String?) : RegisterViewState()

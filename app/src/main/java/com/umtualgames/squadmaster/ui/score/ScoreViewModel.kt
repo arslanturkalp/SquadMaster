@@ -8,7 +8,6 @@ import com.umtualgames.squadmaster.data.enums.Status
 import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.userpointresponses.GetRankListResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
-import com.umtualgames.squadmaster.ui.home.HomeViewState
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class ScoreViewModel : BaseViewModel() {
@@ -65,7 +64,7 @@ class ScoreViewModel : BaseViewModel() {
                         Status.LOADING -> viewState.postValue(ScoreViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            viewState.postValue(ScoreViewState.RefreshState(response))
+                            viewState.postValue(ScoreViewState.RefreshState(response.data.token))
                         }
                         Status.ERROR -> viewState.postValue(ScoreViewState.ErrorState(it.message!!))
                     }

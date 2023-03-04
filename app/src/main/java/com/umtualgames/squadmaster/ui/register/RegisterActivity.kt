@@ -49,7 +49,7 @@ class RegisterActivity : BaseActivity() {
                 is RegisterViewState.LoadingState -> showProgressDialog()
                 is RegisterViewState.SuccessState -> {
                     dismissProgressDialog()
-                    if (state.response) {
+                    if (state.response.statusCode == 200) {
                         startActivity(LoginActivity.createIntent(this))
                     }
                 }

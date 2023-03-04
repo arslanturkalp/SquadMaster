@@ -137,7 +137,7 @@ class ClubsActivity : BaseActivity() {
             AnswerFragment.newInstance(lastLockedClub!!.name, lastLockedClub!!.imagePath!!, isUnlockedClub = true).show(supportFragmentManager, "")
         }
 
-        clubAdapter.updateAdapter(clubs.sortedBy { it.level })
+        clubAdapter.updateAdapter(clubs.sortedBy { it.leagueOrder })
     }
 
     private fun openSquad(club: Club) {
