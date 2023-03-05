@@ -15,7 +15,7 @@ interface UserPointServices {
     fun getUserPoint(@Query("userID") userID: Int): Single<UserPointResponse>
 
     @POST("UserPoint/UpdatePoint")
-    fun updatePoint(@Body updatePointRequest: UpdatePointRequest): Single<Boolean>
+    fun updatePoint(@Body updatePointRequest: UpdatePointRequest): Single<UserPointResponse>
 
     @GET("UserPoint/GetRankList")
     fun getRankList(): Single<GetRankListResponse>

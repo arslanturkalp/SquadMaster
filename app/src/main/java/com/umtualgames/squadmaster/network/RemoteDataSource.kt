@@ -6,7 +6,6 @@ import com.umtualgames.squadmaster.network.requests.LevelPassRequest
 import com.umtualgames.squadmaster.network.requests.LoginRequest
 import com.umtualgames.squadmaster.network.requests.RegisterRequest
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
-import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.leagueresponses.GetLeaguesResponse
 import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
 import com.umtualgames.squadmaster.network.responses.loginresponses.RefreshTokenResponse
@@ -17,9 +16,6 @@ import com.umtualgames.squadmaster.network.responses.unlocksquadresponses.LevelP
 import com.umtualgames.squadmaster.network.responses.userpointresponses.GetRankListResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.umtualgames.squadmaster.network.services.*
-import com.umtualgames.squadmaster.network.services.LeagueServices
-import com.umtualgames.squadmaster.network.services.LoginServices
-import com.umtualgames.squadmaster.network.services.PlayerServices
 import io.reactivex.Observable
 
 class RemoteDataSource {
@@ -228,7 +224,7 @@ class RemoteDataSource {
     }
 
     @SuppressLint("CheckResult")
-    fun updatePoint(updatePointRequest: UpdatePointRequest): Observable<Resource<Boolean>> {
+    fun updatePoint(updatePointRequest: UpdatePointRequest): Observable<Resource<UserPointResponse>> {
 
         return Observable.create { emitter ->
 

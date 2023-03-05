@@ -8,6 +8,7 @@ import com.umtualgames.squadmaster.data.enums.Status
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
+import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class GameViewModel : BaseViewModel() {
@@ -62,7 +63,7 @@ class GameViewModel : BaseViewModel() {
                 .subscribe {
                     when (it.status) {
                         Status.LOADING -> viewState.postValue(GameViewState.ScoreLoadingState)
-                        Status.SUCCESS -> viewState.postValue(GameViewState.UpdateState)
+                        Status.SUCCESS -> viewState.postValue(GameViewState.UpdateState(it.data!!))
                         Status.ERROR -> { refreshTokenLogin(getRefreshToken()) }
                     }
                 }
@@ -73,7 +74,7 @@ class GameViewModel : BaseViewModel() {
 sealed class GameViewState {
     object LoadingState : GameViewState()
     object ScoreLoadingState : GameViewState()
-    object UpdateState : GameViewState()
+    data class UpdateState(val response: UserPointResponse) : GameViewState()
     data class SuccessState(val response: GetFirstElevenBySquadResponse) : GameViewState()
     data class ErrorState(val message: String) : GameViewState()
     data class WarningState(val message: String?) : GameViewState()
