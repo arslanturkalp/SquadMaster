@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-4810521807152117/5869577614" />
+        ads:adUnitId="ca-app-pub-4810521807152117/4516967497" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivSettings"

@@ -248,7 +248,7 @@ class SquadActivity : BaseActivity() {
                 }
                 viewModel.levelPass(LevelPassRequest(
                     userID = getUserID(),
-                    point = 25,
+                    point = if (intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID == 7) 15 else 25,
                     leagueID = intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID,
                     squadID = intent.getDataExtra<Club>(EXTRAS_SQUAD).id
                 ))
