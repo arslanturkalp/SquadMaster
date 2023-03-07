@@ -1,13 +1,14 @@
 package com.umtualgames.squadmaster.ui.start
 
-import com.umtualgames.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import com.orhanobut.hawk.Hawk
 import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.application.Constants
 import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
 import com.umtualgames.squadmaster.application.SessionManager.clearPassword
@@ -22,12 +23,12 @@ import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityStartBinding
 import com.umtualgames.squadmaster.network.requests.LoginRequest
+import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.login.LoginActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.register.RegisterActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
-import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.umtualgames.squadmaster.utils.addOnBackPressedListener
 import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setVisibility
@@ -38,12 +39,14 @@ class StartActivity : BaseActivity() {
     private val binding by lazy { ActivityStartBinding.inflate(layoutInflater) }
 
     private val viewModel by viewModels<StartViewModel>()
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        if (!getIsShowedTutorial()) {
+        val lang = Hawk.get(Constants.KEY_APP_LANG, "en")
+
+        if (!getIsShowedTutorial() && lang == "en") {
             SettingsFragment().show(supportFragmentManager, "")
         }
 

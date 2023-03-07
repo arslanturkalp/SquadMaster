@@ -1,9 +1,9 @@
 package com.umtualgames.squadmaster.ui.game
 
-import com.umtualgames.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
+import android.media.AudioManager
+import android.os.*
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -18,6 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.flexbox.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.adapter.PotentialAnswersAdapter
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedFlag
@@ -43,15 +48,11 @@ import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.Player
 import com.umtualgames.squadmaster.network.responses.item.PotentialAnswer
 import com.umtualgames.squadmaster.ui.answer.AnswerFragment
+import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.gameover.GameOverFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.yellowcard.YellowCardFragment
 import com.umtualgames.squadmaster.utils.*
-import com.google.android.flexbox.*
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 class GameActivity : BaseActivity() {
 
@@ -190,17 +191,14 @@ class GameActivity : BaseActivity() {
 
     private fun showWrongAnswerAnimation() {
 
-
         updateWrongCount(getWrongCount() + 1)
+        if (getAudioMode() == 2) { vibrate() }
         when (getWrongCount()) {
             1 -> setBlinkAnimation(binding.ivWrongThird)
             2 -> setBlinkAnimation(binding.ivWrongSecond)
             3 -> setBlinkAnimation(binding.ivWrongFirst)
         }
-
-        if (getWrongCount() == 2) {
-            navigateToYellowCard()
-        }
+        if (getWrongCount() == 2) { navigateToYellowCard() }
         if (getWrongCount() == 3) {
             navigateToGameOver(getScore())
             if (getScore() != 0 && getUserID() != 13) {
@@ -226,6 +224,31 @@ class GameActivity : BaseActivity() {
             override fun onAnimationEnd(animation: Animation?) { imageView.alpha = 0.2f }
             override fun onAnimationRepeat(animation: Animation?) {}
         })
+    }
+
+    private fun getAudioMode() : Int {
+        val audio : AudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        when (audio.ringerMode) {
+            AudioManager.RINGER_MODE_NORMAL -> return 0
+            AudioManager.RINGER_MODE_SILENT -> return 1
+            AudioManager.RINGER_MODE_VIBRATE -> return 2
+        }
+        return 0
+    }
+
+    @Suppress("DEPRECATION")
+    private fun vibrate() {
+        val vib = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vib.vibrate(VibrationEffect.createOneShot(200, 1))
+        } else{
+            vib.vibrate(200)
+        }
     }
 
     private fun setList(squad: List<Player>, potentialAnswers: List<PotentialAnswer>) {
