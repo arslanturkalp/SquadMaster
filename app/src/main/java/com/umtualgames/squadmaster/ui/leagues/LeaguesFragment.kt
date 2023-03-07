@@ -32,7 +32,7 @@ class LeaguesFragment : BaseFragment() {
 
     private val viewModel by viewModels<LeaguesViewModel>()
 
-    private val leagueAdapter by lazy { LeaguesAdapter { openClubs(it) } }
+    private val leagueAdapter by lazy { LeaguesAdapter( { openClubs(it) }, { showRequireDialog(it) }) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -116,6 +116,10 @@ class LeaguesFragment : BaseFragment() {
 
     private fun openClubs(league: League) {
         context?.startActivity((ClubsActivity.createIntent(context, league)))
+    }
+
+    private fun showRequireDialog(league: League) {
+        showAlertDialogTheme(getString(R.string.warning), String.format(getString(R.string.need_point), league.name, league.point))
     }
 
     private fun showLeagues(leagues: List<League>) {

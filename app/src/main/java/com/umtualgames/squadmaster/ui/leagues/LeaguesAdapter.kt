@@ -12,7 +12,7 @@ import com.umtualgames.squadmaster.databinding.RowLayoutLeagueBinding
 import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.utils.setVisibility
 
-class LeaguesAdapter(private val onClick: (League) -> Unit) : RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder>() {
+class LeaguesAdapter(private val onClick: (League) -> Unit, private val onLockedClick: (League) -> Unit) : RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder>() {
 
     private val dataList: MutableList<League> = mutableListOf()
 
@@ -39,6 +39,9 @@ class LeaguesAdapter(private val onClick: (League) -> Unit) : RecyclerView.Adapt
                     ivLeague.alpha = 0.1f
                     setVisibility(View.VISIBLE, ivLocked, llPoint)
                     tvLeagueName.visibility = View.GONE
+                    itemView.setOnClickListener {
+                        onLockedClick.invoke(item)
+                    }
                 } else {
                     ivLeague.alpha = 1f
                     setVisibility(View.GONE, ivLocked, llPoint)
