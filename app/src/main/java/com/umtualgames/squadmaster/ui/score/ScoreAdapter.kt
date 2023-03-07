@@ -29,10 +29,11 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
     inner class ScoreViewHolder(private val binding: RowLayoutScoreBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: RankItem, position: Int) {
             with(binding) {
                 tvPosition.text = (position + 1).toString()
-                tvUserName.text = item.userViewModel.name
+                tvUserName.text = item.userViewModel.username
                 tvScore.text = item.point.toString()
 
                 if (item.userID == getUserID()) {

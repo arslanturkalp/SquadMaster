@@ -43,8 +43,8 @@ class ScoreViewModel : BaseViewModel() {
                         Status.LOADING -> viewState.postValue(ScoreViewState.LoadingState)
                         Status.SUCCESS -> {
                             val response = it.data!!
-                            getRankList()
                             viewState.postValue(ScoreViewState.UserPointState(response))
+                            getRankList()
                         }
                         Status.ERROR -> {
                             refreshTokenLogin(getRefreshToken())

@@ -86,6 +86,10 @@
     <string name="slide_first_main_mode">Only one player is missing in the first 11 and try to find the correct answer from the 5 answers!</string>
     <string name="slide_two_league_mode">Compete to unlock all leagues in the league mode, which consists of teams from Europe\'s 5 big leagues, Turkish League and other leagues.</string>
     <string name="slide_third_score">Compete fiercely on the overall scoreboard with the main game mode record.</string>
+    <string name="point_15">15 Point won!</string>
     <string name="point_25">25 Point won!</string>
     <string name="club_unlocked">Club Unlocked</string>
+
+    <string name="need_point">You need %2$s points to unlock %1$s. You can earn point by play main game mode.</string>
+
 </resources>

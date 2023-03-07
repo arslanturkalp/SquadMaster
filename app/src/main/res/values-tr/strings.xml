@@ -86,6 +86,9 @@
     <string name="slide_first_main_mode">İlk 11 içerisinde sadece bir oyuncu eksik ve doğru cevabı 5 cevap içerisinden bulmaya çalış!</string>
     <string name="slide_two_league_mode">Avrupa\'nın 5 büyük ligi, Türkiye Ligi ve diğer liglerdeki takımlardan oluşan lig modunda tüm liglerin kilidini açmak için mücadele et.</string>
     <string name="slide_third_score">Ana oyun modu rekoru ile toplam puan tablosunda kıyasıya rekabet.</string>
+    <string name="point_15">15 Puan kazandınız!</string>
     <string name="point_25">25 Puan kazandınız!</string>
     <string name="club_unlocked">Kulüp Kilidi Açıldı</string>
+
+    <string name="need_point">%1$s kilidini açmak için %2$s puana ihtiyacın var. Ana oyun modunda puan kazanabilirsin.</string>
 </resources>

@@ -16,6 +16,7 @@ import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.databinding.FragmentAnswerBinding
+import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
 import org.greenrobot.eventbus.EventBus
 
 class AnswerFragment : BaseBottomSheetDialogFragment() {
@@ -66,6 +67,7 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkLanguage(requireContext())
         setupObservers()
     }
 

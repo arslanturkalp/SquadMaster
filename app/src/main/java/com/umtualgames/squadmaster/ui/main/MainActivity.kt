@@ -14,6 +14,7 @@ import com.umtualgames.squadmaster.ui.home.HomeFragment
 import com.umtualgames.squadmaster.ui.leagues.LeaguesFragment
 import com.umtualgames.squadmaster.ui.score.ScoreFragment
 import com.umtualgames.squadmaster.ui.slide.SlideFragment
+import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
 
 class MainActivity : BaseActivity() {
 
@@ -30,7 +31,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        checkLanguage(this)
+
         initFragments()
+
         if (!getIsShowedTutorial()){
             showFragment(fragmentList.last())
             binding.bottomNavigationView.visibility = View.GONE

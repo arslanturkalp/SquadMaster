@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager.LayoutParams
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -65,6 +66,7 @@ class SquadActivity : BaseActivity() {
         setContentView(binding.root)
 
         checkLanguage(this)
+        preventScreenshot()
         clearUnknownAnswer()
         clearIsShowedFlag()
 
@@ -91,6 +93,8 @@ class SquadActivity : BaseActivity() {
             }
         }
     }
+
+    private fun preventScreenshot() = window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
 
     private fun setupRecyclerViews() {
         binding.rvGoalkeeper.apply {
@@ -160,7 +164,7 @@ class SquadActivity : BaseActivity() {
                     viewModel.getUserPoint(getUserID())
                 }
                 is GetSquadViewState.LevelPassState -> {
-                    if (state.response.statusCode == 200) { } else {
+                    if (state.response.statusCode == 300) {
                         showAlertDialogTheme(getString(R.string.warning), getString(R.string.club_is_passed))
                     }
                 }
@@ -241,7 +245,7 @@ class SquadActivity : BaseActivity() {
         val level = intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueOrder
         binding.apply {
             if (potentialAnswer.isAnswer) {
-                if (level == 5 || level == 10 || level == 15 || level == 18) {
+                if (level == 5 || level == 10 || level == 15 || level == 18 || level == 20) {
                     if (mInterstitialAd != null) {
                         mInterstitialAd?.show(this@SquadActivity)
                     }
@@ -254,7 +258,7 @@ class SquadActivity : BaseActivity() {
                 ))
                 updateUnknownAnswer(potentialAnswer.displayName)
                 updateUnknownImage(potentialAnswer.imagePath)
-                navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName + " + " + getString(R.string.point_25))
+                navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName + " + " + if (intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID == 7) getString(R.string.point_15) else getString(R.string.point_25))
             } else {
                 showAlertDialogTheme(
                     title = getString(R.string.wrong_answer),
