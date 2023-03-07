@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.data.models.SlideModel
 import com.umtualgames.squadmaster.databinding.RowLayoutSlideBinding
 
@@ -29,7 +32,13 @@ class SlidePagerAdapter : RecyclerView.Adapter<SlidePagerAdapter.SlideViewHolder
         fun bind(item: SlideModel) {
 
             binding.apply {
-                ivPhoto.setImageResource(item.imageID)
+                ivPhoto.apply {
+                    Glide.with(context)
+                        .asBitmap()
+                        .load(item.imageID)
+                        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
+                        .into(this)
+                }
                 tvText.text = item.title
             }
         }

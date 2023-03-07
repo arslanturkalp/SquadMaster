@@ -271,7 +271,7 @@ class GameActivity : BaseActivity() {
                 Glide.with(context)
                     .asBitmap()
                     .load(unknownPlayer.squadImagePath)
-                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
                     .into(this)
             }
 

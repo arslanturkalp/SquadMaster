@@ -39,7 +39,7 @@ class StartActivity : BaseActivity() {
     private val binding by lazy { ActivityStartBinding.inflate(layoutInflater) }
 
     private val viewModel by viewModels<StartViewModel>()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

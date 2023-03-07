@@ -9,10 +9,10 @@
         android:name=".application.SquadMasterApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_soccer"
         android:label="@string/app_name"
-        android:enableOnBackInvokedCallback="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.SquadMaster"
         android:usesCleartextTraffic="true"
@@ -20,7 +20,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4810521807152117~5973535300"/>
+            android:value="ca-app-pub-4810521807152117~5973535300" />
 
         <activity
             android:name=".ui.splash.SplashActivity"
@@ -35,43 +35,37 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateVisible">
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
             android:name=".ui.start.StartActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustUnspecified">
-        </activity>
+            android:windowSoftInputMode="adjustUnspecified" />
 
         <activity
             android:name=".ui.register.RegisterActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateVisible">
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustUnspecified">
-        </activity>
+            android:windowSoftInputMode="adjustUnspecified" />
 
         <activity
             android:name=".ui.squad.SquadActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustUnspecified">
-        </activity>
+            android:windowSoftInputMode="adjustUnspecified" />
 
         <activity
             android:name=".ui.game.GameActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustUnspecified">
-        </activity>
+            android:windowSoftInputMode="adjustUnspecified" />
 
         <activity
             android:name=".ui.clubs.ClubsActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateVisible" />
 
     </application>
 
