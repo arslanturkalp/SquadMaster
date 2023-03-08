@@ -115,10 +115,6 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun loadBannerAd() {
-        val configuration = RequestConfiguration.Builder().setTestDeviceIds(listOf("03B094AA787BDF5746C59E26B9356600"))
-        MobileAds.setRequestConfiguration(configuration.build())
-        MobileAds.initialize(requireContext()) {}
-
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }

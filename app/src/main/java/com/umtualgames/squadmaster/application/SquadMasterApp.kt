@@ -2,6 +2,7 @@ package com.umtualgames.squadmaster.application
 
 import android.app.Application
 import android.content.Context
+import com.google.android.gms.ads.MobileAds
 import com.orhanobut.hawk.Hawk
 
 class SquadMasterApp : Application() {
@@ -10,6 +11,7 @@ class SquadMasterApp : Application() {
         super.onCreate()
         instance = this
         Hawk.init(instance).build()
+        MobileAds.initialize(this)
     }
 
     override fun attachBaseContext(base: Context) {
