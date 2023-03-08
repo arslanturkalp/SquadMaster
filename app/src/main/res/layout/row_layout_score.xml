@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_white"
-    android:paddingStart="32dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:paddingEnd="64dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:orientation="horizontal">
@@ -18,7 +16,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvPosition"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="start|center_vertical"
@@ -35,16 +33,16 @@
         android:gravity="start|center_vertical"
         android:padding="16dp"
         android:textColor="@color/green"
-        android:textSize="18sp"
+        android:textSize="16sp"
         tools:text="User" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvScore"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="16dp"
         android:gravity="center_vertical|end"
+        android:padding="16dp"
         android:textColor="@color/red"
         android:textSize="18sp"
         tools:text="50" />
