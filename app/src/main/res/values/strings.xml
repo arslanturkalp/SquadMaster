@@ -23,6 +23,7 @@
     <string name="start_game">Start Game</string>
     <string name="next_level">Next Level</string>
     <string name="restart">Restart</string>
+    <string name="continue_with_life">Continue (+1 Life)</string>
     <string name="game_over">Game Over</string>
     <string name="yellow_card">Yellow Card</string>
 

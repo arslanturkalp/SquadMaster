@@ -201,14 +201,10 @@ class GameActivity : BaseActivity() {
         if (getWrongCount() == 2) { navigateToYellowCard() }
         if (getWrongCount() == 3) {
             navigateToGameOver(getScore())
-            if (getScore() != 0 && getUserID() != 13) {
-                viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
-            }
             if (mInterstitialAd != null) {
                 mInterstitialAd?.show(this)
             }
             clearWrongCount()
-            clearScore()
         }
     }
 

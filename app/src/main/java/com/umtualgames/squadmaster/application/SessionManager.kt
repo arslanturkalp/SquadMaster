@@ -8,6 +8,7 @@ object SessionManager {
     private const val KEY_UNKNOWN_IMAGE = "KEY_UNKNOWN_IMAGE"
     private const val KEY_IS_SHOWED_FLAG = "KEY_IS_SHOWED_FLAG"
     private const val KEY_IS_SHOWED_TUTORIAL = "KEY_IS_SHOWED_TUTORIAL"
+    private const val KEY_IS_USED_EXTRA_LIFE = "KEY_IS_USED_EXTRA_LIFE"
 
     private const val KEY_TOKEN = "KEY_TOKEN"
     private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
@@ -33,6 +34,7 @@ object SessionManager {
 
     private var isShowedFlag: Boolean = false
     private var isShowedTutorial: Boolean = false
+    private var isUsedExtraLife: Boolean = false
 
     init {
         unknownAnswer = Hawk.get(KEY_UNKNOWN_ANSWER, "")
@@ -46,6 +48,7 @@ object SessionManager {
         password = Hawk.get(KEY_PASSWORD, "")
         isShowedFlag = Hawk.get(KEY_IS_SHOWED_FLAG, false)
         isShowedTutorial = Hawk.get(KEY_IS_SHOWED_TUTORIAL, false)
+        isUsedExtraLife = Hawk.get(KEY_IS_USED_EXTRA_LIFE, false)
 
     }
 
@@ -169,4 +172,16 @@ object SessionManager {
     fun clearIsShowedTutorial() {
         updateIsShowedTutorial(false)
     }
+
+    fun updateIsUsedExtraLife(value: Boolean) {
+        Hawk.put(KEY_IS_USED_EXTRA_LIFE, value)
+        isUsedExtraLife = value
+    }
+
+    fun getIsUsedExtraLife() = isUsedExtraLife
+
+    fun clearIsUsedExtraLife() {
+        updateIsUsedExtraLife(false)
+    }
+
 }

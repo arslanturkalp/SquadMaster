@@ -23,6 +23,7 @@
     <string name="start_game">Oyuna Başla</string>
     <string name="next_level">Sonraki Seviye</string>
     <string name="restart">Yeniden Başla</string>
+    <string name="continue_with_life">Devam Et (+1 Can)</string>
     <string name="game_over">Oyun Bitti</string>
     <string name="yellow_card">Sarı Kart</string>
 
