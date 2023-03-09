@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import com.google.android.gms.ads.AdRequest
+import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.clearPassword
 import com.umtualgames.squadmaster.application.SessionManager.clearScore
 import com.umtualgames.squadmaster.application.SessionManager.clearUserID
@@ -16,17 +18,13 @@ import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.data.models.MessageEvent
+import com.umtualgames.squadmaster.databinding.FragmentHomeBinding
 import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
-import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.databinding.FragmentHomeBinding
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -146,6 +144,10 @@ class HomeFragment : BaseFragment() {
                     updateRefreshToken(state.response.refreshToken)
                     viewModel.getUserPoint(getUserID())
                 }
+                is HomeViewState.LeagueSuccessState -> {
+                    (activity as MainActivity).setNotificationBadge(state.response.count { !it.isLocked })
+                }
+                else -> {}
             }
         }
     }

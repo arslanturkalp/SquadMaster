@@ -35,15 +35,26 @@ class MainActivity : BaseActivity() {
 
         initFragments()
 
-        if (!getIsShowedTutorial()){
+        if (!getIsShowedTutorial()) {
             showFragment(fragmentList.last())
             binding.bottomNavigationView.visibility = View.GONE
             updateIsShowedTutorial(true)
-        } else{
+        } else {
             showFragment(fragmentList.first())
             binding.bottomNavigationView.visibility = View.VISIBLE
         }
         setupBottomNavigationView()
+    }
+
+    fun setNotificationBadge(count: Int) {
+        binding.bottomNavigationView.apply {
+            getOrCreateBadge(menu.getItem(1).itemId).apply {
+                number = count
+                verticalOffset = 8
+                backgroundColor = getColor(R.color.green)
+                badgeTextColor = getColor(R.color.white)
+            }
+        }
     }
 
     private fun initFragments() {
