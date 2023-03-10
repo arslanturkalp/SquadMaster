@@ -110,4 +110,6 @@ dependencies {
     //Crashlytics
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
+    //PlayAuth
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 }

@@ -40,7 +40,10 @@
 
     <string name="login">Giriş Yap</string>
     <string name="register">Kayıt Ol</string>
+    <string name="dont_have_an_account">Hesabın yok mu?</string>
+    <string name="or">ya da</string>
     <string name="login_as_guest">Ziyaretçi Olarak Giriş Yap</string>
+    <string name="login_with_google">Google ile Giriş Yap</string>
     <string name="login_as_guest_description">Ziyaretçi olarak giriş yapmanız durumunda skorlarınız kaydedilmeyecek ve başka kullanıcılarla mücadele edememe gibi birçok hizmetten mahrum kalacaksınız.</string>
     <string name="txt_continue">Devam Et</string>
     <string name="logout">Çıkış Yap</string>

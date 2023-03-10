@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.umtualgames.squadmaster.data.enums.Status
 import com.umtualgames.squadmaster.network.requests.LoginRequest
+import com.umtualgames.squadmaster.network.requests.RegisterRequest
 import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.network.responses.loginresponses.RegisterResponse
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class StartViewModel: BaseViewModel() {
@@ -33,11 +35,49 @@ class StartViewModel: BaseViewModel() {
                 }
         )
     }
+
+    fun register(registerRequest: RegisterRequest) {
+        compositeDisposable.addAll(
+            remoteDataSource
+                .register(registerRequest)
+                .applyThreads()
+                .subscribe {
+                    when (it.status) {
+                        Status.LOADING -> viewState.postValue(StartViewState.LoadingState)
+                        Status.SUCCESS -> {
+                            val response = it.data!!
+                            viewState.postValue(StartViewState.RegisterState(response))
+                        }
+                        Status.ERROR -> viewState.postValue(StartViewState.ErrorState(it.message!!))
+                    }
+                }
+        )
+    }
+
+    fun loginAdmin(loginRequest: LoginRequest) {
+        compositeDisposable.addAll(
+            remoteDataSource
+                .login(loginRequest)
+                .applyThreads()
+                .subscribe {
+                    when (it.status) {
+                        Status.LOADING -> {}
+                        Status.SUCCESS -> {
+                            val response = it.data!!
+                            viewState.postValue(StartViewState.AdminState(response))
+                        }
+                        Status.ERROR -> viewState.postValue(StartViewState.ErrorState(it.message!!))
+                    }
+                }
+        )
+    }
 }
 
 sealed class StartViewState {
     object LoadingState : StartViewState()
     data class SuccessState(val response: LoginResponse) : StartViewState()
+    data class AdminState(val response: LoginResponse) : StartViewState()
+    data class RegisterState(val response: RegisterResponse) : StartViewState()
     data class ErrorState(val message: String) : StartViewState()
     data class WarningState(val message: String?) : StartViewState()
 }

@@ -3,9 +3,18 @@ package com.umtualgames.squadmaster.ui.start
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.orhanobut.hawk.Hawk
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.Constants
@@ -23,16 +32,14 @@ import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityStartBinding
 import com.umtualgames.squadmaster.network.requests.LoginRequest
+import com.umtualgames.squadmaster.network.requests.RegisterRequest
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.login.LoginActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.register.RegisterActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
-import com.umtualgames.squadmaster.utils.addOnBackPressedListener
-import com.umtualgames.squadmaster.utils.getDataExtra
-import com.umtualgames.squadmaster.utils.setVisibility
-import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import com.umtualgames.squadmaster.utils.*
 
 class StartActivity : BaseActivity() {
 
@@ -54,8 +61,10 @@ class StartActivity : BaseActivity() {
         setupObservers()
 
         if (intent.getDataExtra(EXTRAS_FROM_GUEST)) {
-            binding.btnLoginAsGuest.visibility = View.GONE
+            binding.apply { setVisibility(View.GONE, btnLoginAsGuest, tvOr) }
         }
+
+        (binding.btnGoogleSignIn.getChildAt(0) as TextView).text = getString(R.string.login_with_google)
 
         addOnBackPressedListener {
             showAlertDialogTheme(getString(R.string.quit_game), getString(R.string.game_close_alert), showNegativeButton = true, onPositiveButtonClick = { finishAndRemoveTask() })
@@ -63,7 +72,7 @@ class StartActivity : BaseActivity() {
 
         if (getUserName() != "" && getPassword() != "") {
             if (!intent.getDataExtra<Boolean>(EXTRAS_FROM_GUEST)) {
-                binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnSignUp, btnLoginAsGuest) }
+                binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnLoginAsGuest, btnGoogleSignIn, btnSignUp, tvOr, tvDontHaveAnAccount) }
                 viewModel.signIn(LoginRequest(username = getUserName(), password = getPassword()))
             }
         }
@@ -84,6 +93,48 @@ class StartActivity : BaseActivity() {
                         updatePassword(ADMIN_PASSWORD)
                     })
             }
+            btnGoogleSignIn.setOnClickListener {
+                viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
+            }
+        }
+    }
+
+    private fun signInOptimisation() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        val client = GoogleSignIn.getClient(this, gso)
+
+        val intent = client.signInIntent
+        signInResult.launch(intent)
+
+    }
+
+    private val signInResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        handleSignInResult(task)
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+            val userName = account.displayName.orEmpty().split(" ")[0].lowercase() + account.displayName.orEmpty().split(" ")[1].lowercase().replaceChars()
+
+            viewModel.register(
+                RegisterRequest(
+                    name = account.displayName.orEmpty().split(" ")[0],
+                    surname = account.displayName.orEmpty().split(" ")[1],
+                    username = userName,
+                    password = "GmailUser",
+                    email = account.email.orEmpty()
+                )
+            )
+            updateUserName(userName)
+            updatePassword("GmailUser")
+
+        } catch (e: ApiException) {
+            Log.d("TAG", e.statusCode.toString())
         }
     }
 
@@ -110,7 +161,19 @@ class StartActivity : BaseActivity() {
                 }
                 is StartViewState.ErrorState -> {
                     dismissProgressDialog()
-                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
+                    if (state.message == "HTTP 403 Forbidden") {
+                        viewModel.signIn(LoginRequest(getUserName(), getPassword()))
+                    } else {
+                        showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
+                    }
+                }
+                is StartViewState.RegisterState -> {
+                    dismissProgressDialog()
+                    viewModel.signIn(LoginRequest(getUserName(), getPassword()))
+                }
+                is StartViewState.AdminState -> {
+                    updateToken(state.response.data.token.accessToken)
+                    signInOptimisation()
                 }
             }
         }
