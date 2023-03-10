@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "639125678412-i1gg6s9lnee87fccuheag26fsagn78o1.apps.googleusercontent.com",
+          "client_id": "639125678412-7b8kqr4qf5aaqs4tu39j1hiqchnnlhhk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.umtualgames.squadmaster",
+            "certificate_hash": "48c41e7ea1c35d85e0d712c597284a52f9a96257"
+          }
+        },
+        {
+          "client_id": "639125678412-v2jhvfeelsrksoi12957sus0aho1jrpk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
