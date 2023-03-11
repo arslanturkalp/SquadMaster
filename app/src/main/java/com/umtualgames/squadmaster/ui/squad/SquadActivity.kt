@@ -66,6 +66,7 @@ class SquadActivity : BaseActivity() {
         setContentView(binding.root)
 
         checkLanguage(this)
+        setPortraitMode()
         preventScreenshot()
         clearUnknownAnswer()
         clearIsShowedFlag()

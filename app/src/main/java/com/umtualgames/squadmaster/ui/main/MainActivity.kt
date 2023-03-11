@@ -1,6 +1,5 @@
 package com.umtualgames.squadmaster.ui.main
 
-import com.umtualgames.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,11 +9,13 @@ import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedTutorial
 import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedTutorial
 import com.umtualgames.squadmaster.databinding.ActivityMainBinding
+import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.home.HomeFragment
 import com.umtualgames.squadmaster.ui.leagues.LeaguesFragment
 import com.umtualgames.squadmaster.ui.score.ScoreFragment
 import com.umtualgames.squadmaster.ui.slide.SlideFragment
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import com.umtualgames.squadmaster.utils.setPortraitMode
 
 class MainActivity : BaseActivity() {
 
@@ -32,7 +33,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         checkLanguage(this)
-
+        setPortraitMode()
         initFragments()
 
         if (!getIsShowedTutorial()) {

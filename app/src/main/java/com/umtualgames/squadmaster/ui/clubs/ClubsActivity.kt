@@ -26,6 +26,7 @@ import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.squad.SquadActivity
 import com.umtualgames.squadmaster.utils.getDataExtra
+import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -45,6 +46,8 @@ class ClubsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        setPortraitMode()
 
         setStatusBarColor()
 

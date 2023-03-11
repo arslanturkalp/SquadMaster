@@ -14,6 +14,7 @@ import com.umtualgames.squadmaster.databinding.ActivityRegisterBinding
 import com.umtualgames.squadmaster.network.requests.LoginRequest
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.login.LoginActivity
+import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import com.umtualgames.squadmaster.utils.spaceControl
 
@@ -30,6 +31,7 @@ class RegisterActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setPortraitMode()
         setupObservers()
 
         viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))

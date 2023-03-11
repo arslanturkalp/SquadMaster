@@ -73,6 +73,7 @@ class GameActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setPortraitMode()
         preventScreenshot()
         clearUnknownAnswer()
         clearIsShowedFlag()

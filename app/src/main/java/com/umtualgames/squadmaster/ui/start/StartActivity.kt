@@ -57,6 +57,7 @@ class StartActivity : BaseActivity() {
             SettingsFragment().show(supportFragmentManager, "")
         }
 
+        setPortraitMode()
         setNavigationBarColor()
         setupObservers()
 

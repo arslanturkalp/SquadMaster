@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
+import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.databinding.ActivitySplashBinding
 import com.umtualgames.squadmaster.network.requests.LoginRequest
 import com.umtualgames.squadmaster.ui.base.BaseActivity
@@ -66,6 +67,7 @@ class SplashActivity : BaseActivity() {
                     showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
                 }
                 is SplashViewState.AdminState -> {
+                    updateToken(state.response.data.token.accessToken)
                     viewModel.getProjectSettings()
                 }
             }

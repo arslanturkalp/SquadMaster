@@ -14,6 +14,7 @@ import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityLoginBinding
 import com.umtualgames.squadmaster.ui.main.MainActivity
+import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 
 class LoginActivity : BaseActivity() {
@@ -26,6 +27,7 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        setPortraitMode()
         setNavigationBarColor()
         setupObservers()
 
