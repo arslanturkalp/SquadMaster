@@ -48,6 +48,7 @@
     <string name="txt_continue">Devam Et</string>
     <string name="logout">Çıkış Yap</string>
     <string name="quit_game">Oyundan Çık</string>
+    <string name="used_username">Seçtiğiniz kullanıcı adı kullanımda olduğu için, başka bir kullanıcı adı seçmeniz gerekmektedir.</string>
 
     <string name="remember_me">Beni Hatırla</string>
     <string name="yellow_card_description">Sonraki yanlış cevabında oyun sonlanacak.</string>

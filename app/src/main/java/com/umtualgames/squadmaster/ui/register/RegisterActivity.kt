@@ -1,24 +1,30 @@
 package com.umtualgames.squadmaster.ui.register
 
-import com.umtualgames.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.orhanobut.hawk.Hawk
 import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.application.Constants
 import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.databinding.ActivityRegisterBinding
 import com.umtualgames.squadmaster.network.requests.LoginRequest
+import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.login.LoginActivity
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import com.umtualgames.squadmaster.utils.spaceControl
 
 class RegisterActivity : BaseActivity() {
 
     private val binding by lazy { ActivityRegisterBinding.inflate(layoutInflater) }
 
     private val viewModel by viewModels<RegisterViewModel>()
+
+    private val lang = Hawk.get(Constants.KEY_APP_LANG, "en")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +35,11 @@ class RegisterActivity : BaseActivity() {
         viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
 
         binding.apply {
+
+            etUserName.spaceControl()
+            etPassword.spaceControl()
+            etMail.spaceControl()
+
             btnSignUp.setOnClickListener {
                 binding.apply {
                     viewModel.register(
@@ -51,6 +62,8 @@ class RegisterActivity : BaseActivity() {
                     dismissProgressDialog()
                     if (state.response.statusCode == 200) {
                         startActivity(LoginActivity.createIntent(this))
+                    } else if (state.response.statusCode == 400) {
+                        showAlertDialogTheme(getString(R.string.error), if (lang == "en") getString(R.string.used_username) else state.response.message)
                     }
                 }
                 is RegisterViewState.ErrorState -> {

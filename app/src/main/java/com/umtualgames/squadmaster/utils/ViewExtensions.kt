@@ -1,6 +1,8 @@
 package com.umtualgames.squadmaster.utils
 
+import android.text.InputFilter
 import android.view.View
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 
@@ -15,3 +17,11 @@ fun AppCompatActivity.addOnBackPressedListener(onBackPressed: () -> Unit) = onBa
         onBackPressed.invoke()
     }
 })
+
+fun EditText.spaceControl() {
+    this.filters = this.filters.let {
+        it + InputFilter { source, _, _, _, _, _ ->
+            source.filterNot { char -> char.isWhitespace() }
+        }
+    }
+}

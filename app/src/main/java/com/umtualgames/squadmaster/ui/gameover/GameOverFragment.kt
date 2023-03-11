@@ -1,6 +1,7 @@
 package com.umtualgames.squadmaster.ui.gameover
 
 import BaseBottomSheetDialogFragment
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.rewarded.RewardItem
@@ -64,11 +66,14 @@ class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardList
                 if (getIsUsedExtraLife()) btnContinue.visibility = View.GONE
                 btnContinue.setOnClickListener {
                     if (mRewardedInterstitialAd != null) {
-                        mRewardedInterstitialAd?.show(requireActivity(), this@GameOverFragment)
+                        mRewardedInterstitialAd?.show(activity as Activity, this@GameOverFragment)
                     }
-                    updateIsUsedExtraLife(true)
-                    context?.startActivity(GameActivity.createIntent(context))
-                    updateWrongCount(2)
+                    mRewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            super.onAdDismissedFullScreenContent()
+                            btnContinue.visibility = View.GONE
+                        }
+                    }
                 }
             }
             ivClose.setOnClickListener {
@@ -123,7 +128,9 @@ class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardList
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
-        //TODO: User Reward
+        updateIsUsedExtraLife(true)
+        context?.startActivity(GameActivity.createIntent(context))
+        updateWrongCount(2)
     }
 
     companion object {

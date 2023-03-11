@@ -48,6 +48,7 @@
     <string name="txt_continue">Continue</string>
     <string name="logout">Sign Out</string>
     <string name="quit_game">Quit Game</string>
+    <string name="used_username">Since this username is in use, you need to choose a different username.</string>
 
     <string name="remember_me">Remember Me</string>
     <string name="yellow_card_description">The next wrong answer will be game over.</string>
