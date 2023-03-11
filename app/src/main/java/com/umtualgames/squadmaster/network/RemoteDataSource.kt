@@ -11,6 +11,7 @@ import com.umtualgames.squadmaster.network.responses.loginresponses.LoginRespons
 import com.umtualgames.squadmaster.network.responses.loginresponses.RefreshTokenResponse
 import com.umtualgames.squadmaster.network.responses.loginresponses.RegisterResponse
 import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
+import com.umtualgames.squadmaster.network.responses.projectsettingsresponses.ProjectSettingsResponse
 import com.umtualgames.squadmaster.network.responses.squadresponses.GetSquadListResponse
 import com.umtualgames.squadmaster.network.responses.unlocksquadresponses.LevelPassResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.GetRankListResponse
@@ -309,6 +310,31 @@ class RemoteDataSource {
                 .getRetrofit()
                 .create(UnlockSquadServices::class.java)
                 .levelPass(levelPassRequest)
+                .subscribe(
+                    {
+                        emitter.onNext(Resource.success(it))
+                        emitter.onComplete()
+                    },
+                    {
+                        it.printStackTrace()
+                        emitter.onNext(Resource.error(it.message!!))
+                        emitter.onComplete()
+                    }
+                )
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getProjectSettings(): Observable<Resource<ProjectSettingsResponse>> {
+
+        return Observable.create { emitter ->
+
+            emitter.onNext(Resource.loading())
+
+            serviceProvider
+                .getRetrofit()
+                .create(ProjectSettingsServices::class.java)
+                .getProjectSettings()
                 .subscribe(
                     {
                         emitter.onNext(Resource.success(it))

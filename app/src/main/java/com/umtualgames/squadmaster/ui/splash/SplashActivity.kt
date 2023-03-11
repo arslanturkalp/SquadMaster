@@ -1,6 +1,5 @@
 package com.umtualgames.squadmaster.ui.splash
 
-import com.umtualgames.squadmaster.ui.base.BaseActivity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -10,25 +9,35 @@ import android.os.Looper
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
+import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
 import com.umtualgames.squadmaster.databinding.ActivitySplashBinding
+import com.umtualgames.squadmaster.network.requests.LoginRequest
+import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
 
     private val binding by lazy { ActivitySplashBinding.inflate(layoutInflater) }
 
+    private val viewModel by viewModels<SplashViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         checkLanguage(this)
+        setupObservers()
         setNavigationBarColor()
         rotateBall()
-        goToStart()
+
+        viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
     }
 
     private fun setNavigationBarColor() {
@@ -42,9 +51,30 @@ class SplashActivity : BaseActivity() {
         binding.imageView.startAnimation(rotate)
     }
 
+    private fun setupObservers() {
+        viewModel.getViewState.observe(this) { state ->
+            when (state) {
+                is SplashViewState.LoadingState -> {}
+                is SplashViewState.SuccessState -> {
+                    if (state.response.data.first().settingName == "IsOnline" && state.response.data.first().settingValue == "true") {
+                        goToStart()
+                    } else {
+                        showAlertDialogTheme(title = getString(R.string.error), contentMessage = getString(R.string.is_not_online))
+                    }
+                }
+                is SplashViewState.ErrorState -> {
+                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
+                }
+                is SplashViewState.AdminState -> {
+                    viewModel.getProjectSettings()
+                }
+            }
+        }
+    }
+
     private fun goToStart() {
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(StartActivity.createIntent(false,this))
+            startActivity(StartActivity.createIntent(false, this))
         }, 2500)
     }
 
