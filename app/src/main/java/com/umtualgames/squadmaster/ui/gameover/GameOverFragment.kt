@@ -114,7 +114,7 @@ class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardList
     private fun loadAds() {
         val adRequest = AdRequest.Builder().build()
 
-        RewardedInterstitialAd.load(requireContext(), "ca-app-pub-4810521807152117/8369556364", adRequest, object : RewardedInterstitialAdLoadCallback() {
+        RewardedInterstitialAd.load(requireContext(), "ca-app-pub-8478732006421140/7625059139", adRequest, object : RewardedInterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Log.d(SquadMasterApp.TAG, adError.toString())
                 mRewardedInterstitialAd = null

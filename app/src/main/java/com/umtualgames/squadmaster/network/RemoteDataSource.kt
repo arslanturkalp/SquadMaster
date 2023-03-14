@@ -181,7 +181,7 @@ class RemoteDataSource {
             emitter.onNext(Resource.loading())
 
             serviceProvider
-                .getRetrofit()
+                .getRetrofitIsLogin()
                 .create(LoginServices::class.java)
                 .refreshTokenLogin(refreshToken)
                 .subscribe(
