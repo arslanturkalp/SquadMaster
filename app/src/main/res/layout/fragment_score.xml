@@ -35,11 +35,9 @@
                 android:id="@+id/llMyScore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_white"
+                android:background="@drawable/bg_light_green"
                 android:orientation="horizontal"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -53,7 +51,7 @@
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
                     android:padding="16dp"
-                    android:textColor="@color/green"
+                    android:textColor="@color/soft_green"
                     android:textSize="14sp"
                     tools:text="omerihsanoguz" />
 
@@ -68,16 +66,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/total_point"
-                        android:textColor="@color/green"
+                        android:textColor="@color/soft_green"
                         android:textSize="12sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvUserTotalPoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/red"
+                        android:textColor="@color/creme"
                         android:textSize="14sp"
                         tools:text="5000" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,14 +91,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/best_score"
                         android:textAlignment="textEnd"
-                        android:textColor="@color/green"
+                        android:textColor="@color/soft_green"
                         android:textSize="12sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvUserBestScore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/red"
+                        android:textColor="@color/creme"
                         android:textSize="14sp"
                         tools:text="300" />
                 </LinearLayout>
@@ -108,91 +107,54 @@
                     android:id="@+id/ivRefresh"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_refresh" />
             </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvTitleHighScore"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/josefin_sans"
-                android:text="@string/high_score"
-                android:textColor="@color/white"
-                android:textSize="28sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_green_with_radius_ten"
                 android:visibility="gone"
-                tools:visibility="visible" />
-
-            <LinearLayout
-                android:id="@+id/llTitleBestScores"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone"
+                ads:tabGravity="fill"
+                ads:tabIconTint="@null"
+                ads:tabIndicatorColor="@color/pitch_green"
+                ads:tabIndicatorFullWidth="false"
+                ads:tabInlineLabel="true"
+                ads:tabMode="fixed"
+                ads:tabSelectedTextColor="@color/white"
+                ads:tabTextAppearance="@style/TabLayoutText"
+                ads:tabTextColor="@color/grey"
                 tools:visibility="visible">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/ic_best_score" />
-
-                <androidx.appcompat.widget.AppCompatTextView
+                <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/rank_list_by_best_scores"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:icon="@drawable/ic_best_score"
+                    android:text="@string/rank_list_by_best_scores" />
 
-            </LinearLayout>
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_coin"
+                    android:text="@string/rank_list_by_total_points" />
+
+            </com.google.android.material.tabs.TabLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvBestPoints"
+                android:id="@+id/rvPoints"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:fadeScrollbars="false"
                 android:scrollbars="vertical"
                 tools:itemCount="10"
-                tools:listitem="@layout/row_layout_score" />
-
-            <LinearLayout
-                android:id="@+id/llTitleTotalPoints"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/ic_coin" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/rank_list_by_total_points"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTotalPoints"
-                android:layout_width="match_parent"
-                android:layout_height="280dp"
-                android:layout_marginBottom="16dp"
-                android:fadeScrollbars="false"
-                android:scrollbars="vertical"
-                tools:itemCount="4"
                 tools:listitem="@layout/row_layout_score" />
 
         </LinearLayout>

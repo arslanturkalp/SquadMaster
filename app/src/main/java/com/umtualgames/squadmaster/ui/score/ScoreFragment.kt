@@ -8,32 +8,34 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.material.tabs.TabLayout
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.getUserName
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
+import com.umtualgames.squadmaster.data.models.MessageEvent
 import com.umtualgames.squadmaster.databinding.FragmentScoreBinding
+import com.umtualgames.squadmaster.network.responses.item.RankItem
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
-import com.umtualgames.squadmaster.data.models.MessageEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class ScoreFragment: BaseFragment() {
+class ScoreFragment : BaseFragment() {
 
     private val binding by lazy { FragmentScoreBinding.inflate(layoutInflater) }
 
     private val viewModel by viewModels<ScoreViewModel>()
 
-    private val bestPointsAdapter by lazy { ScoreAdapter() }
-    private val totalPointsAdapter by lazy { ScoreAdapter() }
+    private val pointsAdapter by lazy { ScoreAdapter() }
+
+    private var bestPoints: ArrayList<RankItem> = arrayListOf()
+    private var totalPoints: ArrayList<RankItem> = arrayListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -46,7 +48,7 @@ class ScoreFragment: BaseFragment() {
         setupObservers()
         setupRecyclerViews()
 
-        if (getUserID() != 13){
+        if (getUserID() != 13) {
             binding.svScore.visibility = View.VISIBLE
             binding.llShowScore.visibility = View.GONE
             binding.tvUserName.text = getUserName()
@@ -56,6 +58,20 @@ class ScoreFragment: BaseFragment() {
         binding.apply {
             ivRefresh.setOnClickListener { viewModel.getUserPoint(getUserID()) }
             btnLoginOrRegister.setOnClickListener { requireContext().startActivity(StartActivity.createIntent(true, requireContext())) }
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    if (tab?.position == 0) {
+                        pointsAdapter.updateAdapter(bestPoints)
+                    } else {
+                        pointsAdapter.updateAdapter(totalPoints)
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            })
         }
 
         requireActivity()
@@ -80,10 +96,11 @@ class ScoreFragment: BaseFragment() {
                 is ScoreViewState.LoadingState -> showProgressDialog()
                 is ScoreViewState.SuccessState -> {
                     dismissProgressDialog()
-                    setVisibility(View.VISIBLE, binding.llTitleBestScores, binding.llTitleTotalPoints, binding.tvTitleHighScore, binding.llMyScore)
+                    setVisibility(View.VISIBLE, binding.llMyScore, binding.tabLayout)
                     loadBannerAd()
-                    bestPointsAdapter.updateAdapter(state.response.data.userBestPoints)
-                    totalPointsAdapter.updateAdapter(state.response.data.userTotalPoints)
+                    bestPoints = state.response.data.userBestPoints as ArrayList<RankItem>
+                    totalPoints = state.response.data.userTotalPoints as ArrayList<RankItem>
+                    if (binding.tabLayout.selectedTabPosition == 0) pointsAdapter.updateAdapter(bestPoints) else pointsAdapter.updateAdapter(totalPoints)
                 }
                 is ScoreViewState.ErrorState -> {
                     dismissProgressDialog()
@@ -108,12 +125,8 @@ class ScoreFragment: BaseFragment() {
     }
 
     private fun setupRecyclerViews() {
-        binding.rvBestPoints.apply {
-            adapter = bestPointsAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        }
-        binding.rvTotalPoints.apply {
-            adapter = totalPointsAdapter
+        binding.rvPoints.apply {
+            adapter = pointsAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }

@@ -69,14 +69,15 @@
 
     <string name="competitive_mode">Main Game</string>
     <string name="league_mode">League Mode</string>
-    <string name="rank_list_by_best_scores">Rank List by Best Scores</string>
-    <string name="rank_list_by_total_points">Rank List by Total Points</string>
+    <string name="rank_list_by_best_scores">Best Scores</string>
+    <string name="rank_list_by_total_points">Total Points</string>
     <string name="high_score">High Score Table</string>
 
     <string name="best_score">Best Score</string>
     <string name="total_point">Total Point</string>
 
     <string name="language">Language</string>
+    <string name="theme">Theme</string>
     <string name="about">About</string>
     <string name="remember_me_reminder">You can be directed to the homepage the next time you log in to the application by checking the Remember Me option.</string>
 

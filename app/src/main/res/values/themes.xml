@@ -48,4 +48,8 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
+
+    <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>
