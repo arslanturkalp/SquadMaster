@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-8478732006421140/5026815958" />
+        ads:adUnitId="ca-app-pub-5776386569149871/3736681362" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/svScore"

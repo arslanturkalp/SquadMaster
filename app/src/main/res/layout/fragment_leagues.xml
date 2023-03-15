@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-8478732006421140/7269835912" />
+        ads:adUnitId="ca-app-pub-5776386569149871/6015931160" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitleLeagues"

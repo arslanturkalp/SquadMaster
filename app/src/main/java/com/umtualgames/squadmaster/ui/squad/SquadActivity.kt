@@ -279,7 +279,7 @@ class SquadActivity : BaseActivity() {
     private fun loadAds() {
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-8478732006421140/9512855875", adRequest, object: InterstitialAdLoadCallback() {
+        InterstitialAd.load(this,"ca-app-pub-5776386569149871/9372151425", adRequest, object: InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Log.d(SquadMasterApp.TAG, adError.toString())
                 mInterstitialAd = null
