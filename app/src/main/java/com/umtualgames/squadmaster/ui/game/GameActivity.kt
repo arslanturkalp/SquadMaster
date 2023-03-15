@@ -26,12 +26,10 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.adapter.PotentialAnswersAdapter
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedFlag
-import com.umtualgames.squadmaster.application.SessionManager.clearScore
 import com.umtualgames.squadmaster.application.SessionManager.clearUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.clearWrongCount
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.getScore
-import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.getWrongCount
 import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
@@ -44,7 +42,6 @@ import com.umtualgames.squadmaster.application.SquadMasterApp.Companion.TAG
 import com.umtualgames.squadmaster.data.enums.PositionIdStatus
 import com.umtualgames.squadmaster.data.enums.PositionTypeIdStatus
 import com.umtualgames.squadmaster.databinding.ActivitySquadBinding
-import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.Player
 import com.umtualgames.squadmaster.network.responses.item.PotentialAnswer
 import com.umtualgames.squadmaster.ui.answer.AnswerFragment
@@ -72,6 +69,8 @@ class GameActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        System.gc()
 
         setPortraitMode()
         preventScreenshot()
