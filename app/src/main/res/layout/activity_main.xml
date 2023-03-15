@@ -20,9 +20,10 @@
         android:layout_height="wrap_content"
         android:visibility="visible"
         app:elevation="16dp"
-        app:itemBackground="@drawable/bg_bottom_navigation"
+        app:itemIconTint="@color/navigation_item_icon_color"
+        app:itemBackground="@drawable/bg_bottom_navigation_dark"
         app:itemIconSize="20dp"
-        app:itemTextColor="@color/green"
+        app:itemTextColor="@color/creme"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/navigation" />
 

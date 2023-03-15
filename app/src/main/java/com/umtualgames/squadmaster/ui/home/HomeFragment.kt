@@ -53,6 +53,11 @@ class HomeFragment : BaseFragment() {
 
         binding.apply {
 
+            cvStart.setBackgroundResource(R.drawable.bg_light_green)
+            cvLeague.setBackgroundResource(R.drawable.bg_light_green)
+            cvScore.setBackgroundResource(R.drawable.bg_light_green)
+            cvSignOut.setBackgroundResource(R.drawable.bg_light_green)
+
             if (getUserID() == 13) {
                 setVisibility(View.GONE, cvLeague, cvScore)
                 ivSignOut.setImageResource(R.drawable.ic_login)

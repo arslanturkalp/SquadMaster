@@ -17,13 +17,17 @@
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-5776386569149871/3672553443" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivSettings"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="end|top"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_settings" />
+        android:background="@color/creme"
+        android:src="@drawable/ic_settings"
+        ads:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        ads:strokeColor="@color/olive_green"
+        ads:strokeWidth="1dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
@@ -50,7 +54,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_bottom_navigation"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -67,7 +70,7 @@
                     android:padding="32dp"
                     android:text="@string/competitive_mode"
                     android:textAlignment="center"
-                    android:textColor="@color/green"
+                    android:textColor="@color/creme"
                     android:textSize="22sp" />
 
             </LinearLayout>
@@ -91,7 +94,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_bottom_navigation"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -111,7 +113,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textColor="@color/green"
+                            android:textColor="@color/creme"
                             android:textSize="22sp"
                             tools:text="0" />
 
@@ -134,7 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textColor="@color/green"
+                            android:textColor="@color/creme"
                             android:textSize="22sp"
                             tools:text="0" />
 
@@ -157,7 +159,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_bottom_navigation"
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatImageView
@@ -173,7 +174,7 @@
                         android:gravity="center"
                         android:padding="16dp"
                         android:text="@string/league_mode"
-                        android:textColor="@color/green"
+                        android:textColor="@color/creme"
                         android:textSize="20sp" />
 
                 </LinearLayout>
@@ -193,7 +194,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_bottom_navigation"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -212,7 +212,7 @@
                     android:padding="32dp"
                     android:text="@string/logout"
                     android:textAlignment="center"
-                    android:textColor="@color/green"
+                    android:textColor="@color/creme"
                     android:textSize="22sp" />
 
             </LinearLayout>

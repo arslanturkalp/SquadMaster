@@ -6,7 +6,7 @@
     android:layout_marginStart="6dp"
     android:layout_marginEnd="6dp"
     android:layout_marginBottom="24dp"
-    android:background="@drawable/bg_white"
+    android:background="@drawable/bg_light_green"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/bg_ripple_effect"
@@ -47,7 +47,7 @@
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:textColor="@color/green"
+        android:textColor="@color/creme"
         android:visibility="gone"
         tools:text="Premier League" />
 
@@ -70,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textColor="@color/green"
+            android:textColor="@color/soft_green"
             android:textSize="18sp"
             tools:text="500" />
     </LinearLayout>

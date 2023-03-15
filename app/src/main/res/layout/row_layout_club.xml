@@ -15,7 +15,7 @@
     <RelativeLayout
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@drawable/bg_white"
+        android:background="@drawable/bg_light_green"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatImageView

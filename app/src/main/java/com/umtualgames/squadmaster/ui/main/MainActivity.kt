@@ -1,7 +1,10 @@
 package com.umtualgames.squadmaster.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -47,13 +50,15 @@ class MainActivity : BaseActivity() {
         setupBottomNavigationView()
     }
 
+    @SuppressLint("NewApi")
     fun setNotificationBadge(count: Int) {
         binding.bottomNavigationView.apply {
+
             getOrCreateBadge(menu.getItem(1).itemId).apply {
                 number = count
                 verticalOffset = 8
-                backgroundColor = getColor(R.color.green)
-                badgeTextColor = getColor(R.color.white)
+                backgroundColor = getColor(R.color.soft_green)
+                badgeTextColor = getColor(R.color.green)
             }
         }
     }
@@ -92,7 +97,6 @@ class MainActivity : BaseActivity() {
 
     private fun setupBottomNavigationView() {
         binding.bottomNavigationView.apply {
-            itemIconTintList = null
             setOnItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.navigation_home -> {

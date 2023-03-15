@@ -47,16 +47,19 @@ class SplashActivity : BaseActivity() {
 
     private fun rotateBall() {
         val rotate = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        rotate.duration = 3000
+        rotate.duration = 3500
         rotate.interpolator = LinearInterpolator()
+        rotate.fillAfter = true
+        rotate.repeatCount = Animation.INFINITE
         binding.imageView.startAnimation(rotate)
     }
 
     private fun setupObservers() {
         viewModel.getViewState.observe(this) { state ->
             when (state) {
-                is SplashViewState.LoadingState -> {}
+                is SplashViewState.LoadingState -> { showProgressDialog() }
                 is SplashViewState.SuccessState -> {
+                    dismissProgressDialog()
                     if (state.response.data.first().settingName == "IsOnline" && state.response.data.first().settingValue == "true") {
                         goToStart()
                     } else {
@@ -64,9 +67,11 @@ class SplashActivity : BaseActivity() {
                     }
                 }
                 is SplashViewState.ErrorState -> {
+                    dismissProgressDialog()
                     showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
                 }
                 is SplashViewState.AdminState -> {
+                    dismissProgressDialog()
                     updateToken(state.response.data.token.accessToken)
                     viewModel.getProjectSettings()
                 }

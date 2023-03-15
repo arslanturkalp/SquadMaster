@@ -62,7 +62,7 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
 
                 setOnClickListener { if (lang == "tr") changeLanguage("en") }
             }
-            if (lang == "en") ivTurkish.alpha = 0.5f else ivEnglish.alpha = 0.5f
+            if (lang == "en") ivTurkish.alpha = 0.2f else ivEnglish.alpha = 0.2f
         }
     }
 

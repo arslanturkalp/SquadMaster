@@ -2,6 +2,7 @@ package com.umtualgames.squadmaster.ui.score
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -35,10 +36,16 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
                 tvPosition.text = (position + 1).toString()
                 tvUserName.text = item.userViewModel.username
                 tvScore.text = item.point.toString()
+                if (position == 0){
+                    ivFirstPosition.visibility = View.VISIBLE
+                    tvPosition.visibility = View.GONE
+                } else {
+                    ivFirstPosition.visibility = View.GONE
+                    tvPosition.visibility = View.VISIBLE
+                }
 
                 if (item.userID == getUserID()) {
                     itemView.setBackgroundResource(R.drawable.bg_green_with_radius_ten)
-                    tvPosition.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                     tvUserName.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                     tvScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                 }

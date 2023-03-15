@@ -13,6 +13,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="green">#4E6C50</color>
+    <color name="green_two">#2E432F</color>
     <color name="red">#A00434</color>
     <color name="yellow">#F4AC0C</color>
     <color name="pitch_green">#7eaf34</color>
@@ -28,5 +29,6 @@
     <color name="soft_green">#CCD9B8</color>
     <color name="olive_green">#30251D</color>
     <color name="transparent_black">#80030303</color>
+    <color name="transparent_black_90">#E6000000</color>
     <color name="creme">#D6D0B9</color>
 </resources>
