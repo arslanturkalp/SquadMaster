@@ -24,4 +24,9 @@
 
     <color name="battleship_grey">#787C81</color>
     <color name="grey">#C5C7C9</color>
+    <color name="light_green">#D0EDBF</color>
+    <color name="soft_green">#CCD9B8</color>
+    <color name="olive_green">#30251D</color>
+    <color name="transparent_black">#80030303</color>
+    <color name="creme">#D6D0B9</color>
 </resources>
