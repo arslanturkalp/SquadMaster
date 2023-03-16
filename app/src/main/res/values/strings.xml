@@ -97,6 +97,8 @@
     <string name="club_unlocked">Club Unlocked</string>
 
     <string name="need_point">You need %2$s points to unlock %1$s. You can earn point by play main game mode.</string>
+    <string name="watch_and_earn">You can also earn 20 points by watching ads.</string>
+    <string name="watch_ad">Earn 20 Point</string>
     <string name="is_not_online">Maintenance work is in progress. Please try again later.</string>
 
 </resources>

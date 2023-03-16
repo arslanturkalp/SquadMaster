@@ -19,7 +19,7 @@ class SquadMasterApp : Application() {
     }
 
     companion object {
-        val TAG = Application::class.java.simpleName
+        val TAG: String = Application::class.java.simpleName
 
         @get:Synchronized
         var instance: SquadMasterApp? = null

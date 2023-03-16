@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.data.enums.Status
+import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.ui.squad.GetSquadViewState
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class LeaguesViewModel: BaseViewModel() {
@@ -31,11 +33,30 @@ class LeaguesViewModel: BaseViewModel() {
                 }
         )
     }
+
+    fun updatePoint(updatePointRequest: UpdatePointRequest) {
+        compositeDisposable.addAll(
+            remoteDataSource
+                .updatePoint(updatePointRequest)
+                .applyThreads()
+                .subscribe {
+                    when (it.status) {
+                        Status.LOADING -> viewState.postValue(LeaguesViewState.UserPointLoadingState)
+                        Status.SUCCESS -> {
+                            viewState.postValue(LeaguesViewState.UpdateState)
+                        }
+                        Status.ERROR -> viewState.postValue(LeaguesViewState.ErrorState(it.message!!))
+                    }
+                }
+        )
+    }
 }
 
 
 sealed class LeaguesViewState {
     object LoadingState : LeaguesViewState()
+    object UserPointLoadingState : LeaguesViewState()
+    object UpdateState : LeaguesViewState()
     data class SuccessState(val response: List<League>) : LeaguesViewState()
     data class ErrorState(val message: String) : LeaguesViewState()
     data class WarningState(val message: String?) : LeaguesViewState()
