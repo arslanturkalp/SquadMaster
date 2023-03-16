@@ -1,5 +1,6 @@
 package com.umtualgames.squadmaster.ui.leagues
 
+import android.app.Activity
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
 import android.util.Log
@@ -38,7 +39,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
     private val viewModel by viewModels<LeaguesViewModel>()
 
-    private val leagueAdapter by lazy { LeaguesAdapter( { openClubs(it) }, { showRequireDialog(it) }) }
+    private val leagueAdapter by lazy { LeaguesAdapter({ openClubs(it) }, { showRequireDialog(it) }) }
 
     private var mRewardedInterstitialAd: RewardedInterstitialAd? = null
 
@@ -65,7 +66,9 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
         requireActivity()
             .onBackPressedDispatcher
             .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() { backToMainMenu() }
+                override fun handleOnBackPressed() {
+                    backToMainMenu()
+                }
             })
 
         binding.apply {
@@ -134,8 +137,10 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
             showNegativeButton = true,
             negativeButtonTitle = getString(R.string.watch_ad),
             onNegativeButtonClick = {
-
-        })
+                if (mRewardedInterstitialAd != null) {
+                    mRewardedInterstitialAd?.show(activity as Activity, this@LeaguesFragment)
+                }
+            })
     }
 
     private fun showLeagues(leagues: List<League>) {
