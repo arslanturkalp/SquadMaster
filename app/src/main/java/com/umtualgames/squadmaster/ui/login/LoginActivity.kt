@@ -1,11 +1,9 @@
 package com.umtualgames.squadmaster.ui.login
 
-import com.umtualgames.squadmaster.ui.base.BaseActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.updatePassword
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
@@ -13,6 +11,7 @@ import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityLoginBinding
+import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
@@ -28,7 +27,6 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
 
         setPortraitMode()
-        setNavigationBarColor()
         setupObservers()
 
         binding.apply {
@@ -71,10 +69,6 @@ class LoginActivity : BaseActivity() {
 
     private fun goToMain() {
         startActivity(MainActivity.createIntent(this))
-    }
-
-    private fun setNavigationBarColor() {
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.green)
     }
 
     companion object {

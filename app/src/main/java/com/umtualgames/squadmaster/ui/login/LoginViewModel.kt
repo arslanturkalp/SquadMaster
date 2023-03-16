@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.login
 
-import BaseViewModel
+import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

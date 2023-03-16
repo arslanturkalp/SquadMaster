@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.home
 
-import BaseFragment
+import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -55,7 +55,7 @@ class HomeFragment : BaseFragment() {
 
             cvStart.setBackgroundResource(R.drawable.bg_light_green)
             cvLeague.setBackgroundResource(R.drawable.bg_light_green)
-            cvScore.setBackgroundResource(R.drawable.bg_light_green)
+            cvScore.setBackgroundResource(R.drawable.bg_white)
             cvSignOut.setBackgroundResource(R.drawable.bg_light_green)
 
             if (getUserID() == 13) {

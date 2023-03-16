@@ -24,7 +24,8 @@
 
         <activity
             android:name=".ui.splash.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/GreenNavigationBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,17 +36,20 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:theme="@style/GreenNavigationBar"/>
 
         <activity
             android:name=".ui.start.StartActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustUnspecified" />
+            android:windowSoftInputMode="adjustUnspecified"
+            android:theme="@style/GreenNavigationBar"/>
 
         <activity
             android:name=".ui.register.RegisterActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:theme="@style/GreenNavigationBar"/>
 
         <activity
             android:name=".ui.main.MainActivity"

@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.leagues
 
-import BaseViewModel
+import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
@@ -8,7 +8,6 @@ import com.umtualgames.squadmaster.data.enums.Status
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
-import com.umtualgames.squadmaster.ui.squad.GetSquadViewState
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class LeaguesViewModel: BaseViewModel() {

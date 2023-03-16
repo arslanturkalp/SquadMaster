@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.score
 
-import BaseViewModel
+import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken

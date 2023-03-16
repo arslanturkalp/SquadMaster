@@ -1,3 +1,5 @@
+package com.umtualgames.squadmaster.ui.base
+
 import android.app.Dialog
 import android.os.Bundle
 import com.umtualgames.squadmaster.ui.generic.GenericProgressDialog

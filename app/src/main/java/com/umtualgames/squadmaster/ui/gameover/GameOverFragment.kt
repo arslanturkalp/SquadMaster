@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.gameover
 
-import BaseBottomSheetDialogFragment
+import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log

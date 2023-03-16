@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.leagues
 
-import BaseFragment
+import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater

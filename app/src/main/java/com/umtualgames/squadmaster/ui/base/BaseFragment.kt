@@ -1,4 +1,8 @@
+package com.umtualgames.squadmaster.ui.base
+
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.ui.generic.GenericProgressDialog
 
 open class BaseFragment : Fragment() {

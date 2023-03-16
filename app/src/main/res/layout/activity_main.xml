@@ -23,7 +23,7 @@
         app:itemIconTint="@color/navigation_item_icon_color"
         app:itemBackground="@drawable/bg_bottom_navigation_dark"
         app:itemIconSize="20dp"
-        app:itemTextColor="@color/creme"
+        app:itemTextColor="@color/navigation_item_icon_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/navigation" />
 

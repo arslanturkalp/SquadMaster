@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -58,7 +57,6 @@ class StartActivity : BaseActivity() {
         }
 
         setPortraitMode()
-        setNavigationBarColor()
         setupObservers()
 
         if (intent.getDataExtra(EXTRAS_FROM_GUEST)) {
@@ -182,10 +180,6 @@ class StartActivity : BaseActivity() {
 
     private fun goToMain() {
         startActivity(MainActivity.createIntent(this))
-    }
-
-    private fun setNavigationBarColor() {
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.green)
     }
 
     companion object {

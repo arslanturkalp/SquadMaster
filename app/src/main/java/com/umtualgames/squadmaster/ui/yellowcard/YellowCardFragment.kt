@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.yellowcard
 
-import BaseBottomSheetDialogFragment
+import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

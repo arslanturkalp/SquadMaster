@@ -1,3 +1,5 @@
+package com.umtualgames.squadmaster.ui.base
+
 import androidx.lifecycle.ViewModel
 import com.umtualgames.squadmaster.network.RemoteDataSource
 import io.reactivex.disposables.CompositeDisposable

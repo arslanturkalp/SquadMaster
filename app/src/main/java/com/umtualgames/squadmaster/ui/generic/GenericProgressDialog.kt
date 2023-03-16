@@ -3,12 +3,11 @@ package com.umtualgames.squadmaster.ui.generic
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.databinding.LayoutProgressBinding
 
 class GenericProgressDialog : DialogFragment() {
@@ -25,7 +24,10 @@ class GenericProgressDialog : DialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        dialog?.window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        dialog?.window?.navigationBarColor = ContextCompat.getColor(requireContext(), R.color.black)
+    }
 
     override fun onStart() {
         super.onStart()

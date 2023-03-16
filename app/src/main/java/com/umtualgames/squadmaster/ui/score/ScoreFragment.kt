@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.ui.score
 
-import BaseFragment
+import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
