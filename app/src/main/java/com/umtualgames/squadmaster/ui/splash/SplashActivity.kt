@@ -3,6 +3,7 @@ package com.umtualgames.squadmaster.ui.splash
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +12,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import com.umtualgames.squadmaster.BuildConfig
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
@@ -57,13 +59,21 @@ class SplashActivity : BaseActivity() {
     private fun setupObservers() {
         viewModel.getViewState.observe(this) { state ->
             when (state) {
-                is SplashViewState.LoadingState -> { showProgressDialog() }
+                is SplashViewState.LoadingState -> {
+                    showProgressDialog()
+                }
                 is SplashViewState.SuccessState -> {
                     dismissProgressDialog()
-                    if (state.response.data.first().settingName == "IsOnline" && state.response.data.first().settingValue == "true") {
-                        goToStart()
+                    if (state.response.data.find { it.settingName == "Version"}?.settingValue == BuildConfig.VERSION_NAME) {
+                        if (state.response.data.find { it.settingName == "IsOnline" }?.settingValue == "true") {
+                            goToStart()
+                        } else {
+                            showAlertDialogTheme(title = getString(R.string.warning), contentMessage = getString(R.string.is_not_online))
+                        }
                     } else {
-                        showAlertDialogTheme(title = getString(R.string.error), contentMessage = getString(R.string.is_not_online))
+                        showAlertDialogTheme(title = getString(R.string.new_version_title), contentMessage = getString(R.string.new_version_available), positiveButtonTitle = getString(R.string.download), onPositiveButtonClick = {
+                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${applicationContext.packageName}")))
+                        })
                     }
                 }
                 is SplashViewState.ErrorState -> {

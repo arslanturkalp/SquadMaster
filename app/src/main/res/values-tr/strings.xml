@@ -99,5 +99,9 @@
     <string name="need_point">%1$s kilidini açmak için %2$s puana ihtiyacın var. Ana oyun modunda puan kazanabilirsin.</string>
     <string name="watch_and_earn">Ayrıca reklam izleyerek de 20 puan kazanabilirsin.</string>
     <string name="watch_ad">20 Puan Kazan</string>
+
     <string name="is_not_online">Bakım çalışması yapılmaktadır. Lütfen daha sonra tekrar deneyiniz.</string>
+    <string name="new_version_title">Yeni Versiyon Yayında!</string>
+    <string name="new_version_available">Yeni versiyon mevcuttur. Butona tıklayarak uygulama mağazasına gidebilirsiniz.</string>
+    <string name="download">İndir</string>
 </resources>
