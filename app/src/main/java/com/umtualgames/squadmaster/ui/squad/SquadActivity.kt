@@ -260,6 +260,7 @@ class SquadActivity : BaseActivity() {
                 updateUnknownAnswer(potentialAnswer.displayName)
                 updateUnknownImage(potentialAnswer.imagePath)
                 navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName + " + " + if (intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID == 7) getString(R.string.point_15) else getString(R.string.point_25))
+                EventBus.getDefault().post(MessageEvent("Score Update"))
             } else {
                 showAlertDialogTheme(
                     title = getString(R.string.wrong_answer),

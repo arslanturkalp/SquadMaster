@@ -159,7 +159,7 @@ class HomeFragment : BaseFragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
-        if (event.message == "League Update") {
+        if (event.message == "League Update" || event.message == "Score Update") {
             viewModel.getUserPoint(getUserID())
         }
     }
