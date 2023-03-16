@@ -246,6 +246,7 @@ class SquadActivity : BaseActivity() {
         val level = intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueOrder
         binding.apply {
             if (potentialAnswer.isAnswer) {
+                EventBus.getDefault().post(MessageEvent("Score Update"))
                 if (level == 5 || level == 10 || level == 15 || level == 18 || level == 20) {
                     if (mInterstitialAd != null) {
                         mInterstitialAd?.show(this@SquadActivity)
@@ -260,7 +261,6 @@ class SquadActivity : BaseActivity() {
                 updateUnknownAnswer(potentialAnswer.displayName)
                 updateUnknownImage(potentialAnswer.imagePath)
                 navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName + " + " + if (intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID == 7) getString(R.string.point_15) else getString(R.string.point_25))
-                EventBus.getDefault().post(MessageEvent("Score Update"))
             } else {
                 showAlertDialogTheme(
                     title = getString(R.string.wrong_answer),

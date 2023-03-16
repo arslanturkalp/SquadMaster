@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
@@ -43,6 +45,8 @@ class ClubsActivity : BaseActivity() {
 
     private var lastLockedClub: Club? = null
 
+    private var reviewInfo: ReviewInfo? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -54,6 +58,8 @@ class ClubsActivity : BaseActivity() {
         setupRecyclerViews()
 
         setupObservers()
+
+        setupInAppReview()
 
         val league = intent.getDataExtra<League>(EXTRAS_LEAGUE)
         viewModel.getSquadListByLeague(league.id, getUserID())
@@ -140,11 +146,25 @@ class ClubsActivity : BaseActivity() {
             AnswerFragment.newInstance(lastLockedClub!!.name, lastLockedClub!!.imagePath!!, isUnlockedClub = true).show(supportFragmentManager, "")
         }
 
+        if (!clubs.last().isLocked) {
+            if (reviewInfo != null) {
+                val flow = ReviewManagerFactory.create(this).launchReviewFlow(this, reviewInfo!!)
+                flow.addOnCompleteListener { }
+            }
+        }
+
         clubAdapter.updateAdapter(clubs.sortedBy { it.leagueOrder })
     }
 
     private fun openSquad(club: Club) {
         startActivity((SquadActivity.createIntent(this, club, club.isPassed!!)))
+    }
+
+    private fun setupInAppReview() {
+        val request = ReviewManagerFactory.create(this).requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) { reviewInfo = task.result }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
