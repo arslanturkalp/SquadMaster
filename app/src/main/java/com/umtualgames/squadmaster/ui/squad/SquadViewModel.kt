@@ -71,7 +71,7 @@ class SquadViewModel : BaseViewModel() {
                             val response = it.data!!
                             viewState.postValue(GetSquadViewState.UserPointState(response))
                         }
-                        Status.ERROR -> viewState.postValue(GetSquadViewState.ErrorState(it.message!!))
+                        Status.ERROR -> refreshTokenLogin(getRefreshToken())
                     }
                 }
         )
@@ -88,7 +88,7 @@ class SquadViewModel : BaseViewModel() {
                         Status.SUCCESS -> {
                             viewState.postValue(GetSquadViewState.UpdateState)
                         }
-                        Status.ERROR -> viewState.postValue(GetSquadViewState.ErrorState(it.message!!))
+                        Status.ERROR -> refreshTokenLogin(getRefreshToken())
                     }
                 }
         )
@@ -105,7 +105,7 @@ class SquadViewModel : BaseViewModel() {
                         Status.SUCCESS -> {
                             viewState.postValue(GetSquadViewState.LevelPassState(it.data!!))
                         }
-                        Status.ERROR -> viewState.postValue(GetSquadViewState.ErrorState(it.message!!))
+                        Status.ERROR -> refreshTokenLogin(getRefreshToken())
                     }
                 }
         )
