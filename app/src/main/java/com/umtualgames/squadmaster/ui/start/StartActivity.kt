@@ -118,8 +118,7 @@ class StartActivity : BaseActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            val userName = account.displayName.orEmpty().split(" ")[0].lowercase() + account.displayName.orEmpty().split(" ")[1].lowercase().replaceChars()
-
+            val userName = account.email.orEmpty().substringBefore("@").lowercase()
             viewModel.register(
                 RegisterRequest(
                     name = account.displayName.orEmpty().split(" ")[0],
