@@ -3,8 +3,6 @@ package com.umtualgames.squadmaster.ui.main
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -45,6 +43,7 @@ class MainActivity : BaseActivity() {
             updateIsShowedTutorial(true)
         } else {
             showFragment(fragmentList.first())
+            HomeFragment.RESUME_FROM_BACKGROUND = false
             binding.bottomNavigationView.visibility = View.VISIBLE
         }
         setupBottomNavigationView()

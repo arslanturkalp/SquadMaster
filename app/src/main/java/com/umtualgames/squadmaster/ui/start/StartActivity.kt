@@ -121,8 +121,8 @@ class StartActivity : BaseActivity() {
             val userName = account.email.orEmpty().substringBefore("@").lowercase()
             viewModel.register(
                 RegisterRequest(
-                    name = account.displayName.orEmpty().split(" ")[0],
-                    surname = account.displayName.orEmpty().split(" ")[1],
+                    name = account.givenName.orEmpty(),
+                    surname = account.familyName.orEmpty(),
                     username = userName,
                     password = "GmailUser",
                     email = account.email.orEmpty()

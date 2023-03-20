@@ -48,6 +48,7 @@ import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.gameover.GameOverFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
+import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.yellowcard.YellowCardFragment
 import com.umtualgames.squadmaster.utils.*
 
@@ -65,6 +66,26 @@ class GameActivity : BaseActivity() {
 
     private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter(false) { controlAnswer(it) } }
     private var mInterstitialAd: InterstitialAd? = null
+
+    private var backgroundStartTime: Long = 0
+    private var backgroundEndTime: Long = 0
+
+    override fun onStop() {
+        super.onStop()
+        backgroundStartTime = SystemClock.elapsedRealtime()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (intent.getDataExtra(EXTRAS_FROM_BACKGROUND)) {
+            backgroundEndTime = SystemClock.elapsedRealtime()
+            val elapsedSeconds: Double = ((backgroundEndTime - backgroundStartTime) / 1000.0)
+            if (elapsedSeconds >= 1799) {
+                startActivity(SplashActivity.createIntent(this, isFromChangeLanguage = false))
+            }
+        }
+        intent.putExtra(EXTRAS_FROM_BACKGROUND, true)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,13 +213,17 @@ class GameActivity : BaseActivity() {
     private fun showWrongAnswerAnimation() {
 
         updateWrongCount(getWrongCount() + 1)
-        if (getAudioMode() == 2) { vibrate() }
+        if (getAudioMode() == 2) {
+            vibrate()
+        }
         when (getWrongCount()) {
             1 -> setBlinkAnimation(binding.ivWrongThird)
             2 -> setBlinkAnimation(binding.ivWrongSecond)
             3 -> setBlinkAnimation(binding.ivWrongFirst)
         }
-        if (getWrongCount() == 2) { navigateToYellowCard() }
+        if (getWrongCount() == 2) {
+            navigateToYellowCard()
+        }
         if (getWrongCount() == 3) {
             navigateToGameOver(getScore())
             if (mInterstitialAd != null) {
@@ -215,15 +240,18 @@ class GameActivity : BaseActivity() {
         anim.repeatCount = 2
 
         imageView.startAnimation(anim)
-        anim.setAnimationListener(object: Animation.AnimationListener {
+        anim.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
-            override fun onAnimationEnd(animation: Animation?) { imageView.alpha = 0.2f }
+            override fun onAnimationEnd(animation: Animation?) {
+                imageView.alpha = 0.2f
+            }
+
             override fun onAnimationRepeat(animation: Animation?) {}
         })
     }
 
-    private fun getAudioMode() : Int {
-        val audio : AudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private fun getAudioMode(): Int {
+        val audio: AudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         when (audio.ringerMode) {
             AudioManager.RINGER_MODE_NORMAL -> return 0
             AudioManager.RINGER_MODE_SILENT -> return 1
@@ -242,7 +270,7 @@ class GameActivity : BaseActivity() {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vib.vibrate(VibrationEffect.createOneShot(200, 1))
-        } else{
+        } else {
             vib.vibrate(200)
         }
     }
@@ -253,7 +281,7 @@ class GameActivity : BaseActivity() {
         defenceAdapter.updateAdapter(ifTwoBack(squad.filter { it.positionTypeID == PositionTypeIdStatus.DEFENCE.value } as ArrayList<Player>))
         middleAdapter.updateAdapter(squad.filter { it.positionTypeID == PositionTypeIdStatus.MIDFIELDER.value && it.positionID != PositionIdStatus.ON.value })
         attackingMiddleAdapter.updateAdapter(if (ifExists10Number(squad)) squad.filter { it.positionID == PositionIdStatus.FA.value || it.positionID == PositionIdStatus.ON.value } else squad.filter { it.positionID == 11 })
-        forwardAdapter.updateAdapter(if(ifExists10Number(squad)) ifTwoWinger(squad.filter { it.positionTypeID == PositionTypeIdStatus.FORWARD.value && it.positionID != PositionIdStatus.FA.value } as ArrayList<Player>) else ifTwoWinger(squad.filter { it.positionTypeID == 4 && it.positionID != 10 && it.positionID != 11} as ArrayList<Player>))
+        forwardAdapter.updateAdapter(if (ifExists10Number(squad)) ifTwoWinger(squad.filter { it.positionTypeID == PositionTypeIdStatus.FORWARD.value && it.positionID != PositionIdStatus.FA.value } as ArrayList<Player>) else ifTwoWinger(squad.filter { it.positionTypeID == 4 && it.positionID != 10 && it.positionID != 11 } as ArrayList<Player>))
 
         binding.cdAnswer.visibility = View.VISIBLE
         potentialAnswersAdapter.updateAdapter(potentialAnswers)
@@ -338,8 +366,12 @@ class GameActivity : BaseActivity() {
     }
 
     companion object {
+        private const val EXTRAS_FROM_BACKGROUND = "EXTRAS_FROM_BACKGROUND"
+
         fun createIntent(context: Context?): Intent {
-            return Intent(context, GameActivity::class.java)
+            return Intent(context, GameActivity::class.java).apply {
+                putExtra(EXTRAS_FROM_BACKGROUND, false)
+            }
         }
     }
 }

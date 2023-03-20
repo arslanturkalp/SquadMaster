@@ -1,7 +1,7 @@
 package com.umtualgames.squadmaster.ui.home
 
-import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +19,11 @@ import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.data.models.MessageEvent
 import com.umtualgames.squadmaster.databinding.FragmentHomeBinding
+import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
+import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
@@ -34,6 +36,26 @@ class HomeFragment : BaseFragment() {
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
 
     private val viewModel by viewModels<HomeViewModel>()
+
+    private var backgroundStartTime: Long = 0
+    private var backgroundEndTime: Long = 0
+
+    override fun onStop() {
+        super.onStop()
+        backgroundStartTime = SystemClock.elapsedRealtime()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (RESUME_FROM_BACKGROUND) {
+            backgroundEndTime = SystemClock.elapsedRealtime()
+            val elapsedSeconds: Double = ((backgroundEndTime - backgroundStartTime) / 1000.0)
+            if (elapsedSeconds >= 1799) {
+                startActivity(SplashActivity.createIntent(requireContext(), isFromChangeLanguage = false))
+            }
+        }
+        RESUME_FROM_BACKGROUND = true
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -172,5 +194,9 @@ class HomeFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+    }
+
+    companion object {
+        var RESUME_FROM_BACKGROUND = false
     }
 }
