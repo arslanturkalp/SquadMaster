@@ -13,9 +13,13 @@
         android:id="@+id/tvLogo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/neo_retro_draw"
+        android:fontFamily="@font/josefin_sans"
         android:gravity="center"
         android:text="@string/app_name"
+        android:shadowColor="@color/black"
+        android:shadowDx="-2"
+        android:shadowDy="-2"
+        android:shadowRadius="10"
         android:textColor="@color/white"
         android:textSize="64sp" />
 

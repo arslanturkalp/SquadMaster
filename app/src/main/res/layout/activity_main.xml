@@ -18,11 +18,11 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_navigation_dark"
         android:visibility="visible"
         app:elevation="16dp"
-        app:itemIconTint="@color/navigation_item_icon_color"
-        app:itemBackground="@drawable/bg_bottom_navigation_dark"
         app:itemIconSize="20dp"
+        app:itemIconTint="@color/navigation_item_icon_color"
         app:itemTextColor="@color/navigation_item_icon_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/navigation" />
