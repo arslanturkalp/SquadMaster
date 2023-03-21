@@ -1,6 +1,5 @@
 package com.umtualgames.squadmaster.ui.game
 
-import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
@@ -9,6 +8,7 @@ import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
+import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class GameViewModel : BaseViewModel() {
@@ -46,8 +46,12 @@ class GameViewModel : BaseViewModel() {
                     when (it.status) {
                         Status.LOADING -> viewState.postValue(GameViewState.LoadingState)
                         Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(GameViewState.RefreshState(response.data.token))
+                            val response = it.data
+                            if (response?.data?.token != null) {
+                                viewState.postValue(GameViewState.RefreshState(response.data.token))
+                            } else {
+                                viewState.postValue(GameViewState.ReturnSplashState)
+                            }
                         }
                         Status.ERROR -> viewState.postValue(GameViewState.ErrorState(it.message!!))
                     }
@@ -74,6 +78,7 @@ class GameViewModel : BaseViewModel() {
 sealed class GameViewState {
     object LoadingState : GameViewState()
     object ScoreLoadingState : GameViewState()
+    object ReturnSplashState : GameViewState()
     data class UpdateState(val response: UserPointResponse) : GameViewState()
     data class SuccessState(val response: GetFirstElevenBySquadResponse) : GameViewState()
     data class ErrorState(val message: String) : GameViewState()

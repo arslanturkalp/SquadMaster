@@ -9,6 +9,7 @@ import com.umtualgames.squadmaster.data.enums.Status
 import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
+import com.umtualgames.squadmaster.ui.squad.GetSquadViewState
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class HomeViewModel: BaseViewModel() {
@@ -69,8 +70,12 @@ class HomeViewModel: BaseViewModel() {
                     when (it.status) {
                         Status.LOADING -> viewState.postValue(HomeViewState.LoadingState)
                         Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(HomeViewState.RefreshState(response.data.token))
+                            val response = it.data
+                            if (response?.data?.token != null) {
+                                viewState.postValue(HomeViewState.RefreshState(response.data.token))
+                            } else {
+                                viewState.postValue(HomeViewState.ReturnSplashState)
+                            }
                         }
                         Status.ERROR -> viewState.postValue(HomeViewState.ErrorState(it.message!!))
                     }
@@ -82,6 +87,7 @@ class HomeViewModel: BaseViewModel() {
 sealed class HomeViewState {
     object LoadingState : HomeViewState()
     object LeagueLoadingState : HomeViewState()
+    object ReturnSplashState : HomeViewState()
     data class ErrorState(val message: String) : HomeViewState()
     data class WarningState(val message: String?) : HomeViewState()
     data class UserPointState(val response: UserPointResponse) : HomeViewState()

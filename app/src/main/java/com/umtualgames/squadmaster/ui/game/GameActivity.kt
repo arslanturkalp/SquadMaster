@@ -67,26 +67,6 @@ class GameActivity : BaseActivity() {
     private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter(false) { controlAnswer(it) } }
     private var mInterstitialAd: InterstitialAd? = null
 
-    private var backgroundStartTime: Long = 0
-    private var backgroundEndTime: Long = 0
-
-    override fun onPause() {
-        super.onPause()
-        backgroundStartTime = SystemClock.elapsedRealtime()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (intent.getDataExtra(EXTRAS_FROM_BACKGROUND)) {
-            backgroundEndTime = SystemClock.elapsedRealtime()
-            val elapsedSeconds: Double = ((backgroundEndTime - backgroundStartTime) / 1000.0)
-            if (elapsedSeconds >= 1799) {
-                startActivity(SplashActivity.createIntent(this, isFromChangeLanguage = false))
-            }
-        }
-        intent.putExtra(EXTRAS_FROM_BACKGROUND, true)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -193,6 +173,10 @@ class GameActivity : BaseActivity() {
                         updateRefreshToken(refreshToken)
                     }
                     viewModel.getSquad()
+                }
+                is GameViewState.ReturnSplashState -> {
+                    dismissProgressDialog()
+                    startActivity(SplashActivity.createIntent(this, false))
                 }
                 else -> {}
             }
@@ -366,12 +350,8 @@ class GameActivity : BaseActivity() {
     }
 
     companion object {
-        private const val EXTRAS_FROM_BACKGROUND = "EXTRAS_FROM_BACKGROUND"
-
         fun createIntent(context: Context?): Intent {
-            return Intent(context, GameActivity::class.java).apply {
-                putExtra(EXTRAS_FROM_BACKGROUND, false)
-            }
+            return Intent(context, GameActivity::class.java)
         }
     }
 }

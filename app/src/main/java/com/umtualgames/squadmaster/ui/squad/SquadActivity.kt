@@ -3,7 +3,6 @@ package com.umtualgames.squadmaster.ui.squad
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.WindowManager.LayoutParams
@@ -62,26 +61,6 @@ class SquadActivity : BaseActivity() {
 
     private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter(false) { controlAnswer(it) } }
     private var mInterstitialAd: InterstitialAd? = null
-
-    private var backgroundStartTime: Long = 0
-    private var backgroundEndTime: Long = 0
-
-    override fun onPause() {
-        super.onPause()
-        backgroundStartTime = SystemClock.elapsedRealtime()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (intent.getDataExtra(EXTRAS_FROM_BACKGROUND)) {
-            backgroundEndTime = SystemClock.elapsedRealtime()
-            val elapsedSeconds: Double = ((backgroundEndTime - backgroundStartTime) / 1000.0)
-            if (elapsedSeconds >= 1799) {
-                startActivity(SplashActivity.createIntent(this, isFromChangeLanguage = false))
-            }
-        }
-        intent.putExtra(EXTRAS_FROM_BACKGROUND, true)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -190,6 +169,10 @@ class SquadActivity : BaseActivity() {
                     if (state.response.statusCode == 300) {
                         showAlertDialogTheme(getString(R.string.warning), getString(R.string.club_is_passed))
                     }
+                }
+                is GetSquadViewState.ReturnSplashState -> {
+                    dismissProgressDialog()
+                    startActivity(SplashActivity.createIntent(this, false))
                 }
             }
         }
@@ -319,13 +302,11 @@ class SquadActivity : BaseActivity() {
 
         private const val EXTRAS_SQUAD = "EXTRAS_SQUAD"
         private const val EXTRAS_IS_PASSED = "EXTRAS_IS_PASSED"
-        private const val EXTRAS_FROM_BACKGROUND = "EXTRAS_FROM_BACKGROUND"
 
         fun createIntent(context: Context?, squad: Club, isPassed: Boolean): Intent {
             return Intent(context, SquadActivity::class.java).apply {
                 putExtra(EXTRAS_SQUAD, squad)
                 putExtra(EXTRAS_IS_PASSED, isPassed)
-                putExtra(EXTRAS_FROM_BACKGROUND, false)
             }
         }
     }

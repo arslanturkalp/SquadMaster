@@ -22,6 +22,7 @@ import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
+import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
@@ -151,6 +152,10 @@ class HomeFragment : BaseFragment() {
                 }
                 is HomeViewState.LeagueSuccessState -> {
                     (activity as MainActivity).setNotificationBadge(state.response.count { !it.isLocked })
+                }
+                is HomeViewState.ReturnSplashState -> {
+                    dismissProgressDialog()
+                    startActivity(SplashActivity.createIntent(requireContext(), false))
                 }
                 else -> {}
             }

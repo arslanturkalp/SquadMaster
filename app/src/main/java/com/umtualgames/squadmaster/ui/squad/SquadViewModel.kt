@@ -11,6 +11,7 @@ import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.umtualgames.squadmaster.network.responses.unlocksquadresponses.LevelPassResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
+import com.umtualgames.squadmaster.ui.game.GameViewState
 import com.umtualgames.squadmaster.utils.applyThreads
 
 class SquadViewModel : BaseViewModel() {
@@ -50,8 +51,12 @@ class SquadViewModel : BaseViewModel() {
                     when (it.status) {
                         Status.LOADING -> viewState.postValue(GetSquadViewState.LoadingState)
                         Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(GetSquadViewState.RefreshState(response.data.token))
+                            val response = it.data
+                            if (response?.data?.token != null) {
+                                viewState.postValue(GetSquadViewState.RefreshState(response.data.token))
+                            } else {
+                                viewState.postValue(GetSquadViewState.ReturnSplashState)
+                            }
                         }
                         Status.ERROR -> viewState.postValue(GetSquadViewState.ErrorState(it.message!!))
                     }
@@ -116,6 +121,7 @@ sealed class GetSquadViewState {
     object LoadingState : GetSquadViewState()
     object UserPointLoadingState : GetSquadViewState()
     object UpdateState : GetSquadViewState()
+    object ReturnSplashState : GetSquadViewState()
     data class LevelPassState(val response: LevelPassResponse) : GetSquadViewState()
     data class SuccessState(val response: GetFirstElevenBySquadResponse) : GetSquadViewState()
     data class ErrorState(val message: String) : GetSquadViewState()
