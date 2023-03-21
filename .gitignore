@@ -85,3 +85,4 @@ lint/tmp/
 # lint/reports/
 .idea/codeStyles/Project.xml
 .idea/codeStyles/codeStyleConfig.xml
+app/src/main/java/com/umtualgames/squadmaster/application/Constants.kt
