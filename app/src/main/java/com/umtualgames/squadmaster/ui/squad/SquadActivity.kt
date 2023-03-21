@@ -66,8 +66,8 @@ class SquadActivity : BaseActivity() {
     private var backgroundStartTime: Long = 0
     private var backgroundEndTime: Long = 0
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         backgroundStartTime = SystemClock.elapsedRealtime()
     }
 

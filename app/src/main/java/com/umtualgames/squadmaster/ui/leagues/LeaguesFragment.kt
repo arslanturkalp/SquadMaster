@@ -1,7 +1,6 @@
 package com.umtualgames.squadmaster.ui.leagues
 
 import android.app.Activity
-import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,6 +24,7 @@ import com.umtualgames.squadmaster.data.models.MessageEvent
 import com.umtualgames.squadmaster.databinding.FragmentLeaguesBinding
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.League
+import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
