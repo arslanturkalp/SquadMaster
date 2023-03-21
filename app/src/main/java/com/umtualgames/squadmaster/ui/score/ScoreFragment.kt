@@ -1,6 +1,5 @@
 package com.umtualgames.squadmaster.ui.score
 
-import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,7 @@ import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.data.models.MessageEvent
 import com.umtualgames.squadmaster.databinding.FragmentScoreBinding
 import com.umtualgames.squadmaster.network.responses.item.RankItem
+import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setVisibility

@@ -43,7 +43,6 @@ class MainActivity : BaseActivity() {
             updateIsShowedTutorial(true)
         } else {
             showFragment(fragmentList.first())
-            HomeFragment.RESUME_FROM_BACKGROUND = false
             binding.bottomNavigationView.visibility = View.VISIBLE
         }
         setupBottomNavigationView()
