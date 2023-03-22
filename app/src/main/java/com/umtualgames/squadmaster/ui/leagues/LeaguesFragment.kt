@@ -98,7 +98,6 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
                     dismissProgressDialog()
                     showLeagues(state.response)
                     binding.tvTitleLeagues.visibility = View.VISIBLE
-                    loadBannerAd()
                 }
                 is LeaguesViewState.ErrorState -> {
                     dismissProgressDialog()
@@ -119,11 +118,6 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
                 }
             }
         }
-    }
-
-    private fun loadBannerAd() {
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
     }
 
     private fun openClubs(league: League) {

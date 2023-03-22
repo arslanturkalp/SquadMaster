@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.gms.ads.AdRequest
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.clearPassword
 import com.umtualgames.squadmaster.application.SessionManager.clearScore
@@ -47,8 +46,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
         setupSwipeRefresh()
         setupObservers()
-
-        loadBannerAd()
 
         if (getUserID() != 13) {
             viewModel.getUserPoint(getUserID())
@@ -118,11 +115,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
             })
-    }
-
-    private fun loadBannerAd() {
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
     }
 
     private fun setupSwipeRefresh() = binding.swipeRefreshLayout.setOnRefreshListener(this)
