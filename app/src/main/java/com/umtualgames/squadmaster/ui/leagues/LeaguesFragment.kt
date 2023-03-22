@@ -164,7 +164,8 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
-        viewModel.updatePoint(UpdatePointRequest(getUserID(), 25))
+        viewModel.updatePoint(UpdatePointRequest(getUserID(), 20))
+        showAlertDialogTheme(getString(R.string.info), getString(R.string.point_20))
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

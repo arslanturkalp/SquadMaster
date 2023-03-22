@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.gms.ads.AdRequest
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.clearPassword
@@ -30,7 +31,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
 
@@ -44,6 +45,7 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupSwipeRefresh()
         setupObservers()
 
         loadBannerAd()
@@ -123,6 +125,8 @@ class HomeFragment : BaseFragment() {
         binding.adView.loadAd(adRequest)
     }
 
+    private fun setupSwipeRefresh() = binding.swipeRefreshLayout.setOnRefreshListener(this)
+
     private fun setupObservers() {
         viewModel.getViewState.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -133,13 +137,14 @@ class HomeFragment : BaseFragment() {
                     }
                 }
                 is HomeViewState.UserPointState -> {
+                    dismissProgress()
                     binding.apply {
                         tvBestScore.text = state.response.data.bestPoint.toString()
                         tvTotalScore.text = state.response.data.point.toString()
                     }
                 }
                 is HomeViewState.WarningState -> {
-                    dismissProgressDialog()
+                    dismissProgress()
                     state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
                 }
                 is HomeViewState.ErrorState -> {
@@ -154,12 +159,20 @@ class HomeFragment : BaseFragment() {
                     (activity as MainActivity).setNotificationBadge(state.response.count { !it.isLocked })
                 }
                 is HomeViewState.ReturnSplashState -> {
-                    dismissProgressDialog()
+                    dismissProgress()
                     startActivity(SplashActivity.createIntent(requireContext(), false))
                 }
                 else -> {}
             }
         }
+    }
+
+    private fun showProgress() {
+        binding.swipeRefreshLayout.isRefreshing = true
+    }
+
+    private fun dismissProgress() {
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -177,5 +190,9 @@ class HomeFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+    }
+
+    override fun onRefresh() {
+        viewModel.getUserPoint(getUserID())
     }
 }
