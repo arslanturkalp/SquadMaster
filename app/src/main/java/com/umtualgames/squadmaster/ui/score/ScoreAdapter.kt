@@ -48,6 +48,10 @@ class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
                     itemView.setBackgroundResource(R.drawable.bg_green_with_radius_ten)
                     tvUserName.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                     tvScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                } else {
+                    itemView.setBackgroundResource(R.drawable.bg_light_green)
+                    tvUserName.setTextColor(ContextCompat.getColor(itemView.context, R.color.creme))
+                    tvScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.soft_green))
                 }
             }
         }
