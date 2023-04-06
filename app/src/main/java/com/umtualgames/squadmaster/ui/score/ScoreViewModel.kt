@@ -1,75 +1,53 @@
 package com.umtualgames.squadmaster.ui.score
 
-import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
-import com.umtualgames.squadmaster.data.enums.Status
+import com.umtualgames.squadmaster.di.Repository
 import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.userpointresponses.GetRankListResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
-import com.umtualgames.squadmaster.utils.applyThreads
+import com.umtualgames.squadmaster.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ScoreViewModel : BaseViewModel() {
+@HiltViewModel
+class ScoreViewModel @Inject constructor(private val repository: Repository) : BaseViewModel() {
 
     private val viewState = MutableLiveData<ScoreViewState>()
     val getViewState: LiveData<ScoreViewState> = viewState
 
-    private fun getRankList() {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .getRankList()
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(ScoreViewState.LoadingState)
-                        Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(ScoreViewState.SuccessState(response))
-                        }
-                        Status.ERROR -> viewState.postValue(ScoreViewState.ErrorState(it.message!!))
-                    }
-                }
-        )
+    private fun getRankList() = viewModelScope.launch {
+        viewState.postValue(ScoreViewState.LoadingState)
+        repository.getRankList().let {
+            if (it.isSuccessful) viewState.postValue(ScoreViewState.SuccessState(it.body()!!)) else viewState.postValue(ScoreViewState.ErrorState(it.message()))
+        }
     }
 
-    fun getUserPoint(userId: Int) {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .getPoint(userId)
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(ScoreViewState.LoadingState)
-                        Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(ScoreViewState.UserPointState(response))
-                            getRankList()
-                        }
-                        Status.ERROR -> {
-                            refreshTokenLogin(getRefreshToken())
-                        }
-                    }
-                }
-        )
+    fun getUserPoint(userId: Int) = viewModelScope.launch {
+        viewState.postValue(ScoreViewState.LoadingState)
+        repository.getUserPoint(userId).let {
+            if (it.isSuccessful) {
+                getRankList()
+                viewState.postValue(ScoreViewState.UserPointState(it.body()!!))
+            } else {
+                refreshTokenLogin(getRefreshToken())
+            }
+        }
     }
 
-    private fun refreshTokenLogin(refreshToken: String) {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .signInRefreshToken(refreshToken)
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(ScoreViewState.LoadingState)
-                        Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(ScoreViewState.RefreshState(response.data.token))
-                        }
-                        Status.ERROR -> viewState.postValue(ScoreViewState.ErrorState(it.message!!))
-                    }
+    private fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
+        viewState.postValue(ScoreViewState.LoadingState)
+        repository.refreshTokenLogin(refreshToken).let {
+            when {
+                it.isSuccessful -> {
+                    viewState.postValue(ScoreViewState.RefreshState(it.body()!!.data.token))
                 }
-        )
+                else -> viewState.postValue(ScoreViewState.ErrorState(it.message()))
+            }
+        }
     }
 }
 

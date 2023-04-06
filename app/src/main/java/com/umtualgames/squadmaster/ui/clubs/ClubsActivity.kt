@@ -30,11 +30,12 @@ import com.umtualgames.squadmaster.ui.squad.SquadActivity
 import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-
+@AndroidEntryPoint
 class ClubsActivity : BaseActivity() {
 
     private val binding by lazy { FragmentClubsBinding.inflate(layoutInflater) }

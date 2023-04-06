@@ -17,7 +17,9 @@ import com.umtualgames.squadmaster.ui.score.ScoreFragment
 import com.umtualgames.squadmaster.ui.slide.SlideFragment
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.umtualgames.squadmaster.utils.setPortraitMode
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }

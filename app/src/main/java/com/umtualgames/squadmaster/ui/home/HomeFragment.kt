@@ -21,15 +21,18 @@ import com.umtualgames.squadmaster.databinding.FragmentHomeBinding
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
+import com.umtualgames.squadmaster.ui.online.OnlineActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
@@ -51,11 +54,44 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             viewModel.getUserPoint(getUserID())
         }
 
-        binding.apply {
+        with(binding) {
 
-            cvStart.setBackgroundResource(R.drawable.bg_light_green)
-            cvLeague.setBackgroundResource(R.drawable.bg_light_green)
-            cvScore.setBackgroundResource(R.drawable.bg_white)
+            cvStart.apply {
+                setBackgroundResource(R.drawable.bg_light_green)
+                setOnClickListener {
+                    startActivity((GameActivity.createIntent(requireContext())))
+                    clearScore()
+                    clearWrongCount()
+                }
+            }
+            cvStartOnline.apply {
+                setBackgroundResource(R.drawable.bg_light_green)
+                setOnClickListener {
+                    //startActivity(OnlineActivity.createIntent(requireContext()))
+                    showAlertDialogTheme(context.getString(R.string.online_mode), context.getString(R.string.coming_soon))
+                }
+                alpha = 0.8f
+
+            }
+            cvLeague.apply {
+                setBackgroundResource(R.drawable.bg_light_green)
+                setOnClickListener {
+                    (activity as MainActivity).apply {
+                        showFragment(leaguesFragment)
+                        setItemInNavigation(leaguesFragment)
+                    }
+                }
+            }
+            cvScore.apply {
+                setBackgroundResource(R.drawable.bg_white)
+                setOnClickListener {
+                    (activity as MainActivity).apply {
+                        showFragment(scoreFragment)
+                        setItemInNavigation(scoreFragment)
+                    }
+                }
+            }
+
             cvSignOut.setBackgroundResource(R.drawable.bg_light_green)
 
             if (getUserID() == 13) {
@@ -77,26 +113,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
             ivSettings.setOnClickListener {
                 SettingsFragment().show(parentFragmentManager, "")
-            }
-
-            cvStart.setOnClickListener {
-                requireContext().startActivity((GameActivity.createIntent(requireContext())))
-                clearScore()
-                clearWrongCount()
-            }
-
-            cvScore.setOnClickListener {
-                (activity as MainActivity).apply {
-                    showFragment(scoreFragment)
-                    setItemInNavigation(scoreFragment)
-                }
-            }
-
-            cvLeague.setOnClickListener {
-                (activity as MainActivity).apply {
-                    showFragment(leaguesFragment)
-                    setItemInNavigation(leaguesFragment)
-                }
             }
         }
 

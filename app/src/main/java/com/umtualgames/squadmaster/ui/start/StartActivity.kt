@@ -39,7 +39,9 @@ import com.umtualgames.squadmaster.ui.register.RegisterActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StartActivity : BaseActivity() {
 
     private val binding by lazy { ActivityStartBinding.inflate(layoutInflater) }

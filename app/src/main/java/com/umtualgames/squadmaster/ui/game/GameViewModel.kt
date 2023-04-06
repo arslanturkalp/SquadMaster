@@ -2,76 +2,51 @@ package com.umtualgames.squadmaster.ui.game
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
-import com.umtualgames.squadmaster.data.enums.Status
+import com.umtualgames.squadmaster.di.Repository
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.Token
 import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
-import com.umtualgames.squadmaster.utils.applyThreads
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameViewModel : BaseViewModel() {
+@HiltViewModel
+class GameViewModel @Inject constructor(private val repository: Repository) : BaseViewModel() {
 
     private val viewState = MutableLiveData<GameViewState>()
     val getViewState: LiveData<GameViewState> = viewState
 
-    fun getSquad() {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .getRandomSquad()
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(GameViewState.LoadingState)
-                        Status.SUCCESS -> {
-                            val response = it.data!!
-                            when (response.statusCode) {
-                                200 -> viewState.postValue(GameViewState.SuccessState(response))
-                                else -> viewState.postValue(GameViewState.WarningState(response.message))
-                            }
-                        }
-                        Status.ERROR -> { refreshTokenLogin(getRefreshToken()) }
-                    }
-                }
-        )
+    fun getSquad() = viewModelScope.launch {
+        viewState.postValue(GameViewState.LoadingState)
+        repository.getFirstElevenByRandomSquad().let {
+            when {
+                it.isSuccessful -> viewState.postValue(GameViewState.SuccessState(it.body()!!))
+                it.code() != 200 -> viewState.postValue(GameViewState.WarningState(it.message()))
+                else -> refreshTokenLogin(getRefreshToken())
+            }
+        }
     }
 
-    private fun refreshTokenLogin(refreshToken: String) {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .signInRefreshToken(refreshToken)
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(GameViewState.LoadingState)
-                        Status.SUCCESS -> {
-                            val response = it.data
-                            if (response?.data?.token != null) {
-                                viewState.postValue(GameViewState.RefreshState(response.data.token))
-                            } else {
-                                viewState.postValue(GameViewState.ReturnSplashState)
-                            }
-                        }
-                        Status.ERROR -> viewState.postValue(GameViewState.ErrorState(it.message!!))
-                    }
-                }
-        )
+    private fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
+        viewState.postValue(GameViewState.LoadingState)
+        repository.refreshTokenLogin(refreshToken).let {
+            when {
+                it.isSuccessful -> viewState.postValue(GameViewState.RefreshState(it.body()!!.data.token))
+                it.code() != 200 -> viewState.postValue(GameViewState.ReturnSplashState)
+                else -> viewState.postValue(GameViewState.ErrorState(it.message()))
+            }
+        }
     }
 
-    fun updatePoint(updatePointRequest: UpdatePointRequest) {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .updatePoint(updatePointRequest)
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(GameViewState.ScoreLoadingState)
-                        Status.SUCCESS -> viewState.postValue(GameViewState.UpdateState(it.data!!))
-                        Status.ERROR -> { refreshTokenLogin(getRefreshToken()) }
-                    }
-                }
-        )
+    fun updatePoint(updatePointRequest: UpdatePointRequest) = viewModelScope.launch{
+        viewState.postValue(GameViewState.ScoreLoadingState)
+        repository.updatePoint(updatePointRequest).let {
+            if (it.isSuccessful) viewState.postValue(GameViewState.UpdateState(it.body()!!)) else refreshTokenLogin(getRefreshToken())
+        }
     }
 }
 

@@ -11,8 +11,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.databinding.RowLayoutLeagueBinding
 import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.utils.setVisibility
+import javax.inject.Inject
 
-class LeaguesAdapter(private val onClick: (League) -> Unit, private val onLockedClick: (League) -> Unit) : RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder>() {
+class LeaguesAdapter @Inject constructor(private val onClick: (League) -> Unit, private val onLockedClick: (League) -> Unit) : RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder>() {
 
     private val dataList: MutableList<League> = mutableListOf()
 

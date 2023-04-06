@@ -31,7 +31,9 @@ import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardListener {
 
     private val binding by lazy { FragmentGameOverBinding.inflate(layoutInflater) }

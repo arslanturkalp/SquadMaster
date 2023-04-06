@@ -1,14 +1,8 @@
 package com.umtualgames.squadmaster.ui.base
 
 import androidx.lifecycle.ViewModel
-import com.umtualgames.squadmaster.network.RemoteDataSource
-import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseViewModel : ViewModel() {
-
-    val remoteDataSource = RemoteDataSource()
-
-    val compositeDisposable = CompositeDisposable()
 
     private val errorList: MutableList<Int> = mutableListOf()
 
@@ -17,9 +11,4 @@ abstract class BaseViewModel : ViewModel() {
     fun addError(error: Int) = errorList.add(error)
 
     fun getErrorList() = errorList
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
-    }
 }

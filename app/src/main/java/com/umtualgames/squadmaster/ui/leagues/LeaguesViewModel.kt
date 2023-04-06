@@ -1,38 +1,65 @@
 package com.umtualgames.squadmaster.ui.leagues
 
-import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.umtualgames.squadmaster.application.SessionManager.getUserID
-import com.umtualgames.squadmaster.data.enums.Status
+import androidx.lifecycle.viewModelScope
+import com.umtualgames.squadmaster.di.Repository
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
-import com.umtualgames.squadmaster.utils.applyThreads
+import com.umtualgames.squadmaster.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LeaguesViewModel: BaseViewModel() {
+@HiltViewModel
+class LeaguesViewModel @Inject constructor(private val repository: Repository) : BaseViewModel() {
 
     private val viewState = MutableLiveData<LeaguesViewState>()
     val getViewState: LiveData<LeaguesViewState> = viewState
 
-    fun getLeagues() {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .getLeagues(getUserID())
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(LeaguesViewState.LoadingState)
-                        Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(LeaguesViewState.SuccessState(response.data))
-                        }
-                        Status.ERROR -> { viewState.postValue(LeaguesViewState.ErrorState(it.message!!)) }
-                    }
-                }
-        )
+    fun getLeagues(userID: Int) = viewModelScope.launch {
+        viewState.postValue(LeaguesViewState.LoadingState)
+        repository.getLeagues(userID).let {
+            if (it.isSuccessful) {
+                viewState.postValue(LeaguesViewState.SuccessState(it.body()?.data.orEmpty()))
+            } else {
+                viewState.postValue(LeaguesViewState.ErrorState(it.message()))
+            }
+        }
     }
 
+    fun updatePoint(updatePointRequest: UpdatePointRequest) = viewModelScope.launch {
+        viewState.postValue(LeaguesViewState.UserPointLoadingState)
+        repository.updatePoint(updatePointRequest).let {
+            if (it.isSuccessful) {
+                viewState.postValue(LeaguesViewState.UpdateState)
+            } else {
+                viewState.postValue(LeaguesViewState.ErrorState(it.message()))
+            }
+        }
+    }
+
+    /*Old GetLeagues
+fun getLeagues() {
+    compositeDisposable.addAll(
+        remoteDataSource
+            .getLeagues(getUserID())
+            .applyThreads()
+            .subscribe {
+                when (it.status) {
+                    Status.LOADING -> viewState.postValue(LeaguesViewState.LoadingState)
+                    Status.SUCCESS -> {
+                        val response = it.data!!
+                        viewState.postValue(LeaguesViewState.SuccessState(response.data))
+                    }
+                    Status.ERROR -> { viewState.postValue(LeaguesViewState.ErrorState(it.message!!)) }
+                }
+            }
+    )
+}*/
+
+    /* Old UpdatePoint
     fun updatePoint(updatePointRequest: UpdatePointRequest) {
         compositeDisposable.addAll(
             remoteDataSource
@@ -48,7 +75,7 @@ class LeaguesViewModel: BaseViewModel() {
                     }
                 }
         )
-    }
+    }*/
 }
 
 

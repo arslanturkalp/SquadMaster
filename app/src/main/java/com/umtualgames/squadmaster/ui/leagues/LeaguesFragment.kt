@@ -29,10 +29,12 @@ import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
+@AndroidEntryPoint
 class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
     private val binding by lazy { FragmentLeaguesBinding.inflate(layoutInflater) }
@@ -60,7 +62,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
                 rvLeagues.visibility = View.VISIBLE
                 llShowLeague.visibility = View.GONE
             }
-            viewModel.getLeagues()
+            viewModel.getLeagues(getUserID())
         }
 
         requireActivity()
@@ -165,7 +167,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
         if (event.message == "League Update") {
-            viewModel.getLeagues()
+            viewModel.getLeagues(getUserID())
         }
     }
 

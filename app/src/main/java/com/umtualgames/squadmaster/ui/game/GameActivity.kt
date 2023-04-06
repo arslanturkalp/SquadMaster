@@ -51,7 +51,9 @@ import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.yellowcard.YellowCardFragment
 import com.umtualgames.squadmaster.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameActivity : BaseActivity() {
 
     private val binding by lazy { ActivitySquadBinding.inflate(layoutInflater) }

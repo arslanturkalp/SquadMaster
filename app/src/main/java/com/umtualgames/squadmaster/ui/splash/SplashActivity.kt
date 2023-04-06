@@ -24,7 +24,9 @@ import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
 
@@ -46,7 +48,7 @@ class SplashActivity : BaseActivity() {
 
     private fun rotateBall() {
         val rotate = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        rotate.duration = 3500
+        rotate.duration = 2500
         rotate.interpolator = LinearInterpolator()
         rotate.fillAfter = true
         rotate.repeatCount = Animation.INFINITE
@@ -82,6 +84,7 @@ class SplashActivity : BaseActivity() {
                     updateToken(state.response.data.token.accessToken)
                     viewModel.getProjectSettings()
                 }
+                else -> {}
             }
         }
     }
@@ -89,7 +92,7 @@ class SplashActivity : BaseActivity() {
     private fun goToStart() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(StartActivity.createIntent(false, this))
-        }, 2500)
+        }, 1000)
     }
 
     private fun askNotificationPermission() {

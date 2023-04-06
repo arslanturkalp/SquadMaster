@@ -10,8 +10,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.databinding.RowLayoutClubBinding
 import com.umtualgames.squadmaster.network.responses.item.Club
+import javax.inject.Inject
 
-class ClubAdapter(private val onClick: (Club) -> Unit) : RecyclerView.Adapter<ClubAdapter.ClubViewHolder>() {
+class ClubAdapter @Inject constructor(private val onClick: (Club) -> Unit) : RecyclerView.Adapter<ClubAdapter.ClubViewHolder>() {
 
     private val dataList: MutableList<Club> = mutableListOf()
 

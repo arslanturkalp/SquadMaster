@@ -5,7 +5,9 @@ import android.content.Context
 import com.google.android.gms.ads.MobileAds
 import com.onesignal.OneSignal
 import com.orhanobut.hawk.Hawk
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class SquadMasterApp : Application() {
 
     override fun onCreate() {

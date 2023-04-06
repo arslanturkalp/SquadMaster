@@ -68,6 +68,7 @@
     <string name="login_or_register">Login or Register</string>
 
     <string name="competitive_mode">Main Game</string>
+    <string name="online_mode">Online Mode</string>
     <string name="league_mode">League Mode</string>
     <string name="rank_list_by_best_scores">Best Scores</string>
     <string name="rank_list_by_total_points">Total Points</string>
@@ -105,4 +106,5 @@
     <string name="new_version_title">New Version Is Out!</string>
     <string name="new_version_available">New version available. You can go to the store by click button.</string>
     <string name="download">Download</string>
+    <string name="coming_soon">Coming soon…</string>
 </resources>

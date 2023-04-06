@@ -47,37 +47,89 @@
             android:orientation="vertical">
 
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cvStart"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="8dp">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvStart"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="0.5"
+                    app:cardElevation="8dp">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="36dp"
-                        android:src="@drawable/ic_main" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/sofia_sans"
-                        android:padding="32dp"
-                        android:text="@string/competitive_mode"
-                        android:textAlignment="center"
-                        android:textColor="@color/creme"
-                        android:textSize="22sp" />
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                </LinearLayout>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_main" />
 
-            </com.google.android.material.card.MaterialCardView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/sofia_sans"
+                            android:gravity="center"
+                            android:text="@string/competitive_mode"
+                            android:textColor="@color/creme"
+                            android:textSize="22sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvStartOnline"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="0.5"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivBall"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/football_ball" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/sofia_sans"
+                            android:gravity="center"
+                            android:text="@string/online_mode"
+                            android:textColor="@color/creme"
+                            android:textSize="22sp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:background="@drawable/bg_white"
+                            android:gravity="center"
+                            android:text="@string/coming_soon"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,8 +158,8 @@
                             android:padding="16dp">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
                                 android:src="@drawable/ic_coin" />
 
                             <androidx.appcompat.widget.AppCompatTextView
@@ -115,6 +167,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
+                                android:padding="8dp"
                                 android:textColor="@color/olive_green"
                                 android:textSize="22sp"
                                 tools:text="0" />
@@ -129,8 +182,8 @@
                             android:padding="16dp">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
                                 android:src="@drawable/ic_best_score" />
 
                             <androidx.appcompat.widget.AppCompatTextView
@@ -138,6 +191,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
+                                android:padding="8dp"
                                 android:textColor="@color/olive_green"
                                 android:textSize="22sp"
                                 tools:text="0" />

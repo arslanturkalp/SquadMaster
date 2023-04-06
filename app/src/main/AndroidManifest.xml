@@ -36,20 +36,20 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:theme="@style/GreenNavigationBar"/>
+            android:theme="@style/GreenNavigationBar"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
             android:name=".ui.start.StartActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustUnspecified"
-            android:theme="@style/GreenNavigationBar"/>
+            android:theme="@style/GreenNavigationBar"
+            android:windowSoftInputMode="adjustUnspecified" />
 
         <activity
             android:name=".ui.register.RegisterActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:theme="@style/GreenNavigationBar"/>
+            android:theme="@style/GreenNavigationBar"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
             android:name=".ui.main.MainActivity"
@@ -68,6 +68,10 @@
             android:name=".ui.clubs.ClubsActivity"
             android:exported="true"
             android:windowSoftInputMode="stateVisible" />
+
+        <activity
+            android:name=".ui.online.OnlineActivity"
+            android:exported="true" />
 
     </application>
 

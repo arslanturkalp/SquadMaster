@@ -16,8 +16,9 @@ import com.umtualgames.squadmaster.application.SessionManager.getUnknownImage
 import com.umtualgames.squadmaster.databinding.RowLayoutPlayerBinding
 import com.umtualgames.squadmaster.network.responses.item.Player
 import com.umtualgames.squadmaster.utils.ifContains
+import javax.inject.Inject
 
-class SquadAdapter : RecyclerView.Adapter<SquadAdapter.SquadViewHolder>() {
+class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.SquadViewHolder>() {
 
     private val dataList: MutableList<Player> = mutableListOf()
 

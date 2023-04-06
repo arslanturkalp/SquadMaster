@@ -45,8 +45,10 @@ import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.utils.*
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 
+@AndroidEntryPoint
 class SquadActivity : BaseActivity() {
 
     private val binding by lazy { ActivitySquadBinding.inflate(layoutInflater) }

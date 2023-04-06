@@ -17,8 +17,10 @@ import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.databinding.FragmentAnswerBinding
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 
+@AndroidEntryPoint
 class AnswerFragment : BaseBottomSheetDialogFragment() {
 
     private val binding by lazy { FragmentAnswerBinding.inflate(layoutInflater) }

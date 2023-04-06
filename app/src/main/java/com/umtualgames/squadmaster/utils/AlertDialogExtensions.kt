@@ -47,7 +47,7 @@ fun Activity.showAlertDialogTheme(
     isCancelable: Boolean = false,
     showPositiveButton: Boolean = true,
     positiveButtonTitle: String? = this.getString(R.string.done),
-    onPositiveButtonClick: (() -> Unit?)? = null,
+    onPositiveButtonClick: (() -> Any)? = null,
     showNegativeButton: Boolean = false,
     negativeButtonTitle: String? = this.getString(R.string.cancel),
     onNegativeButtonClick: (() -> Unit?)? = null,

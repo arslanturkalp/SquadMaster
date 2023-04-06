@@ -17,7 +17,9 @@ import com.umtualgames.squadmaster.ui.login.LoginActivity
 import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import com.umtualgames.squadmaster.utils.spaceControl
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterActivity : BaseActivity() {
 
     private val binding by lazy { ActivityRegisterBinding.inflate(layoutInflater) }
@@ -25,7 +27,6 @@ class RegisterActivity : BaseActivity() {
     private val viewModel by viewModels<RegisterViewModel>()
 
     private val lang = Hawk.get(Constants.KEY_APP_LANG, "en")
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,7 @@ class RegisterActivity : BaseActivity() {
                 is RegisterViewState.SuccessState -> {
                     dismissProgressDialog()
                     if (state.response.statusCode == 200) {
-                        startActivity(LoginActivity.createIntent(this))
+                        startActivity(LoginActivity.createIntent(this, state.response.data.username, binding.etPassword.text.toString()))
                     } else if (state.response.statusCode == 400) {
                         showAlertDialogTheme(getString(R.string.error), if (lang == "en") getString(R.string.used_username) else state.response.message)
                     }

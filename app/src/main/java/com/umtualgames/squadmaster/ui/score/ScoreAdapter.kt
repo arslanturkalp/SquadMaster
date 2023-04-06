@@ -10,8 +10,9 @@ import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.databinding.RowLayoutScoreBinding
 import com.umtualgames.squadmaster.network.responses.item.RankItem
+import javax.inject.Inject
 
-class ScoreAdapter : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
+class ScoreAdapter @Inject constructor() : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
     private val dataList: MutableList<RankItem> = mutableListOf()
 

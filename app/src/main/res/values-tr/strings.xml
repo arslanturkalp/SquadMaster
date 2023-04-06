@@ -67,7 +67,8 @@
     <string name="show_league">Lig modunu oynamak için giriş yap veya kayıt ol.</string>
     <string name="login_or_register">Giriş Yap veya Kayıt Ol</string>
 
-    <string name="competitive_mode">Ana Oyun</string>
+    <string name="competitive_mode">Tek Kişi Modu</string>
+    <string name="online_mode">Online Modu</string>
     <string name="league_mode">Lig Modu</string>
     <string name="rank_list_by_best_scores">En Yüksek Skorlar</string>
     <string name="rank_list_by_total_points">Toplam Puanlar</string>
@@ -105,4 +106,5 @@
     <string name="new_version_title">Yeni Versiyon Yayında!</string>
     <string name="new_version_available">Yeni versiyon mevcuttur. Butona tıklayarak uygulama mağazasına gidebilirsiniz.</string>
     <string name="download">İndir</string>
+    <string name="coming_soon">Yakında gelecek…</string>
 </resources>

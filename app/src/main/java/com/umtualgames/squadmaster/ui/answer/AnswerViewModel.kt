@@ -1,33 +1,29 @@
 package com.umtualgames.squadmaster.ui.answer
 
-import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.umtualgames.squadmaster.data.enums.Status
+import androidx.lifecycle.viewModelScope
+import com.umtualgames.squadmaster.di.Repository
 import com.umtualgames.squadmaster.network.responses.item.Token
-import com.umtualgames.squadmaster.utils.applyThreads
+import com.umtualgames.squadmaster.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AnswerViewModel: BaseViewModel() {
+@HiltViewModel
+class AnswerViewModel @Inject constructor(private val repository: Repository): BaseViewModel() {
 
     private val viewState = MutableLiveData<AnswerViewState>()
     val getViewState: LiveData<AnswerViewState> = viewState
 
-    private fun refreshTokenLogin(refreshToken: String) {
-        compositeDisposable.addAll(
-            remoteDataSource
-                .signInRefreshToken(refreshToken)
-                .applyThreads()
-                .subscribe {
-                    when (it.status) {
-                        Status.LOADING -> viewState.postValue(AnswerViewState.LoadingState)
-                        Status.SUCCESS -> {
-                            val response = it.data!!
-                            viewState.postValue(AnswerViewState.RefreshState(response.data.token))
-                        }
-                        Status.ERROR -> viewState.postValue(AnswerViewState.ErrorState(it.message!!))
-                    }
-                }
-        )
+    private fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
+        viewState.postValue(AnswerViewState.LoadingState)
+        repository.refreshTokenLogin(refreshToken).let {
+            when {
+                it.isSuccessful -> viewState.postValue(AnswerViewState.RefreshState(it.body()!!.data.token))
+                else -> viewState.postValue(AnswerViewState.ErrorState(it.message()))
+            }
+        }
     }
 }
 

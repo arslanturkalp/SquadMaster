@@ -11,11 +11,16 @@ import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityLoginBinding
+import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.ui.base.BaseActivity
+import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
+import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : BaseActivity() {
 
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
@@ -29,7 +34,14 @@ class LoginActivity : BaseActivity() {
         setPortraitMode()
         setupObservers()
 
+
         binding.apply {
+            val userName = intent.getDataExtra<String?>(EXTRAS_USER_NAME)
+            val password = intent.getDataExtra<String?>(EXTRAS_PASSWORD)
+            if (userName != null && password != null) {
+                etUserName.setText(userName)
+                etPassword.setText(password)
+            }
             btnLogin.setOnClickListener {
                 viewModel.login(username = etUserName.text.toString(), password = etPassword.text.toString())
             }
@@ -72,6 +84,12 @@ class LoginActivity : BaseActivity() {
     }
 
     companion object {
-        fun createIntent(context: Context): Intent = Intent(context, LoginActivity::class.java)
+        private const val EXTRAS_USER_NAME = "EXTRAS_USER_NAME"
+        private const val EXTRAS_PASSWORD = "EXTRAS_PASSWORD"
+
+        fun createIntent(context: Context, userName: String? = null, password: String? = null): Intent = Intent(context, LoginActivity::class.java).apply {
+            putExtra("EXTRAS_USER_NAME", userName)
+            putExtra("EXTRAS_PASSWORD", password)
+        }
     }
 }
