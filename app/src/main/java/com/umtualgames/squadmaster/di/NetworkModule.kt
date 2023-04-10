@@ -21,8 +21,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Singleton
     @Provides
+    @Singleton
     @Named("Normal")
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
@@ -33,8 +33,8 @@ object NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
+    @Singleton
     @Named("ForToken")
     fun provideRetrofitIsLogin(): Retrofit {
         return Retrofit.Builder()
@@ -51,22 +51,24 @@ object NetworkModule {
     @Provides
     fun provideApiServiceForToken(@Named("ForToken") retrofit: Retrofit): ForTokenApiService = retrofit.create(ForTokenApiService::class.java)
 
-    @Singleton
     @Provides
+    @Singleton
     fun providesRepository(apiService: ApiService, forTokenApiService: ForTokenApiService) = Repository(apiService, forTokenApiService)
 
-    @Singleton
     @Provides
+    @Singleton
     fun providesOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(AccessTokenInterceptor())
             .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
             .retryOnConnectionFailure(false)
             .build()
     }
 
-    @Singleton
     @Provides
+    @Singleton
     fun providesOkHttpClientForToken(): OkHttpClient {
         return OkHttpClient.Builder()
             .retryOnConnectionFailure(false)
