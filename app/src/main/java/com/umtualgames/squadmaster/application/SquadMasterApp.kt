@@ -20,6 +20,10 @@ class SquadMasterApp : Application() {
         OneSignal.setAppId(ONESIGNAL_APP_ID)
     }
 
+    fun getContext(): Context {
+        return applicationContext
+    }
+
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
     }

@@ -17,8 +17,8 @@ android {
         applicationId "com.umtualgames.squadmaster"
         minSdk 23
         targetSdk 33
-        versionCode 21
-        versionName "1.2.1"
+        versionCode 22
+        versionName "1.2.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
@@ -57,7 +57,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     //KTX
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation "androidx.activity:activity-ktx:1.7.0"
     implementation "androidx.fragment:fragment-ktx:1.5.6"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
@@ -115,7 +115,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf-ktx'
 
     //PlayAuth
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
     //In-App Review
     implementation 'com.google.android.play:review:2.0.1'

@@ -4,6 +4,7 @@ import com.umtualgames.squadmaster.application.Constants.BASE_URL
 import com.umtualgames.squadmaster.network.services.ApiService
 import com.umtualgames.squadmaster.network.services.ForTokenApiService
 import com.umtualgames.squadmaster.utils.interceptor.AccessTokenInterceptor
+import com.umtualgames.squadmaster.utils.interceptor.DefaultInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -71,6 +72,10 @@ object NetworkModule {
     @Singleton
     fun providesOkHttpClientForToken(): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(DefaultInterceptor())
+            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
             .retryOnConnectionFailure(false)
             .build()
     }

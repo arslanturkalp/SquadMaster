@@ -107,4 +107,10 @@
     <string name="new_version_available">Yeni versiyon mevcuttur. Butona tıklayarak uygulama mağazasına gidebilirsiniz.</string>
     <string name="download">İndir</string>
     <string name="coming_soon">Yakında gelecek…</string>
+
+    <string name="socket_timeout_exception">İstek zaman aşımına uğradı. Lütfen internet bağlantınızı kontrol ediniz.</string>
+    <string name="unknown_host_exception">Bağlantı kurulamıyor. Lütfen internet bağlantınızı kontrol ediniz.</string>
+    <string name="connection_shutdown_exception">Bağlantı kapandı. Lütfen internet bağlantınızı kontrol ediniz.</string>
+    <string name="io_exception">Sunucuya ulaşılamıyor. İnternet bağlantısını kontrol edip tekrar deneyiniz.</string>
+
 </resources>

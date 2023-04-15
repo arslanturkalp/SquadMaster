@@ -1,11 +1,9 @@
 package com.umtualgames.squadmaster.utils.interceptor
 
 import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.application.SessionManager.getToken
 import com.umtualgames.squadmaster.application.SquadMasterApp
 import okhttp3.Interceptor
 import okhttp3.Protocol
-import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.internal.http2.ConnectionShutdownException
@@ -13,11 +11,11 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class AccessTokenInterceptor : Interceptor {
+class DefaultInterceptor : Interceptor {
 
     @Throws(Exception::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request().newBuilder().addHeaders(getToken()).build()
+        val request = chain.request()
         try {
             val response = chain.proceed(request)
 
@@ -58,6 +56,4 @@ class AccessTokenInterceptor : Interceptor {
                 .body("{${e}}".toResponseBody(null)).build()
         }
     }
-
-    private fun Request.Builder.addHeaders(token: String) = this.apply { header("Authorization", "Bearer $token") }
 }

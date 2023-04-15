@@ -107,4 +107,9 @@
     <string name="new_version_available">New version available. You can go to the store by click button.</string>
     <string name="download">Download</string>
     <string name="coming_soon">Coming soon…</string>
+
+    <string name="socket_timeout_exception">Timeout - Please check your internet connection.</string>
+    <string name="unknown_host_exception">Unable to make a connection. Please check your internet.</string>
+    <string name="connection_shutdown_exception">Connection shutdown. Please check your internet.</string>
+    <string name="io_exception">Server is unreachable, please try again later.</string>
 </resources>
