@@ -11,9 +11,7 @@ import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityLoginBinding
-import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.ui.base.BaseActivity
-import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setPortraitMode
@@ -54,14 +52,18 @@ class LoginActivity : BaseActivity() {
                 is LoginViewState.LoadingState -> showProgressDialog()
                 is LoginViewState.SuccessState -> {
                     dismissProgressDialog()
-                    updateToken(state.response.data.token.accessToken)
-                    updateRefreshToken(state.response.data.token.refreshToken)
-                    updateUserID(state.response.data.id)
+                    if (state.response.statusCode == 200) {
+                        updateToken(state.response.data.token.accessToken)
+                        updateRefreshToken(state.response.data.token.refreshToken)
+                        updateUserID(state.response.data.id)
 
-                    updateUserName(binding.etUserName.text.toString())
-                    updatePassword(binding.etPassword.text.toString())
+                        updateUserName(binding.etUserName.text.toString())
+                        updatePassword(binding.etPassword.text.toString())
 
-                    goToMain()
+                        goToMain()
+                    } else {
+                        showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.response.message)
+                    }
                 }
                 is LoginViewState.ErrorState -> {
                     dismissProgressDialog()
