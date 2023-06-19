@@ -9,6 +9,7 @@ object SessionManager {
     private const val KEY_IS_SHOWED_FLAG = "KEY_IS_SHOWED_FLAG"
     private const val KEY_IS_SHOWED_TUTORIAL = "KEY_IS_SHOWED_TUTORIAL"
     private const val KEY_IS_USED_EXTRA_LIFE = "KEY_IS_USED_EXTRA_LIFE"
+    private const val KEY_IS_ONLINE_MODE_ACTIVE = "KEY_IS_ONLINE_MODE_ACTIVE"
 
     private const val KEY_TOKEN = "KEY_TOKEN"
     private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
@@ -35,6 +36,7 @@ object SessionManager {
     private var isShowedFlag: Boolean = false
     private var isShowedTutorial: Boolean = false
     private var isUsedExtraLife: Boolean = false
+    private var isOnlineModeActive: Boolean = false
 
     init {
         unknownAnswer = Hawk.get(KEY_UNKNOWN_ANSWER, "")
@@ -49,7 +51,7 @@ object SessionManager {
         isShowedFlag = Hawk.get(KEY_IS_SHOWED_FLAG, false)
         isShowedTutorial = Hawk.get(KEY_IS_SHOWED_TUTORIAL, false)
         isUsedExtraLife = Hawk.get(KEY_IS_USED_EXTRA_LIFE, false)
-
+        isOnlineModeActive = Hawk.get(KEY_IS_ONLINE_MODE_ACTIVE, false)
     }
 
     fun updateUnknownAnswer(value: String) {
@@ -182,6 +184,17 @@ object SessionManager {
 
     fun clearIsUsedExtraLife() {
         updateIsUsedExtraLife(false)
+    }
+
+    fun updateIsOnlineModeActive(value: Boolean) {
+        Hawk.put(KEY_IS_ONLINE_MODE_ACTIVE, value)
+        isOnlineModeActive = value
+    }
+
+    fun getIsOnlineModeActive() = isOnlineModeActive
+
+    fun clearIsOnlineModeActive() {
+        updateIsOnlineModeActive(false)
     }
 
 }

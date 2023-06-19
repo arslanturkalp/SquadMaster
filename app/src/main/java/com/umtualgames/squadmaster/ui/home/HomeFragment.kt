@@ -15,6 +15,7 @@ import com.umtualgames.squadmaster.application.SessionManager.clearScore
 import com.umtualgames.squadmaster.application.SessionManager.clearUserID
 import com.umtualgames.squadmaster.application.SessionManager.clearUserName
 import com.umtualgames.squadmaster.application.SessionManager.clearWrongCount
+import com.umtualgames.squadmaster.application.SessionManager.getIsOnlineModeActive
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
@@ -76,10 +77,17 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
             cvStartOnline.apply {
-                setBackgroundResource(R.drawable.bg_green_with_radius_ten)
-                setOnClickListener {
-                    startActivity(OnlineActivity.createIntent(requireContext()))
+                if (getIsOnlineModeActive()) {
+                    alpha = 1f
+                    setOnClickListener {
+                        startActivity(OnlineActivity.createIntent(requireContext()))
+                    }
+                } else {
+                    alpha = 0.2f
+                    isClickable = false
                 }
+                setBackgroundResource(R.drawable.bg_green_with_radius_ten)
+
             }
             cvLeague.apply {
                 setBackgroundResource(R.drawable.bg_green_with_radius_ten)

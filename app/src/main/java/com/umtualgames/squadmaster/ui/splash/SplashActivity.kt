@@ -17,6 +17,7 @@ import com.umtualgames.squadmaster.BuildConfig
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
+import com.umtualgames.squadmaster.application.SessionManager.updateIsOnlineModeActive
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.databinding.ActivitySplashBinding
 import com.umtualgames.squadmaster.network.requests.LoginRequest
@@ -63,6 +64,11 @@ class SplashActivity : BaseActivity() {
                 }
                 is SplashViewState.SuccessState -> {
                     dismissProgressDialog()
+                    if (state.response.data.find { it.settingName == "OnlineModeActive"}?.settingValue == "true") {
+                        updateIsOnlineModeActive(true)
+                    } else {
+                        updateIsOnlineModeActive(false)
+                    }
                     if (state.response.data.find { it.settingName == "Version" }?.settingValue == BuildConfig.VERSION_NAME) {
                         if (state.response.data.find { it.settingName == "IsOnline" }?.settingValue == "true") {
                             goToStart()
