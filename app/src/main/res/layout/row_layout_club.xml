@@ -24,7 +24,7 @@
             android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            tools:src="@drawable/ic_flag"/>
+            tools:src="@drawable/ic_flag" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivLocked"
@@ -32,9 +32,9 @@
             android:layout_height="32dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:src="@drawable/ic_lock"
-            android:visibility="gone"
-            android:layout_gravity="center" />
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -43,7 +43,11 @@
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:layout_marginTop="2dp"
+        android:ellipsize="end"
         android:gravity="center"
-        android:textColor="@color/white" />
+        android:maxLines="1"
+        android:textColor="@color/soft_green"
+        android:textSize="13sp"
+        tools:text="Barcelona" />
 
 </LinearLayout>

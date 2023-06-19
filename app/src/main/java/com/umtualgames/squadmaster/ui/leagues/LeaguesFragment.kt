@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.OnUserEarnedRewardListener
@@ -28,6 +27,7 @@ import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
+import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
@@ -59,7 +59,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
         if (getUserID() != 13) {
             binding.apply {
-                rvLeagues.visibility = View.VISIBLE
+                setVisibility(View.VISIBLE, rvLeagues, llLeagueTitle)
                 llShowLeague.visibility = View.GONE
             }
             viewModel.getLeagues(getUserID())
@@ -75,6 +75,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
         binding.apply {
             btnLoginOrRegister.setOnClickListener { requireContext().startActivity(StartActivity.createIntent(true, requireContext())) }
+            ivRefresh.setOnClickListener { viewModel.getLeagues(getUserID()) }
         }
     }
 
@@ -88,7 +89,8 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     private fun setupRecyclerViews() {
         binding.rvLeagues.apply {
             adapter = leagueAdapter
-            layoutManager = GridLayoutManager(context, 2)
+            setAlpha(true)
+            set3DItem(true)
         }
     }
 
@@ -99,21 +101,24 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
                 is LeaguesViewState.SuccessState -> {
                     dismissProgressDialog()
                     showLeagues(state.response)
-                    binding.tvTitleLeagues.visibility = View.VISIBLE
                 }
+
                 is LeaguesViewState.ErrorState -> {
                     dismissProgressDialog()
                     showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
                 }
+
                 is LeaguesViewState.WarningState -> {
                     dismissProgressDialog()
                     state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
                 }
+
                 is LeaguesViewState.RefreshState -> {
                     dismissProgressDialog()
                     updateToken(state.response.data.token.accessToken)
                     updateRefreshToken(state.response.data.token.refreshToken)
                 }
+
                 is LeaguesViewState.UserPointLoadingState -> {}
                 is LeaguesViewState.UpdateState -> {
                     EventBus.getDefault().post("Score Update")
@@ -160,8 +165,8 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
-        viewModel.updatePoint(UpdatePointRequest(getUserID(), 20))
-        showAlertDialogTheme(getString(R.string.info), getString(R.string.point_20))
+        viewModel.updatePoint(UpdatePointRequest(getUserID(), 50))
+        showAlertDialogTheme(getString(R.string.info), getString(R.string.point_50))
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

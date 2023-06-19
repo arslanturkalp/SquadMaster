@@ -25,7 +25,7 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
-            android:theme="@style/GreenNavigationBar">
+            android:theme="@style/GreenTwoNavigationBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

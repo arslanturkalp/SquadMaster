@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: Repository): BaseViewModel() {
+class HomeViewModel @Inject constructor(private val repository: Repository) : BaseViewModel() {
 
     private val viewState = MutableLiveData<HomeViewState>()
     val getViewState: LiveData<HomeViewState> = viewState
@@ -26,8 +26,10 @@ class HomeViewModel @Inject constructor(private val repository: Repository): Bas
             when {
                 it.isSuccessful -> {
                     getLeagues()
+                    getRoomCount()
                     viewState.postValue(HomeViewState.UserPointState(it.body()!!))
                 }
+
                 it.code() != 200 -> viewState.postValue(HomeViewState.WarningState(it.message()))
                 else -> refreshTokenLogin(getRefreshToken())
             }
@@ -45,6 +47,16 @@ class HomeViewModel @Inject constructor(private val repository: Repository): Bas
         }
     }
 
+    private fun getRoomCount() = viewModelScope.launch {
+        viewState.postValue(HomeViewState.LoadingState)
+        repository.getRooms().let {
+            when (it.body()?.statusCode) {
+                200 -> viewState.postValue(HomeViewState.RoomCountState(it.body()?.data?.availableCount!!))
+                300 -> viewState.postValue(HomeViewState.RoomCountState(0))
+            }
+        }
+    }
+
     private fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
         viewState.postValue(HomeViewState.LoadingState)
         repository.refreshTokenLogin(refreshToken).let {
@@ -52,6 +64,7 @@ class HomeViewModel @Inject constructor(private val repository: Repository): Bas
                 it.isSuccessful -> {
                     viewState.postValue(HomeViewState.RefreshState(it.body()!!.data.token))
                 }
+
                 it.code() != 200 -> viewState.postValue(HomeViewState.ReturnSplashState)
                 else -> viewState.postValue(HomeViewState.ErrorState(it.message()))
             }
@@ -67,5 +80,6 @@ sealed class HomeViewState {
     data class WarningState(val message: String?) : HomeViewState()
     data class UserPointState(val response: UserPointResponse) : HomeViewState()
     data class LeagueSuccessState(val response: List<League>) : HomeViewState()
+    data class RoomCountState(val response: Int) : HomeViewState()
     data class RefreshState(val response: Token) : HomeViewState()
 }

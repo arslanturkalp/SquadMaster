@@ -40,14 +40,17 @@ class LeaguesAdapter @Inject constructor(private val onClick: (League) -> Unit, 
                     ivLeague.alpha = 0.1f
                     setVisibility(View.VISIBLE, ivLocked, llPoint)
                     tvLeagueName.visibility = View.GONE
+                    binding.cvCard.setOnClickListener {
+                        onLockedClick.invoke(item)
+                    }
                     itemView.setOnClickListener {
                         onLockedClick.invoke(item)
                     }
                 } else {
                     ivLeague.alpha = 1f
-                    setVisibility(View.GONE, ivLocked, llPoint)
+                    setVisibility(View.INVISIBLE, ivLocked, llPoint)
                     tvLeagueName.visibility = View.VISIBLE
-                    itemView.setOnClickListener {
+                    binding.cvCard.setOnClickListener {
                         onClick.invoke(item)
                     }
                 }

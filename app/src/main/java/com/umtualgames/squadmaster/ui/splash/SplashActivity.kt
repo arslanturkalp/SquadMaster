@@ -47,8 +47,8 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun rotateBall() {
-        val rotate = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        rotate.duration = 2500
+        val rotate = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        rotate.duration = 2000
         rotate.interpolator = LinearInterpolator()
         rotate.fillAfter = true
         rotate.repeatCount = Animation.INFINITE
@@ -92,7 +92,7 @@ class SplashActivity : BaseActivity() {
     private fun goToStart() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(StartActivity.createIntent(false, this))
-        }, 1000)
+        }, 500)
     }
 
     private fun askNotificationPermission() {

@@ -3,11 +3,13 @@ package com.umtualgames.squadmaster.di
 import com.umtualgames.squadmaster.network.requests.LevelPassRequest
 import com.umtualgames.squadmaster.network.requests.LoginRequest
 import com.umtualgames.squadmaster.network.requests.RegisterRequest
+import com.umtualgames.squadmaster.network.requests.RoomRequest
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.network.services.ApiService
 import com.umtualgames.squadmaster.network.services.ForTokenApiService
+import com.umtualgames.squadmaster.network.services.WebsocketService
 
-class Repository(private val apiService: ApiService, private val forTokenApiService: ForTokenApiService) {
+class Repository(private val apiService: ApiService, private val forTokenApiService: ForTokenApiService, private val websocketService: WebsocketService) {
 
     suspend fun getLeagues(userID: Int) = apiService.getLeagues(userID)
 
@@ -36,4 +38,13 @@ class Repository(private val apiService: ApiService, private val forTokenApiServ
     suspend fun login(loginRequest: LoginRequest) = forTokenApiService.login(loginRequest)
 
     suspend fun refreshTokenLogin(refreshToken: String) = forTokenApiService.refreshTokenLogin(refreshToken)
+
+    suspend fun getRooms() = apiService.getRooms()
+
+    suspend fun createRoom(roomName: String) = apiService.createRoom(roomName)
+
+    suspend fun joinRoom() = apiService.joinRoom()
+
+    suspend fun leaveRoom(roomName: String) = apiService.leaveRoom(roomName)
+
 }

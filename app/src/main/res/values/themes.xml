@@ -55,4 +55,8 @@
     <style name="GreenNavigationBar" parent="Theme.SquadMaster">
         <item name="android:navigationBarColor">@color/green</item>
     </style>
+
+    <style name="GreenTwoNavigationBar" parent="Theme.SquadMaster">
+        <item name="android:navigationBarColor">@color/green_two</item>
+    </style>
 </resources>

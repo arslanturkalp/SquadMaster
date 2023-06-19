@@ -19,6 +19,7 @@
     <string name="home">Home</string>
     <string name="leagues">Leagues</string>
     <string name="score">Score</string>
+    <string name="settings">Settings</string>
 
     <string name="start_game">Start Game</string>
     <string name="next_level">Next Level</string>
@@ -94,13 +95,13 @@
     <string name="slide_two_league_mode">Compete to unlock all leagues in the league mode, which consists of teams from Europe\'s 5 big leagues, Turkish League and other leagues.</string>
     <string name="slide_third_score">Compete fiercely on the overall scoreboard with the main game mode record.</string>
     <string name="point_15">15 Point won!</string>
-    <string name="point_20">20 Point won!</string>
     <string name="point_25">25 Point won!</string>
+    <string name="point_50">50 Point won!</string>
     <string name="club_unlocked">Club Unlocked</string>
 
     <string name="need_point">You need %2$s points to unlock %1$s. You can earn point by play main game mode.</string>
-    <string name="watch_and_earn">You can also earn 20 points by watching ads.</string>
-    <string name="watch_ad">Earn 20 Point</string>
+    <string name="watch_and_earn">You can also earn 50 points by watching ads.</string>
+    <string name="watch_ad">Earn 50 Point</string>
 
     <string name="is_not_online">Maintenance work is in progress. Please try again later.</string>
     <string name="new_version_title">New Version Is Out!</string>
@@ -112,4 +113,12 @@
     <string name="unknown_host_exception">Unable to make a connection. Please check your internet.</string>
     <string name="connection_shutdown_exception">Connection shutdown. Please check your internet.</string>
     <string name="io_exception">Server is unreachable, please try again later.</string>
+    <string name="rival_disconnect">Rival left session!</string>
+    <string name="match_start">Match started!</string>
+    <string name="rival_is_not_found">Rival is not found!</string>
+    <string name="online_loss_match">If you leave the game, your opponent will win the game.</string>
+    <string name="user_left_game">%1$s kullanıcısı oyundan ayrıldı.</string>
+    <string name="user_joined_game">%1$s odaya katıldı.</string>
+    <string name="answer_waiting">Waiting for opponent\'s answer.</string>
+
 </resources>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:alpha="0.2"
+    android:alpha="1"
     android:shape="rectangle">
     <gradient
         android:angle="45"
         android:centerColor="@color/transparent_black"
-        android:endColor="@color/transparent_black"
-        android:startColor="@color/transparent_black" />
+        android:endColor="@color/battleship_grey"
+        android:startColor="@color/battleship_grey" />
     <corners android:radius="30dp" />
     <stroke
         android:width="0.5dp"

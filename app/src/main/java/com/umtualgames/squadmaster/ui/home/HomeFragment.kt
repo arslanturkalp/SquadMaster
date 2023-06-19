@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.clearPassword
 import com.umtualgames.squadmaster.application.SessionManager.clearScore
@@ -17,7 +19,7 @@ import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.data.models.MessageEvent
-import com.umtualgames.squadmaster.databinding.FragmentHomeBinding
+import com.umtualgames.squadmaster.databinding.FragmentHomeNewBinding
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
@@ -28,6 +30,7 @@ import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.glide.transformations.MaskTransformation
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -35,7 +38,7 @@ import org.greenrobot.eventbus.ThreadMode
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
+    private val binding by lazy { FragmentHomeNewBinding.inflate(layoutInflater) }
 
     private val viewModel by viewModels<HomeViewModel>()
 
@@ -56,8 +59,16 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
         with(binding) {
 
+            imageView.apply {
+                Glide.with(context)
+                    .asBitmap()
+                    .load(R.drawable.football_ball_big)
+                    .apply(RequestOptions.bitmapTransform(MaskTransformation(R.drawable.star)))
+                    .into(this)
+
+            }
             cvStart.apply {
-                setBackgroundResource(R.drawable.bg_light_green)
+                setBackgroundResource(R.drawable.bg_green_with_radius_ten)
                 setOnClickListener {
                     startActivity((GameActivity.createIntent(requireContext())))
                     clearScore()
@@ -65,16 +76,13 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
             cvStartOnline.apply {
-                setBackgroundResource(R.drawable.bg_light_green)
+                setBackgroundResource(R.drawable.bg_green_with_radius_ten)
                 setOnClickListener {
-                    //startActivity(OnlineActivity.createIntent(requireContext()))
-                    showAlertDialogTheme(context.getString(R.string.online_mode), context.getString(R.string.coming_soon))
+                    startActivity(OnlineActivity.createIntent(requireContext()))
                 }
-                alpha = 0.8f
-
             }
             cvLeague.apply {
-                setBackgroundResource(R.drawable.bg_light_green)
+                setBackgroundResource(R.drawable.bg_green_with_radius_ten)
                 setOnClickListener {
                     (activity as MainActivity).apply {
                         showFragment(leaguesFragment)
@@ -83,7 +91,7 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
             cvScore.apply {
-                setBackgroundResource(R.drawable.bg_white)
+                setBackgroundResource(R.drawable.bg_green_with_radius_ten)
                 setOnClickListener {
                     (activity as MainActivity).apply {
                         showFragment(scoreFragment)
@@ -91,11 +99,15 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
             }
+            cvSettings.apply {
+                setBackgroundResource(R.drawable.bg_green_with_radius_ten)
+                setOnClickListener { SettingsFragment().show(parentFragmentManager, "") }
+            }
 
-            cvSignOut.setBackgroundResource(R.drawable.bg_light_green)
+            cvSignOut.setBackgroundResource(R.drawable.bg_green_with_radius_ten)
 
             if (getUserID() == 13) {
-                setVisibility(View.GONE, cvLeague, cvScore)
+                setVisibility(View.INVISIBLE, cvLeague, cvScore)
                 ivSignOut.setImageResource(R.drawable.ic_login)
                 tvSignOut.text = getString(R.string.login_or_register)
                 cvSignOut.setOnClickListener { requireContext().startActivity(StartActivity.createIntent(true, requireContext())) }
@@ -109,10 +121,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                         requireContext().startActivity(StartActivity.createIntent(false, requireContext()))
                     })
                 }
-            }
-
-            ivSettings.setOnClickListener {
-                SettingsFragment().show(parentFragmentManager, "")
             }
         }
 
@@ -165,6 +173,9 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
                 is HomeViewState.LeagueSuccessState -> {
                     (activity as MainActivity).setNotificationBadge(state.response.count { !it.isLocked })
+                }
+                is HomeViewState.RoomCountState -> {
+                    binding.tvActiveUserCount.text = "Bekleyen: ${state.response}"
                 }
                 is HomeViewState.ReturnSplashState -> {
                     dismissProgress()

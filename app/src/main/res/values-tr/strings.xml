@@ -19,6 +19,7 @@
     <string name="home">Ana Menü</string>
     <string name="leagues">Ligler</string>
     <string name="score">Skor</string>
+    <string name="settings">Ayarlar</string>
 
     <string name="start_game">Oyuna Başla</string>
     <string name="next_level">Sonraki Seviye</string>
@@ -94,13 +95,13 @@
     <string name="slide_two_league_mode">Avrupa\'nın 5 büyük ligi, Türkiye Ligi ve diğer liglerdeki takımlardan oluşan lig modunda tüm liglerin kilidini açmak için mücadele et.</string>
     <string name="slide_third_score">Ana oyun modu rekoru ile toplam puan tablosunda kıyasıya rekabet.</string>
     <string name="point_15">15 Puan kazandınız!</string>
-    <string name="point_20">20 Puan kazandınız!</string>
     <string name="point_25">25 Puan kazandınız!</string>
+    <string name="point_50">50 Puan kazandınız!</string>
     <string name="club_unlocked">Kulüp Kilidi Açıldı</string>
 
     <string name="need_point">%1$s kilidini açmak için %2$s puana ihtiyacın var. Ana oyun modunda puan kazanabilirsin.</string>
-    <string name="watch_and_earn">Ayrıca reklam izleyerek de 20 puan kazanabilirsin.</string>
-    <string name="watch_ad">20 Puan Kazan</string>
+    <string name="watch_and_earn">Ayrıca reklam izleyerek de 50 puan kazanabilirsin.</string>
+    <string name="watch_ad">50 Puan Kazan</string>
 
     <string name="is_not_online">Bakım çalışması yapılmaktadır. Lütfen daha sonra tekrar deneyiniz.</string>
     <string name="new_version_title">Yeni Versiyon Yayında!</string>
@@ -112,5 +113,12 @@
     <string name="unknown_host_exception">Bağlantı kurulamıyor. Lütfen internet bağlantınızı kontrol ediniz.</string>
     <string name="connection_shutdown_exception">Bağlantı kapandı. Lütfen internet bağlantınızı kontrol ediniz.</string>
     <string name="io_exception">Sunucuya ulaşılamıyor. İnternet bağlantısını kontrol edip tekrar deneyiniz.</string>
+    <string name="rival_disconnect">Hükmen Galibiyet</string>
+    <string name="match_start">Maç başladı!</string>
+    <string name="rival_is_not_found">Rakip bulunamadı!</string>
+    <string name="online_loss_match">Oyundan çıkman durumunda oyunu rakibin kazanacak.</string>
+    <string name="user_left_game">%1$s kullanıcısı oyundan ayrıldı.</string>
+    <string name="user_joined_game">%1$s odaya katıldı.</string>
+    <string name="answer_waiting">Cevap Bekleniyor.</string>
 
 </resources>

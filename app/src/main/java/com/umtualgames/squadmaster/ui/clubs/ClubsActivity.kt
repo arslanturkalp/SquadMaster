@@ -2,13 +2,8 @@ package com.umtualgames.squadmaster.ui.clubs
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.Window
-import android.view.WindowInsetsController
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -54,8 +49,6 @@ class ClubsActivity : BaseActivity() {
 
         setPortraitMode()
 
-        setStatusBarColor()
-
         setupRecyclerViews()
 
         setupObservers()
@@ -66,6 +59,7 @@ class ClubsActivity : BaseActivity() {
         viewModel.getSquadListByLeague(league.id, getUserID())
 
         binding.apply {
+            ivBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
             tvLeagueName.text = league.name
             ivLeague.apply {
                 Glide.with(context)
@@ -73,21 +67,6 @@ class ClubsActivity : BaseActivity() {
                     .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(this)
             }
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun setStatusBarColor() {
-        val window: Window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = Color.WHITE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
 

@@ -46,19 +46,19 @@ android {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //Android
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     //KTX
-    implementation 'androidx.core:core-ktx:1.10.0'
-    implementation "androidx.activity:activity-ktx:1.7.1"
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation "androidx.activity:activity-ktx:1.7.2"
     implementation "androidx.fragment:fragment-ktx:1.5.7"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
@@ -68,6 +68,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7'
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.7"
@@ -94,7 +95,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     //GoogleAdMob
-    implementation 'com.google.android.gms:play-services-ads:22.0.0'
+    implementation 'com.google.android.gms:play-services-ads:22.1.0'
 
     //ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
@@ -127,4 +128,10 @@ dependencies {
     //Dagger Hilt
     implementation "com.google.dagger:hilt-android:2.45"
     kapt "com.google.dagger:hilt-compiler:2.45"
+
+    //Glide Transformations
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
+    //Carousel RecyclerView
+    implementation 'com.github.sparrow007:carouselrecyclerview:1.2.6'
 }

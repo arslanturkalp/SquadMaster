@@ -8,6 +8,10 @@ import com.umtualgames.squadmaster.network.responses.leagueresponses.GetLeaguesR
 import com.umtualgames.squadmaster.network.responses.loginresponses.RegisterResponse
 import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.umtualgames.squadmaster.network.responses.projectsettingsresponses.ProjectSettingsResponse
+import com.umtualgames.squadmaster.network.responses.roomresponses.CreateRoomResponse
+import com.umtualgames.squadmaster.network.responses.roomresponses.GetRoomsResponse
+import com.umtualgames.squadmaster.network.responses.roomresponses.JoinRoomResponse
+import com.umtualgames.squadmaster.network.responses.roomresponses.LeaveRoomResponse
 import com.umtualgames.squadmaster.network.responses.squadresponses.GetSquadListResponse
 import com.umtualgames.squadmaster.network.responses.unlocksquadresponses.LevelPassResponse
 import com.umtualgames.squadmaster.network.responses.userpointresponses.GetRankListResponse
@@ -37,6 +41,18 @@ interface ApiService {
 
     @GET("ProjectSettings/GetProjectSettings")
     suspend fun getProjectSettings() : Response<ProjectSettingsResponse>
+
+    @GET("Room/GetRooms")
+    suspend fun getRooms() : Response<GetRoomsResponse>
+
+    @POST("Room/CreateRoom")
+    suspend fun createRoom(@Query("roomName") roomName: String) : Response<CreateRoomResponse>
+
+    @POST("Room/JoinRoom")
+    suspend fun joinRoom() : Response<JoinRoomResponse>
+
+    @POST("Room/LeaveRoom")
+    suspend fun leaveRoom(@Query("roomName") roomName: String) : Response<LeaveRoomResponse>
 
     @GET("Squad/GetSquadList")
     suspend fun getSquadList(): Response<GetSquadListResponse>

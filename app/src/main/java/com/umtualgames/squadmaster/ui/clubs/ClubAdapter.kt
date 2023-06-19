@@ -57,8 +57,6 @@ class ClubAdapter @Inject constructor(private val onClick: (Club) -> Unit) : Rec
                         .into(this)
                 }
                 tvClubName.text = item.name
-                tvClubName.textSize = if (item.name.length > 22) 11f else 12f
-
             }
         }
     }

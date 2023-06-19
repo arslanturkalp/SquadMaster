@@ -11,35 +11,52 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
         app:cardElevation="16dp">
 
-    <LinearLayout
-        android:id="@+id/llTeam"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_not_radius"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        tools:visibility="visible">
+        <LinearLayout
+            android:id="@+id/llTeam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_not_radius"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivLeague"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="16dp" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_back" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvLeagueName"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:textColor="@color/green"
-            tools:text="Premier League" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivLeague"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="16dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLeagueName"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:textColor="@color/olive_green"
+                android:textSize="18sp"
+                android:gravity="center"
+                tools:text="Premier League" />
+
+            </LinearLayout>
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -48,13 +65,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
-        android:paddingTop="16dp"
+        android:paddingTop="8dp"
         android:paddingEnd="8dp"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="4"
         tools:itemCount="50"
         tools:listitem="@layout/row_layout_club" />
-
 
 </LinearLayout>
