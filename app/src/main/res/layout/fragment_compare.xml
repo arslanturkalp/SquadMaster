@@ -17,6 +17,16 @@
         android:textColor="@color/black"
         android:textSize="24sp" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMatchStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        tools:text="@string/defeat"
+        android:textColor="@color/green_two"
+        android:textSize="18sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -120,5 +120,9 @@
     <string name="user_left_game">%1$s kullanıcısı oyundan ayrıldı.</string>
     <string name="user_joined_game">%1$s odaya katıldı.</string>
     <string name="answer_waiting">Waiting for opponent\'s answer.</string>
+    <string name="disconnect_won_10_point">You\'ve earned 10 points for leaving your opponent out of the game!</string>
+    <string name="draw">Tie</string>
+    <string name="defeat">Defeat</string>
+    <string name="won_and_50_point">Won. 50 points are yours!</string>
 
 </resources>

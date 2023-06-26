@@ -111,6 +111,12 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
         viewModel.getAvailableRoomCount()
     }
 
+    override fun onStop() {
+        super.onStop()
+        webSocket?.close(1000,"")
+        viewModel.leaveRoom(getUserName())
+    }
+
     private fun backToMainMenu() {
         showAlertDialogTheme(
             title = getString(R.string.back_to_main_menu),
@@ -120,8 +126,8 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
             negativeButtonTitle = getString(R.string.no),
             onPositiveButtonClick = {
                 viewModel.leaveRoom(getUserName())
-                webSocket?.send(String.format(getString(R.string.user_left_game), getUserName()))
                 webSocket?.close(1000, "")
+                webSocket?.send(String.format(getString(R.string.user_left_game), getUserName()))
                 startActivity(MainActivity.createIntent(this))
             }
         )
@@ -202,7 +208,6 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                     dismissProgressDialog()
                     roomName = state.response.data.roomName
                     webSocket = okHttpClient.newWebSocket(createRequest(roomName), webSocketJoinerListener)
-                    webSocket!!.request()
                 }
 
                 is OnlineViewState.RoomsState -> {
@@ -294,7 +299,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
     }
 
     private fun createRequest(roomID: String): Request {
-        val webSocketUrl = "wss://squad-master-ktor.ey.r.appspot.com/joinOnline/$roomID"
+        val webSocketUrl = "wss://squad-master-e391494f487b.herokuapp.com/joinOnline/$roomID"
 
         return Request.Builder()
             .url(webSocketUrl)
@@ -414,8 +419,10 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                 }
                 if (text.contains("oyundan ayrıldı")) {
                     if (text.substringBefore("oyundan ayrıldı").trim() != getUserName()) {
-                        viewModel.updatePoint(UpdatePointRequest(getUserID(), 20))
-                        startActivity(MainActivity.createIntent(this@OnlineActivity))
+                        showAlertDialogTheme(getString(R.string.rival_disconnect), String.format(getString(R.string.disconnect_won_10_point)), onPositiveButtonClick = {
+                            viewModel.updatePoint(UpdatePointRequest(getUserID(), 10))
+                            startActivity(MainActivity.createIntent(this@OnlineActivity))
+                        })
                     }
                 }
             }
@@ -443,7 +450,6 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                 onlineAdapter.updateAdapter(messageList)
                 if (text == "Yeni kullanıcı bağlandı. Şu anda odada 1 kullanıcı var.") {
                     okHttpClient.newWebSocket(createRequest(roomName), this)
-                    Companion.webSocket!!.request()
                 }
 
                 if (text.contains("{\"statusCode\":200")) {
@@ -523,8 +529,10 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                 }
                 if (text.contains("oyundan ayrıldı")) {
                     if (text.substringBefore("oyundan ayrıldı").trim() != getUserName()) {
-                        viewModel.updatePoint(UpdatePointRequest(getUserID(), 20))
-                        startActivity(MainActivity.createIntent(this@OnlineActivity))
+                        showAlertDialogTheme(getString(R.string.rival_disconnect), String.format(getString(R.string.disconnect_won_10_point)), onPositiveButtonClick = {
+                            viewModel.updatePoint(UpdatePointRequest(getUserID(), 10))
+                            startActivity(MainActivity.createIntent(this@OnlineActivity))
+                        })
                     }
                 }
             }
@@ -539,7 +547,6 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
     companion object {
         private var webSocket: WebSocket? = null
         const val TIMEOUT: Long = 3
-
 
         val messageList = arrayListOf<String>()
 

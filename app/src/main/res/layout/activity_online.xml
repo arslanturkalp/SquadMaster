@@ -97,12 +97,12 @@
                         android:layout_weight="0.8"
                         android:gravity="start|center_vertical"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         tools:text="player_one" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivSeperator"
-                        android:layout_width="24dp"
+                        android:layout_width="4dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="0.2"
@@ -115,7 +115,7 @@
                         android:layout_weight="0.8"
                         android:gravity="end|center_vertical"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         tools:text="player_two" />
 
                     <RelativeLayout
