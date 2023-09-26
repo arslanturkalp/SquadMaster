@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.OnUserEarnedRewardListener
@@ -16,6 +18,7 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
+import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SquadMasterApp
@@ -26,7 +29,9 @@ import com.umtualgames.squadmaster.network.responses.item.League
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
+import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
+import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,12 +62,12 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
         setupRecyclerViews()
         loadAds()
 
-        if (getUserID() != 13) {
+        if (!isAdminUser()) {
             binding.apply {
-                setVisibility(View.VISIBLE, rvLeagues, llLeagueTitle)
-                llShowLeague.visibility = View.GONE
+                setVisibility(View.VISIBLE, rvLeagues, cvScore, ivRefresh)
+                llShowLeague.setGone()
             }
-            viewModel.getLeagues(getUserID())
+            viewModel.getUserPoint(getUserID())
         }
 
         requireActivity()
@@ -89,8 +94,8 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     private fun setupRecyclerViews() {
         binding.rvLeagues.apply {
             adapter = leagueAdapter
-            setAlpha(true)
-            set3DItem(true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            LinearSnapHelper().attachToRecyclerView(this)
         }
     }
 
@@ -115,13 +120,33 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
                 is LeaguesViewState.RefreshState -> {
                     dismissProgressDialog()
-                    updateToken(state.response.data.token.accessToken)
-                    updateRefreshToken(state.response.data.token.refreshToken)
+                    state.response.data.token.apply {
+                        updateToken(accessToken)
+                        updateRefreshToken(refreshToken)
+                    }
                 }
 
                 is LeaguesViewState.UserPointLoadingState -> {}
                 is LeaguesViewState.UpdateState -> {
                     EventBus.getDefault().post("Score Update")
+                }
+                is LeaguesViewState.RefreshTokenState -> {
+                    updateToken(state.response.accessToken)
+                    updateRefreshToken(state.response.refreshToken)
+                    viewModel.getUserPoint(getUserID())
+                }
+                is LeaguesViewState.ReturnSplashState -> {
+                    dismissProgressDialog()
+                    startActivity(SplashActivity.createIntent(requireContext(), false))
+                }
+                is LeaguesViewState.UserPointState -> {
+                    dismissProgressDialog()
+                    with(binding) {
+                        state.response.data.apply {
+                            tvBestScore.text = bestPoint.toString()
+                            tvTotalScore.text = point.toString()
+                        }
+                    }
                 }
             }
         }
@@ -172,14 +197,13 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
         if (event.message == "League Update") {
-            viewModel.getLeagues(getUserID())
+            viewModel.getUserPoint(getUserID())
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
-
     }
 
     override fun onDestroy() {

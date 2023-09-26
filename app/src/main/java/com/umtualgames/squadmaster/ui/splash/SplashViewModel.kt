@@ -29,7 +29,6 @@ class SplashViewModel @Inject constructor(private val repository: Repository): B
             if (it.isSuccessful) viewState.postValue(SplashViewState.AdminState(it.body()!!)) else viewState.postValue(SplashViewState.ErrorState(it.message()))
         }
     }
-
 }
 
 sealed class SplashViewState {

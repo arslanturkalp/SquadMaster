@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/half_square_line" android:start="0dp" android:end="0dp" />
+    <item
+        android:drawable="@drawable/half_square_line"
+        android:end="0dp"
+        android:start="0dp" />
 
-    <item android:top="80dp" android:start="80dp" android:end="80dp" android:bottom="80dp">
-        <bitmap
-            android:gravity="center_vertical|center_horizontal"
-            android:src="@drawable/football_ball"/>
+    <item
+        android:bottom="80dp"
+        android:drawable="@drawable/ic_ball_new"
+        android:end="80dp"
+        android:start="80dp"
+        android:top="80dp">
+
     </item>
 
 

@@ -43,7 +43,9 @@ import com.umtualgames.squadmaster.utils.addOnBackPressedListener
 import com.umtualgames.squadmaster.utils.ifExists10Number
 import com.umtualgames.squadmaster.utils.ifTwoBack
 import com.umtualgames.squadmaster.utils.ifTwoWinger
+import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
+import com.umtualgames.squadmaster.utils.setVisible
 import com.umtualgames.squadmaster.utils.show
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -250,7 +252,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
         forwardAdapter.updateAdapter(if (ifExists10Number(squad)) ifTwoWinger(squad.filter { it.positionTypeID == PositionTypeIdStatus.FORWARD.value && it.positionID != PositionIdStatus.FA.value } as ArrayList<Player>) else ifTwoWinger(squad.filter { it.positionTypeID == 4 && it.positionID != 10 && it.positionID != 11 } as ArrayList<Player>))
 
         potentialAnswersAdapter.updateAdapter(potentialAnswers)
-        binding.cdAnswer.visibility = View.VISIBLE
+        binding.cdAnswer.setVisible()
     }
 
     private fun setupUI(squad: List<Player>) {
@@ -349,12 +351,14 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                         }
 
                         override fun onFinish() {
-                            binding.tvStatusOpponent.text = getString(R.string.match_start)
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                binding.llSearchingOpponent.visibility = View.GONE
-                                setList(squad!!.data.playerList, squad!!.data.potentialAnswerList)
+                            with(binding) {
+                                tvStatusOpponent.text = getString(R.string.match_start)
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    llSearchingOpponent.setGone()
+                                    setList(squad!!.data.playerList, squad!!.data.potentialAnswerList)
 
-                            }, 500)
+                                }, 500)
+                            }
                         }
                     }.start()
                 }
@@ -386,12 +390,14 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                         }
 
                         override fun onFinish() {
-                            binding.tvStatusOpponent.text = getString(R.string.match_start)
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                binding.llSearchingOpponent.visibility = View.GONE
-                                setList(squad!!.data.playerList, squad!!.data.potentialAnswerList)
+                            with(binding) {
+                                tvStatusOpponent.text = getString(R.string.match_start)
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    llSearchingOpponent.setGone()
+                                    setList(squad!!.data.playerList, squad!!.data.potentialAnswerList)
 
-                            }, 500)
+                                }, 500)
+                            }
                         }
                     }.start()
                 }
@@ -495,11 +501,13 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                         }
 
                         override fun onFinish() {
-                            binding.tvStatusOpponent.text = getString(R.string.match_start)
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                binding.llSearchingOpponent.visibility = View.GONE
-                                setList(squad!!.data.playerList, squad!!.data.potentialAnswerList)
-                            }, 500)
+                            with(binding){
+                                tvStatusOpponent.text = getString(R.string.match_start)
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    llSearchingOpponent.setGone()
+                                    setList(squad!!.data.playerList, squad!!.data.potentialAnswerList)
+                                }, 500)
+                            }
                         }
                     }.start()
                 }

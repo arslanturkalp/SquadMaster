@@ -18,6 +18,7 @@
 
     <string name="home">Ana Menü</string>
     <string name="leagues">Ligler</string>
+    <string name="tournaments">Turnuvalar</string>
     <string name="score">Skor</string>
     <string name="settings">Ayarlar</string>
 
@@ -62,15 +63,17 @@
     <string name="select_answer">Cevap Seç</string>
 
     <string name="show_flag">Oyuncunun Ülkesini Göster</string>
+    <string name="show_number">Oyuncunun Numarasını Göster</string>
     <string name="show_flag_description">Oyuncunun ülkesi 20 puan karşılığında gösterilecektir. Onaylıyor musunuz?</string>
+    <string name="show_number_description">Oyuncunun numarası 20 puan karşılığında gösterilecektir. Onaylıyor musunuz?</string>
 
     <string name="show_score">Diğer kullanıcılarla yarışmak için giriş yap veya kayıt ol.</string>
     <string name="show_league">Lig modunu oynamak için giriş yap veya kayıt ol.</string>
     <string name="login_or_register">Giriş Yap veya Kayıt Ol</string>
 
-    <string name="competitive_mode">Tek Kişi Modu</string>
+    <string name="competitive_mode">Macera Modu</string>
     <string name="online_mode">Online Modu</string>
-    <string name="league_mode">Lig Modu</string>
+    <string name="league_mode">Turnuva Modu</string>
     <string name="rank_list_by_best_scores">En Yüksek Skorlar</string>
     <string name="rank_list_by_total_points">Toplam Puanlar</string>
     <string name="high_score">Puan Tablosu</string>
@@ -113,6 +116,7 @@
     <string name="unknown_host_exception">Bağlantı kurulamıyor. Lütfen internet bağlantınızı kontrol ediniz.</string>
     <string name="connection_shutdown_exception">Bağlantı kapandı. Lütfen internet bağlantınızı kontrol ediniz.</string>
     <string name="io_exception">Sunucuya ulaşılamıyor. İnternet bağlantısını kontrol edip tekrar deneyiniz.</string>
+    <string name="internet_connection_problem">İnternet bağlantısını kontrol edip tekrar deneyiniz.</string>
     <string name="rival_disconnect">Hükmen Galibiyet</string>
     <string name="match_start">Maç başladı!</string>
     <string name="rival_is_not_found">Rakip bulunamadı!</string>
@@ -124,5 +128,10 @@
     <string name="draw">Beraberlik</string>
     <string name="defeat">Mağlubiyet</string>
     <string name="won_and_50_point">Galibiyet. 50 puan senin!</string>
+    <string name="your_answer">Senin Cevabın</string>
+    <string name="rival_answer">Rakibin Cevabı</string>
+    <string name="waiting_person">Bekleyen: %1$s</string>
+    <string name="clues">İpucu</string>
+    <string name="level_is_passed_description">Bu takımdaki eksik oyuncuyu buldunuz. Macera modunda bu takım tekrar karşına çıkabilir.</string>
 
 </resources>

@@ -11,6 +11,8 @@ import com.umtualgames.squadmaster.data.models.SlideModel
 import com.umtualgames.squadmaster.databinding.FragmentSlideBinding
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import com.umtualgames.squadmaster.utils.setGone
+import com.umtualgames.squadmaster.utils.setVisible
 
 class SlideFragment : BaseFragment() {
 
@@ -29,30 +31,32 @@ class SlideFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupViewPager()
-        binding.apply {
-            btnStartGame.setOnClickListener {
-                goToMain()
-            }
+        with(binding) {
+            btnStartGame.setOnClickListener { goToMain() }
+
+            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (position == list.lastIndex) {
+                        btnStartGame.setVisible()
+                    } else {
+                        btnStartGame.setGone()
+                    }
+                }
+            })
         }
 
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                if (position == list.lastIndex) {
-                    binding.btnStartGame.visibility = View.VISIBLE
-                } else {
-                    binding.btnStartGame.visibility = View.GONE
-                }
-            }
-        })
-
-        list.add(SlideModel(getString(R.string.slide_first_main_mode), R.drawable.screen_main_mode))
-        list.add(SlideModel(getString(R.string.slide_two_league_mode), R.drawable.screen_league_mode))
-        list.add(SlideModel(getString(R.string.slide_third_score), R.drawable.screen_score))
+        list.apply {
+            add(SlideModel(getString(R.string.slide_first_main_mode), R.drawable.screen_main_mode))
+            add(SlideModel(getString(R.string.slide_two_league_mode), R.drawable.screen_league_mode))
+            add(SlideModel(getString(R.string.slide_third_score), R.drawable.screen_score))
+        }
         slidePagerAdapter.updateAdapter(list)
     }
 
-    private fun goToMain() { startActivity(MainActivity.createIntent(requireContext())) }
+    private fun goToMain() {
+        startActivity(MainActivity.createIntent(requireContext()))
+    }
 
     private fun setupViewPager() {
         with(binding) {

@@ -11,7 +11,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.material.tabs.TabLayout
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
-import com.umtualgames.squadmaster.application.SessionManager.getUserName
+import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.data.models.MessageEvent
@@ -20,7 +20,9 @@ import com.umtualgames.squadmaster.network.responses.item.RankItem
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
+import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
+import com.umtualgames.squadmaster.utils.setVisible
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
@@ -50,12 +52,14 @@ class ScoreFragment : BaseFragment() {
         setupObservers()
         setupRecyclerViews()
 
-        if (getUserID() != 13) {
-            binding.svScore.visibility = View.VISIBLE
-            binding.llShowScore.visibility = View.GONE
-            binding.tvUserName.text = getUserName()
-            viewModel.getUserPoint(getUserID())
+        with(binding) {
+            if (!isAdminUser()) {
+                svScore.setVisible()
+                llShowScore.setGone()
+            }
         }
+
+        viewModel.getUserPoint(getUserID())
 
         binding.apply {
             ivRefresh.setOnClickListener { viewModel.getUserPoint(getUserID()) }
@@ -98,11 +102,14 @@ class ScoreFragment : BaseFragment() {
                 is ScoreViewState.LoadingState -> showProgressDialog()
                 is ScoreViewState.SuccessState -> {
                     dismissProgressDialog()
-                    setVisibility(View.VISIBLE, binding.llMyScore, binding.tabLayout)
                     loadBannerAd()
                     bestPoints = state.response.data.userBestPoints as ArrayList<RankItem>
                     totalPoints = state.response.data.userTotalPoints as ArrayList<RankItem>
-                    if (binding.tabLayout.selectedTabPosition == 0) pointsAdapter.updateAdapter(bestPoints) else pointsAdapter.updateAdapter(totalPoints)
+
+                    with(binding) {
+                        setVisibility(View.VISIBLE, cvScore, tabLayout)
+                        if (tabLayout.selectedTabPosition == 0) pointsAdapter.updateAdapter(bestPoints) else pointsAdapter.updateAdapter(totalPoints)
+                    }
                 }
                 is ScoreViewState.ErrorState -> {
                     dismissProgressDialog()
@@ -114,8 +121,12 @@ class ScoreFragment : BaseFragment() {
                 }
                 is ScoreViewState.UserPointState -> {
                     dismissProgressDialog()
-                    binding.tvUserTotalPoint.text = state.response.data.point.toString()
-                    binding.tvUserBestScore.text = state.response.data.bestPoint.toString()
+                    with(binding) {
+                        state.response.data.apply {
+                            tvTotalScore.text = point.toString()
+                            tvBestScore.text = bestPoint.toString()
+                        }
+                    }
                 }
                 is ScoreViewState.RefreshState -> {
                     updateToken(state.response.accessToken)

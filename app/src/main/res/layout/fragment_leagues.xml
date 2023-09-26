@@ -7,44 +7,98 @@
     android:background="@drawable/bg_gradient"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/llLeagueTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/bg_white"
-        android:orientation="horizontal"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="-8dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/green_two"
+        android:padding="16dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.9"
-            android:fontFamily="@font/josefin_sans"
-            android:padding="16dp"
-            android:text="@string/leagues"
-            android:textColor="@color/olive_green"
-            android:textSize="24sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivRefresh"
-            android:layout_width="16dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.1"
-            android:gravity="center_vertical|end"
-            android:padding="8dp"
-            android:src="@drawable/ic_refresh"
-            android:tint="@color/olive_green" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-    </LinearLayout>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_coin" />
 
-    <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvTotalScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/text_me_one"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    tools:text="4685" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_best_score" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvBestScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/text_me_one"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    tools:text="300" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivRefresh"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_refresh"
+        android:tint="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLeagues"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,11 +106,15 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:fadeScrollbars="false"
+        android:orientation="horizontal"
+        android:scrollbars="horizontal"
         android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llLeagueTitle"
+        app:layout_constraintTop_toBottomOf="@id/cvScore"
         tools:listitem="@layout/row_layout_league"
         tools:visibility="visible" />
 
@@ -92,7 +150,7 @@
             android:text="@string/login_or_register"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:backgroundTint="@color/green"
+            app:backgroundTint="@color/green_two"
             app:cornerRadius="8dp"
             app:strokeColor="@color/white"
             app:strokeWidth="1dp" />

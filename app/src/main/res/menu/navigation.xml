@@ -9,7 +9,7 @@
     <item
         android:id="@+id/navigation_leagues"
         android:icon="@drawable/ic_clubs_disabled"
-        android:title="@string/leagues" />
+        android:title="@string/tournaments" />
 
     <item
         android:id="@+id/navigation_score"

@@ -7,49 +7,38 @@
     android:background="@drawable/rounded_dialog"
     android:orientation="vertical">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/star" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="32dp"
         android:text="@string/correct_answer"
         android:textColor="@color/black"
         android:textSize="24sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivPlayerPhoto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:padding="3dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivPlayerPhoto"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@color/white"
-            android:elevation="4dp"
-            android:padding="3dp"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent"
-            app:srcCompat="@drawable/ic_launcher_background"
-            app:strokeColor="@color/white"
-            app:strokeWidth="1dp" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="16dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/star" />
-
-    </LinearLayout>
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent"
+        app:srcCompat="@drawable/ic_launcher_background"
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvPlayerName"
@@ -64,16 +53,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNext"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_width="144dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="@string/next_level"
         android:textAllCaps="false"
+        android:layout_marginBottom="16dp"
         android:textColor="@color/white"
-        app:backgroundTint="@color/green"
+        app:backgroundTint="@color/pitch_green"
         app:cornerRadius="16dp" />
 </LinearLayout>

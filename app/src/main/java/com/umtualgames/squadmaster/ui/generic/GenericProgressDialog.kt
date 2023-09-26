@@ -31,10 +31,11 @@ class GenericProgressDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.setCancelable(false)
+        dialog.let {
+            it?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            it?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            it?.setCancelable(false)
+        }
     }
 
     override fun show(manager: FragmentManager, tag: String?) {

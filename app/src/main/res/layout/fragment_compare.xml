@@ -47,12 +47,13 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvYourAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Senin Cevabın"
+                android:text="@string/your_answer"
                 android:textColor="@color/green"
                 android:textSize="14sp" />
 
@@ -111,12 +112,13 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRivalAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Rakibin Cevabı"
+                android:text="@string/rival_answer"
                 android:textColor="@color/green"
                 android:textSize="14sp" />
 

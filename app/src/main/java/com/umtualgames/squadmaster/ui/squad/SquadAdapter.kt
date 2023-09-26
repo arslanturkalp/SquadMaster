@@ -2,7 +2,6 @@ package com.umtualgames.squadmaster.ui.squad
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +15,7 @@ import com.umtualgames.squadmaster.application.SessionManager.getUnknownImage
 import com.umtualgames.squadmaster.databinding.RowLayoutPlayerBinding
 import com.umtualgames.squadmaster.network.responses.item.Player
 import com.umtualgames.squadmaster.utils.ifContains
+import com.umtualgames.squadmaster.utils.setGone
 import javax.inject.Inject
 
 class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.SquadViewHolder>() {
@@ -40,22 +40,27 @@ class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.Squ
         fun bind(item: Player) {
 
             val circularProgressDrawable = CircularProgressDrawable(itemView.context)
-            circularProgressDrawable.strokeWidth = 5f
-            circularProgressDrawable.centerRadius = 30f
-            circularProgressDrawable.start()
+            circularProgressDrawable.apply {
+                strokeWidth = 5f
+                centerRadius = 30f
+                start()
+            }
 
             with(binding) {
                 ivFlag.apply {
                     Glide.with(context)
                         .asBitmap()
-                        .load("https://flagcdn.com/56x42/${ifContains(item.nationality.lowercase())}.png")
+                        .load("https://flagcdn.com/w160/${ifContains(item.nationality.lowercase())}.png")
                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                         .placeholder(circularProgressDrawable)
                         .into(this)
                 }
 
+                tvNumber.text = item.number.toString()
+
                 if (!item.isVisible) {
-                    ivFlag.visibility = View.GONE
+                    flNumber.setGone()
+                    ivFlag.setGone()
 
                     ivPlayer.apply {
                         setImageResource(R.drawable.ic_question_mark)
@@ -80,7 +85,7 @@ class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.Squ
                 } else {
                     tvPlayerName.apply {
                         text = item.displayName
-                        textSize = if (item.displayName.length > 23) 10f else if(item.displayName.length > 17) 11f else 12f
+                        textSize = if (item.displayName.length > 23) 12f else if(item.displayName.length > 17) 13f else 14f
                     }
 
                     ivPlayer.apply {

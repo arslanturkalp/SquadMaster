@@ -15,6 +15,20 @@ fun setVisibility(visibility: Int, vararg views: View?) {
     }
 }
 
+fun setOpacity(alpha: Int, vararg views: View?) {
+    for (view in views) {
+        view?.alpha = alpha.toFloat()
+    }
+}
+
+fun View.setVisible() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.setGone() {
+    this.visibility = View.GONE
+}
+
 fun AppCompatActivity.addOnBackPressedListener(onBackPressed: () -> Unit) = onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
         onBackPressed.invoke()

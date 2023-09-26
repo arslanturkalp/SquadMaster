@@ -10,6 +10,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.network.responses.item.PotentialAnswer
 import com.umtualgames.squadmaster.databinding.RowLayoutPlayerBinding
+import com.umtualgames.squadmaster.utils.setGone
+import com.umtualgames.squadmaster.utils.setVisibility
 
 class PotentialAnswersAdapter(private val isLeagueMode: Boolean, private val onClick: (PotentialAnswer) -> Unit) : RecyclerView.Adapter<PotentialAnswersAdapter.PotentialAnswersViewHolder>() {
 
@@ -32,8 +34,6 @@ class PotentialAnswersAdapter(private val isLeagueMode: Boolean, private val onC
 
         fun bind(item: PotentialAnswer) {
 
-            val scale = itemView.resources.displayMetrics.density
-
             with(binding) {
                 ivPlayer.apply {
                     Glide.with(context)
@@ -43,23 +43,22 @@ class PotentialAnswersAdapter(private val isLeagueMode: Boolean, private val onC
                         .into(this)
                 }
 
-                ivFlag.visibility = View.GONE
+                setVisibility(View.GONE, flNumber, ivFlag)
 
                 tvPlayerName.apply {
-                    setPadding((1 * scale + 0.5f).toInt(), (7 * scale + 0.5f).toInt(), (1 * scale + 0.5f).toInt(), (7 * scale + 0.5f).toInt())
                     text = item.displayName
                     textSize = if (item.displayName.length > 23) 10f else if(item.displayName.length > 17) 11f else 12f
                 }
 
                 ivPlayer.setOnClickListener {
                     if (!item.isAnswer && !isLeagueMode){
-                        itemView.visibility = View.GONE
+                        itemView.setGone()
                     }
                     onClick.invoke(item)
                 }
                 llPlayer.setOnClickListener {
                     if (!item.isAnswer && !isLeagueMode){
-                        itemView.visibility = View.GONE
+                        itemView.setGone()
                     }
                     onClick.invoke(item)
                 }

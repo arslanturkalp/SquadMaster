@@ -1,6 +1,6 @@
 package com.umtualgames.squadmaster.di
 
-import com.google.gson.GsonBuilder
+import android.content.Context
 import com.umtualgames.squadmaster.application.Constants.BASE_URL
 import com.umtualgames.squadmaster.application.Constants.WEBSOCKET_URL
 import com.umtualgames.squadmaster.network.services.ApiService
@@ -11,13 +11,13 @@ import com.umtualgames.squadmaster.utils.interceptor.DefaultInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -29,40 +29,38 @@ object NetworkModule {
     @Provides
     @Singleton
     @Named("Normal")
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(@ApplicationContext applicationContext: Context): Retrofit {
         return Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
-            .client(providesOkHttpClient())
+            .client(providesOkHttpClient(applicationContext))
             .build()
     }
 
     @Provides
     @Singleton
     @Named("ForToken")
-    fun provideRetrofitIsLogin(): Retrofit {
+    fun provideRetrofitIsLogin(@ApplicationContext applicationContext: Context): Retrofit {
         return Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
-            .client(providesOkHttpClientForToken())
+            .client(providesOkHttpClientForToken(applicationContext))
             .build()
     }
 
     @Provides
     @Singleton
     @Named("WebSocket")
-    fun provideRetrofitWebsocket(): Retrofit {
+    fun provideRetrofitWebsocket(@ApplicationContext applicationContext: Context): Retrofit {
         return Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(WEBSOCKET_URL)
-            .client(providesOkHttpClientForToken())
+            .client(providesOkHttpClientForToken(applicationContext))
             .build()
     }
-
-
 
     @Provides
     fun provideApiService(@Named("Normal") retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
@@ -79,9 +77,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(): OkHttpClient {
+    fun providesOkHttpClient(@ApplicationContext applicationContext: Context): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(AccessTokenInterceptor())
+            .addInterceptor(AccessTokenInterceptor(applicationContext))
             .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
@@ -91,9 +89,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClientForToken(): OkHttpClient {
+    fun providesOkHttpClientForToken(@ApplicationContext applicationContext: Context): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(DefaultInterceptor())
+            .addInterceptor(DefaultInterceptor(applicationContext))
             .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)

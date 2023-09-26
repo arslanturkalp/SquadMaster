@@ -109,7 +109,6 @@ class StartActivity : BaseActivity() {
 
         val intent = client.signInIntent
         signInResult.launch(intent)
-
     }
 
     private val signInResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -148,6 +147,7 @@ class StartActivity : BaseActivity() {
                         updateToken(token.accessToken)
                         updateRefreshToken(token.refreshToken)
                         updateUserID(id)
+                        updateUserName(username)
                     }
                     goToMain()
 

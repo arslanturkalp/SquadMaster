@@ -7,6 +7,7 @@ object SessionManager {
     private const val KEY_UNKNOWN_ANSWER = "KEY_UNKNOWN_ANSWER"
     private const val KEY_UNKNOWN_IMAGE = "KEY_UNKNOWN_IMAGE"
     private const val KEY_IS_SHOWED_FLAG = "KEY_IS_SHOWED_FLAG"
+    private const val KEY_IS_SHOWED_NUMBER = "KEY_IS_SHOWED_NUMBER"
     private const val KEY_IS_SHOWED_TUTORIAL = "KEY_IS_SHOWED_TUTORIAL"
     private const val KEY_IS_USED_EXTRA_LIFE = "KEY_IS_USED_EXTRA_LIFE"
     private const val KEY_IS_ONLINE_MODE_ACTIVE = "KEY_IS_ONLINE_MODE_ACTIVE"
@@ -34,6 +35,7 @@ object SessionManager {
     private var password: String = ""
 
     private var isShowedFlag: Boolean = false
+    private var isShowedNumber: Boolean = false
     private var isShowedTutorial: Boolean = false
     private var isUsedExtraLife: Boolean = false
     private var isOnlineModeActive: Boolean = false
@@ -49,6 +51,7 @@ object SessionManager {
         userName = Hawk.get(KEY_USER_NAME, "")
         password = Hawk.get(KEY_PASSWORD, "")
         isShowedFlag = Hawk.get(KEY_IS_SHOWED_FLAG, false)
+        isShowedNumber = Hawk.get(KEY_IS_SHOWED_NUMBER, false)
         isShowedTutorial = Hawk.get(KEY_IS_SHOWED_TUTORIAL, false)
         isUsedExtraLife = Hawk.get(KEY_IS_USED_EXTRA_LIFE, false)
         isOnlineModeActive = Hawk.get(KEY_IS_ONLINE_MODE_ACTIVE, false)
@@ -104,6 +107,8 @@ object SessionManager {
     }
 
     fun getUserID() = userID
+
+    fun isAdminUser() = getUserID() == 13
 
     fun clearUserID() {
         updateUserID(0)
@@ -162,6 +167,17 @@ object SessionManager {
 
     fun clearIsShowedFlag() {
         updateIsShowedFlag(false)
+    }
+
+    fun updateIsShowedNumber(value: Boolean) {
+        Hawk.put(KEY_IS_SHOWED_NUMBER, value)
+        isShowedNumber = value
+    }
+
+    fun getIsShowedNumber() = isShowedNumber
+
+    fun clearIsShowedNumber() {
+        updateIsShowedNumber(false)
     }
 
     fun updateIsShowedTutorial(value: Boolean) {

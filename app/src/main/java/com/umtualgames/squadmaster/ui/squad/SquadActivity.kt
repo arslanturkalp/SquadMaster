@@ -14,25 +14,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.flexbox.*
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.adapter.PotentialAnswersAdapter
+import com.umtualgames.squadmaster.application.SessionManager
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.clearUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedFlag
+import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedNumber
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SessionManager.updateUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.updateUnknownImage
 import com.umtualgames.squadmaster.application.SquadMasterApp
-import com.umtualgames.squadmaster.data.enums.PositionIdStatus
-import com.umtualgames.squadmaster.data.enums.PositionTypeIdStatus
 import com.umtualgames.squadmaster.data.models.MessageEvent
 import com.umtualgames.squadmaster.databinding.ActivitySquadBinding
 import com.umtualgames.squadmaster.network.requests.LevelPassRequest
@@ -43,8 +47,18 @@ import com.umtualgames.squadmaster.network.responses.item.PotentialAnswer
 import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
-import com.umtualgames.squadmaster.utils.*
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import com.umtualgames.squadmaster.utils.getDataExtra
+import com.umtualgames.squadmaster.utils.ifContains
+import com.umtualgames.squadmaster.utils.ifExists10Number
+import com.umtualgames.squadmaster.utils.ifTwoBack
+import com.umtualgames.squadmaster.utils.ifTwoWinger
+import com.umtualgames.squadmaster.utils.setGone
+import com.umtualgames.squadmaster.utils.setPortraitMode
+import com.umtualgames.squadmaster.utils.setVisibility
+import com.umtualgames.squadmaster.utils.setVisible
+import com.umtualgames.squadmaster.utils.show
+import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 
@@ -64,6 +78,8 @@ class SquadActivity : BaseActivity() {
     private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter(false) { controlAnswer(it) } }
     private var mInterstitialAd: InterstitialAd? = null
 
+    private var isAllFabButtonsVisible: Boolean  = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -81,9 +97,7 @@ class SquadActivity : BaseActivity() {
         viewModel.getSquad(intent.getDataExtra<Club>(EXTRAS_SQUAD).name)
 
         binding.apply {
-            ivWrongFirst.visibility = View.GONE
-            ivWrongSecond.visibility = View.GONE
-            ivWrongThird.visibility = View.GONE
+            setVisibility(View.GONE, ivWrongFirst, ivWrongSecond, ivWrongThird)
 
             svGeneral.postDelayed({ svGeneral.fullScroll(ScrollView.FOCUS_DOWN) }, 350)
             ivPause.setOnClickListener {
@@ -95,43 +109,55 @@ class SquadActivity : BaseActivity() {
                     negativeButtonTitle = getString(R.string.no),
                     onPositiveButtonClick = { onBackPressedDispatcher.onBackPressed() })
             }
+
+            fabJoker.apply {
+                shrink()
+                setOnClickListener {
+                    isAllFabButtonsVisible = if (!isAllFabButtonsVisible) {
+                        setVisibility(View.VISIBLE, fabFlag, fabNumber, tvNumber)
+                        this.extend()
+                        true
+                    } else {
+                        setVisibility(View.GONE, fabFlag, fabNumber, tvNumber)
+                        this.shrink()
+                        false
+                    }
+                }
+            }
         }
     }
 
     private fun preventScreenshot() = window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
 
     private fun setupRecyclerViews() {
-        binding.rvGoalkeeper.apply {
-            adapter = goalkeeperAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        binding.rvDefence.apply {
-            adapter = defenceAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        binding.rvMiddle.apply {
-            adapter = middleAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        binding.rvAttackingMiddle.apply {
-            adapter = attackingMiddleAdapter
-            layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW, FlexWrap.WRAP).apply {
-                justifyContent = JustifyContent.SPACE_AROUND
-                alignItems = AlignItems.CENTER
+        with(binding) {
+            rvGoalkeeper.apply {
+                adapter = goalkeeperAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
-        }
-
-        binding.rvForwards.apply {
-            adapter = forwardAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        binding.rvPotentialAnswers.apply {
-            adapter = potentialAnswersAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            rvDefence.apply {
+                adapter = defenceAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
+            rvMiddle.apply {
+                adapter = middleAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
+            rvAttackingMiddle.apply {
+                adapter = attackingMiddleAdapter
+                layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW, FlexWrap.WRAP).apply {
+                    justifyContent = JustifyContent.SPACE_AROUND
+                    alignItems = AlignItems.CENTER
+                }
+            }
+            rvForwards.apply {
+                adapter = forwardAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
+            rvPotentialAnswers.apply {
+                adapter = potentialAnswersAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
         }
     }
 
@@ -185,23 +211,33 @@ class SquadActivity : BaseActivity() {
     }
 
     private fun setList(squad: List<Player>, potentialAnswers: List<PotentialAnswer>) {
+
+        val goalkeeper = squad.filter { it.isGoalkeeper() }
+        val defences = ifTwoBack(squad.filter { it.isDefender() } as ArrayList<Player>)
+        val midfielders = squad.filter { it.isMidfielder() && !it.is10Number() }
+        val attackingMidfielders = if (ifExists10Number(squad)) squad.filter { it.isOF() || it.is10Number() } else squad.filter { it.isRightWinger() }
+        val forwards = if (ifExists10Number(squad)) ifTwoWinger(squad.filter { it.isForward() && !it.isOF() } as ArrayList<Player>) else ifTwoWinger(squad.filter { it.isForward() && !it.isOF() && !it.isRightWinger() } as ArrayList<Player>)
+
         setupUI(squad)
+
         binding.apply {
             if (intent.getDataExtra(EXTRAS_IS_PASSED)) {
                 squad.forEach { it.isVisible = true }
-                cdAnswer.visibility = View.GONE
-                ivFlag.visibility = View.GONE
+                setVisibility(View.GONE, rvPotentialAnswers, fabJoker)
+
+                tvLevelPassed.setVisible()
+                tvAnswerTitle.text = getString(R.string.info)
             } else {
-                cdAnswer.visibility = View.VISIBLE
-                ivFlag.visibility = View.VISIBLE
+                setVisibility(View.VISIBLE, rvPotentialAnswers, fabJoker)
+                tvLevelPassed.setGone()
             }
         }
-        goalkeeperAdapter.updateAdapter(squad.filter { it.positionTypeID == PositionTypeIdStatus.GOALKEEPER.value })
-        defenceAdapter.updateAdapter(ifTwoBack(squad.filter { it.positionTypeID == PositionTypeIdStatus.DEFENCE.value } as ArrayList<Player>))
-        middleAdapter.updateAdapter(squad.filter { it.positionTypeID == PositionTypeIdStatus.MIDFIELDER.value && it.positionID != PositionIdStatus.ON.value })
-        attackingMiddleAdapter.updateAdapter(if (ifExists10Number(squad)) squad.filter { it.positionID == PositionIdStatus.FA.value || it.positionID == PositionIdStatus.ON.value } else squad.filter { it.positionID == 11 })
-        forwardAdapter.updateAdapter(if(ifExists10Number(squad)) ifTwoWinger(squad.filter { it.positionTypeID == PositionTypeIdStatus.FORWARD.value && it.positionID != PositionIdStatus.FA.value } as ArrayList<Player>) else ifTwoWinger(squad.filter { it.positionTypeID == 4 && it.positionID != 10 && it.positionID != 11} as ArrayList<Player>))
 
+        goalkeeperAdapter.updateAdapter(goalkeeper)
+        defenceAdapter.updateAdapter(defences)
+        middleAdapter.updateAdapter(midfielders)
+        attackingMiddleAdapter.updateAdapter(attackingMidfielders)
+        forwardAdapter.updateAdapter(forwards)
         potentialAnswersAdapter.updateAdapter(potentialAnswers)
     }
 
@@ -209,8 +245,11 @@ class SquadActivity : BaseActivity() {
 
         binding.apply {
 
+            val team = intent.getDataExtra<Club>(EXTRAS_SQUAD)
             val unknownPlayer = squad.first { !it.isVisible }
-            tvTeamName.text = intent.getDataExtra<Club>(EXTRAS_SQUAD).name
+
+            tvTeamName.text = team.name
+
             ivTeam.apply {
                 Glide.with(context)
                     .asBitmap()
@@ -221,7 +260,7 @@ class SquadActivity : BaseActivity() {
 
             setVisibility(View.VISIBLE, ivFootballPitch, ivFootballGoal, llHalfSquare, tvAnswerTitle)
 
-            ivFlag.setOnClickListener {
+            fabFlag.setOnClickListener {
                 if (!getIsShowedFlag()) {
                     showAlertDialogTheme(
                         title = getString(R.string.show_flag),
@@ -232,7 +271,7 @@ class SquadActivity : BaseActivity() {
                         onPositiveButtonClick = {
 
                             if (binding.tvScore.text.toString().toInt() >= 20) {
-                                ivFlag.apply {
+                                fabFlag.apply {
                                     setBackgroundColor(ContextCompat.getColor(context, R.color.green))
                                     Glide.with(context)
                                         .asBitmap()
@@ -246,11 +285,32 @@ class SquadActivity : BaseActivity() {
                         onNegativeButtonClick = { dismissProgressDialog() })
                 }
             }
+
+            fabNumber.setOnClickListener {
+                if (!SessionManager.getIsShowedNumber()) {
+                    showAlertDialogTheme(
+                        title = getString(R.string.show_number),
+                        contentMessage = getString(R.string.show_number_description),
+                        showNegativeButton = true,
+                        positiveButtonTitle = getString(R.string.yes),
+                        negativeButtonTitle = getString(R.string.no),
+                        onPositiveButtonClick = {
+                            if (binding.tvScore.text.toString().toInt() >= 20) {
+                                tvNumber.text = unknownPlayer.number.toString()
+                                updateIsShowedNumber(true)
+                                viewModel.updatePoint(UpdatePointRequest(getUserID(), -20))
+                            } else Toast.makeText(this@SquadActivity, getString(R.string.insufficient_score), Toast.LENGTH_SHORT).show()
+                        },
+                        onNegativeButtonClick = { dismissProgressDialog() })
+                }
+            }
         }
     }
 
     private fun controlAnswer(potentialAnswer: PotentialAnswer) {
-        val level = intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueOrder
+        val team = intent.getDataExtra<Club>(EXTRAS_SQUAD)
+
+        val level = team.leagueOrder
         binding.apply {
             if (potentialAnswer.isAnswer) {
                 EventBus.getDefault().post(MessageEvent("Score Update"))
@@ -261,13 +321,13 @@ class SquadActivity : BaseActivity() {
                 }
                 viewModel.levelPass(LevelPassRequest(
                     userID = getUserID(),
-                    point = if (intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID == 7) 15 else 25,
-                    leagueID = intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID,
-                    squadID = intent.getDataExtra<Club>(EXTRAS_SQUAD).id
+                    point = if (team.leagueID == 7) 15 else 25,
+                    leagueID = team.leagueID,
+                    squadID = team.id
                 ))
                 updateUnknownAnswer(potentialAnswer.displayName)
                 updateUnknownImage(potentialAnswer.imagePath)
-                navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName + " + " + if (intent.getDataExtra<Club>(EXTRAS_SQUAD).leagueID == 7) getString(R.string.point_15) else getString(R.string.point_25))
+                navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName + " + " + if (team.leagueID == 7) getString(R.string.point_15) else getString(R.string.point_25))
             } else {
                 showAlertDialogTheme(
                     title = getString(R.string.wrong_answer),

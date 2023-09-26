@@ -12,6 +12,5 @@ data class Club(
     val imagePath: String?,
     val leagueOrder: Int,
     val isLocked: Boolean,
-
     var isPassed: Boolean?
 ): Parcelable

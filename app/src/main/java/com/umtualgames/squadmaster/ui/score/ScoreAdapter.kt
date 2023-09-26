@@ -2,7 +2,6 @@ package com.umtualgames.squadmaster.ui.score
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +9,8 @@ import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.databinding.RowLayoutScoreBinding
 import com.umtualgames.squadmaster.network.responses.item.RankItem
+import com.umtualgames.squadmaster.utils.setGone
+import com.umtualgames.squadmaster.utils.setVisible
 import javax.inject.Inject
 
 class ScoreAdapter @Inject constructor() : RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
@@ -38,21 +39,21 @@ class ScoreAdapter @Inject constructor() : RecyclerView.Adapter<ScoreAdapter.Sco
                 tvUserName.text = item.userViewModel.username
                 tvScore.text = item.point.toString()
                 if (position == 0){
-                    ivFirstPosition.visibility = View.VISIBLE
-                    tvPosition.visibility = View.GONE
+                    ivFirstPosition.setVisible()
+                    tvPosition.setGone()
                 } else {
-                    ivFirstPosition.visibility = View.GONE
-                    tvPosition.visibility = View.VISIBLE
+                    ivFirstPosition.setGone()
+                    tvPosition.setVisible()
                 }
 
                 if (item.userID == getUserID()) {
+                    itemView.setBackgroundResource(R.drawable.bg_light_green)
+                    tvUserName.setTextColor(ContextCompat.getColor(itemView.context, R.color.soft_green))
+                    tvScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.soft_green))
+                } else {
                     itemView.setBackgroundResource(R.drawable.bg_green_with_radius_ten)
                     tvUserName.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                     tvScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-                } else {
-                    itemView.setBackgroundResource(R.drawable.bg_light_green)
-                    tvUserName.setTextColor(ContextCompat.getColor(itemView.context, R.color.creme))
-                    tvScore.setTextColor(ContextCompat.getColor(itemView.context, R.color.soft_green))
                 }
             }
         }

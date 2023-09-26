@@ -1,6 +1,5 @@
 package com.umtualgames.squadmaster.ui.settings
 
-import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +7,24 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.orhanobut.hawk.Hawk
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.Constants
+import com.umtualgames.squadmaster.application.SessionManager.clearPassword
+import com.umtualgames.squadmaster.application.SessionManager.clearScore
+import com.umtualgames.squadmaster.application.SessionManager.clearUserID
+import com.umtualgames.squadmaster.application.SessionManager.clearUserName
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedTutorial
+import com.umtualgames.squadmaster.application.SessionManager.getUserName
+import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.databinding.FragmentSettingsBinding
+import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
+import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import com.umtualgames.squadmaster.utils.setGone
+import com.umtualgames.squadmaster.utils.setVisible
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
-import com.orhanobut.hawk.Hawk
 import java.util.*
 
 class SettingsFragment : BaseBottomSheetDialogFragment() {
@@ -33,12 +42,27 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
         checkLanguage(requireContext())
         setFlags()
 
-        if (!getIsShowedTutorial()) {
-            binding.btnAbout.visibility = View.GONE
-        }
-        binding.btnAbout.setOnClickListener {
-            dismiss()
-            showAlertDialogTheme(getString(R.string.app_name), "Umtual Games 2023©")
+        with(binding) {
+            tvUserName.text = getUserName()
+            
+            if (!getIsShowedTutorial()) {
+                btnAbout.setGone()
+            }
+            btnAbout.setOnClickListener {
+                dismiss()
+                showAlertDialogTheme(getString(R.string.app_name), "Umtual Games 2023©")
+            }
+            btnLogOut.apply {
+                setOnClickListener {
+                    clearUserName()
+                    clearPassword()
+                    clearScore()
+                    clearUserID()
+                    startActivity(StartActivity.createIntent(false, requireContext()))
+                }
+
+                if (isAdminUser()) setGone() else setVisible()
+            }
         }
     }
 

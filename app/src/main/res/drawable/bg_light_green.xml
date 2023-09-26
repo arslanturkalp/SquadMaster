@@ -7,7 +7,7 @@
         android:centerColor="@color/transparent_black"
         android:endColor="@color/transparent_black"
         android:startColor="@color/transparent_black" />
-    <corners android:radius="30dp" />
+    <corners android:radius="8dp" />
     <stroke
         android:width="0.5dp"
         android:color="@color/soft_green" />

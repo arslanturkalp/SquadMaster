@@ -16,6 +16,7 @@ import com.umtualgames.squadmaster.application.SessionManager.getUnknownImage
 import com.umtualgames.squadmaster.databinding.RowLayoutPlayerBinding
 import com.umtualgames.squadmaster.network.responses.item.Player
 import com.umtualgames.squadmaster.utils.ifContains
+import com.umtualgames.squadmaster.utils.setGone
 import javax.inject.Inject
 
 class GameAdapter @Inject constructor() : RecyclerView.Adapter<GameAdapter.SquadViewHolder>() {
@@ -54,8 +55,11 @@ class GameAdapter @Inject constructor() : RecyclerView.Adapter<GameAdapter.Squad
                         .into(this)
                 }
 
+                tvNumber.text = item.number.toString()
+
                 if (!item.isVisible) {
-                    ivFlag.visibility = View.GONE
+                    flNumber.setGone()
+                    ivFlag.setGone()
 
                     ivPlayer.apply {
                         setImageResource(R.drawable.ic_question_mark)

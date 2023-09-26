@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.umtualgames.squadmaster.BuildConfig
 import com.umtualgames.squadmaster.R
@@ -40,7 +38,6 @@ class SplashActivity : BaseActivity() {
         setContentView(binding.root)
 
         checkLanguage(this)
-        askNotificationPermission()
         setupObservers()
         rotateBall()
 
@@ -100,15 +97,6 @@ class SplashActivity : BaseActivity() {
             startActivity(StartActivity.createIntent(false, this))
         }, 500)
     }
-
-    private fun askNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            pushNotificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
-
-    private val pushNotificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
-
     companion object {
 
         private const val EXTRAS_IS_FROM_CHANGE_LANGUAGE = "EXTRAS_IS_FROM_CHANGE_LANGUAGE"

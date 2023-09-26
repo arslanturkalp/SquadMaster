@@ -1,6 +1,5 @@
 package com.umtualgames.squadmaster.ui.gameover
 
-import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
@@ -23,13 +22,16 @@ import com.umtualgames.squadmaster.application.SessionManager.clearWrongCount
 import com.umtualgames.squadmaster.application.SessionManager.getIsUsedExtraLife
 import com.umtualgames.squadmaster.application.SessionManager.getScore
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
+import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.application.SessionManager.updateIsUsedExtraLife
 import com.umtualgames.squadmaster.application.SessionManager.updateWrongCount
 import com.umtualgames.squadmaster.application.SquadMasterApp
 import com.umtualgames.squadmaster.databinding.FragmentGameOverBinding
 import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
+import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
+import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,7 +59,7 @@ class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardList
             arguments?.let {
                 tvScore.text = String.format(getString(R.string.formatted_score, it.getInt(KEY_SCORE).toString()))
                 btnRestart.setOnClickListener {
-                    if (getScore() != 0 && getUserID() != 13) {
+                    if (getScore() != 0 && !isAdminUser()) {
                         viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
                         clearScore()
                         clearWrongCount()
@@ -65,7 +67,7 @@ class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardList
                     }
                     context?.startActivity((GameActivity.createIntent(context)))
                 }
-                if (getIsUsedExtraLife()) btnContinue.visibility = View.GONE
+                if (getIsUsedExtraLife()) btnContinue.setGone()
                 btnContinue.setOnClickListener {
                     if (mRewardedInterstitialAd != null) {
                         mRewardedInterstitialAd?.show(activity as Activity, this@GameOverFragment)
@@ -73,13 +75,13 @@ class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardList
                     mRewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
                             super.onAdDismissedFullScreenContent()
-                            btnContinue.visibility = View.GONE
+                            btnContinue.setGone()
                         }
                     }
                 }
             }
             ivClose.setOnClickListener {
-                if (getScore() != 0 && getUserID() != 13) {
+                if (getScore() != 0 && !isAdminUser()) {
                     viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
                 }
                 clearIsUsedExtraLife()
@@ -104,7 +106,7 @@ class GameOverFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardList
                         SessionManager.updateToken(accessToken)
                         SessionManager.updateRefreshToken(refreshToken)
                     }
-                    if (getScore() != 0 && getUserID() != 13) {
+                    if (getScore() != 0 && !isAdminUser()) {
                         viewModel.updatePoint(UpdatePointRequest(getUserID(), getScore()))
                     }
                 }

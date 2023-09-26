@@ -12,86 +12,105 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:cardBackgroundColor="@color/green"
+        app:cardBackgroundColor="@color/green_two"
         app:cardCornerRadius="0dp"
         app:cardElevation="24dp">
 
         <LinearLayout
             android:id="@+id/llTeam"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_green_with_radius_ten_bottom_border"
             android:gravity="center_vertical"
+            android:orientation="vertical"
             android:padding="16dp"
             android:weightSum="2">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivWrongFirst"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_weight="0.1"
-                android:src="@drawable/football_ball" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivWrongSecond"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_weight="0.1"
-                android:src="@drawable/football_ball" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvScore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:fontFamily="@font/josefin_sans"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="36sp"
+                    tools:text="200" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivWrongThird"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_weight="0.1"
-                android:src="@drawable/football_ball" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivPause"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/ic_home_disabled"
+                    android:tint="@color/white" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivTeam"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:layout_weight="0.1" />
+            </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvTeamName"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_weight="0.8"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                tools:text="Arsenal" />
+                android:orientation="horizontal">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivFlag"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_weight="0.1"
-                android:background="@drawable/bg_white"
-                android:src="@drawable/ic_flag"
-                android:visibility="gone"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvTeamName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    tools:text="Wolverhampton Wanderers" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvScore"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="0.6"
-                android:gravity="center_vertical|end"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                tools:text="200" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivTeam"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/bg_white"
+                    tools:src="@drawable/ic_flag" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivPause"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.1"
-                android:src="@drawable/ic_pause" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivWrongFirst"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_ball_new" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivWrongSecond"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_ball_new" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivWrongThird"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_ball_new" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -140,6 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="1"
@@ -229,6 +249,74 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tvAnswerTitle"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabFlag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/green_two"
+            android:visibility="gone"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_flag"
+            app:tint="@null" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/clNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/green_two"
+                android:visibility="gone"
+                app:fabSize="normal"
+                app:tint="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="32dp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:visibility="gone"
+                app:layout_anchor="@id/fabNumber"
+                app:layout_anchorGravity="center" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabJoker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/clues"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/green_two"
+            app:icon="@drawable/ic_ball_new"
+            app:iconTint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvAnswerTitle"
         android:layout_width="130dp"
@@ -240,19 +328,23 @@
         android:text="@string/select_answer"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:fontFamily="@font/text_me_one"
         android:textSize="14sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cdAnswer"
         style="@style/AnswerCardView"
         android:layout_width="match_parent"
-        android:layout_height="112dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        app:cardBackgroundColor="@color/green"
-        app:cardElevation="24dp"
-        tools:visibility="visible">
+        android:layout_marginStart="-2dp"
+        android:layout_marginEnd="-2dp"
+        android:layout_marginBottom="-2dp"
+        app:cardBackgroundColor="@color/pitch_green"
+        app:cardElevation="32dp"
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPotentialAnswers"
@@ -262,7 +354,20 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
+            tools:visibility="gone"
             tools:listitem="@layout/row_layout_player" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLevelPassed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="@font/text_me_one"
+            android:visibility="gone"
+            android:padding="16dp"
+            tools:visibility="visible"
+            android:textSize="16sp"
+            android:text="@string/level_is_passed_description"/>
 
     </com.google.android.material.card.MaterialCardView>
 

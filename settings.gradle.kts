@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "SquadMaster"
-include ':app'
+include(":app")

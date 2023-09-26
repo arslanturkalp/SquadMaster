@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:visibility="gone"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-5776386569149871/3736681362" />
 
@@ -24,113 +25,120 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/llMyScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_white"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="start|center_vertical"
-                    android:padding="16dp"
-                    android:textColor="@color/olive_green"
-                    android:textSize="14sp"
-                    tools:text="omerihsanoguz" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvScore"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="-8dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/green_two"
+                android:padding="16dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|end"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/total_point"
-                        android:textColor="@color/olive_green"
-                        android:textSize="12sp" />
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvUserTotalPoint"
-                        android:layout_width="wrap_content"
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_coin" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvTotalScore"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/text_me_one"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            tools:text="4685" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/red"
-                        android:textSize="14sp"
-                        tools:text="5000" />
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_best_score" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvBestScore"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/text_me_one"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            tools:text="300" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|end"
-                    android:orientation="vertical">
+            </com.google.android.material.card.MaterialCardView>
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/best_score"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/olive_green"
-                        android:textSize="12sp" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvUserBestScore"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red"
-                        android:textSize="14sp"
-                        tools:text="300" />
-                </LinearLayout>
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivRefresh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_refresh" />
-            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivRefresh"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="24dp"
+                android:src="@drawable/ic_refresh"
+                android:tint="@color/white"
+                ads:layout_constraintEnd_toEndOf="parent"
+                ads:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_light_green"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_green_with_radius_ten"
                 android:visibility="gone"
+                ads:layout_constraintTop_toBottomOf="@id/cvScore"
                 ads:tabGravity="fill"
                 ads:tabIconTint="@null"
-                ads:tabIndicatorColor="@color/white"
+                ads:tabIndicatorColor="@color/soft_green"
                 ads:tabIndicatorFullWidth="false"
                 ads:tabInlineLabel="true"
                 ads:tabMode="fixed"
                 ads:tabSelectedTextColor="@color/soft_green"
                 ads:tabTextAppearance="@style/TabLayoutText"
-                ads:tabTextColor="@color/creme"
+                ads:tabTextColor="@color/white"
                 tools:visibility="visible">
 
                 <com.google.android.material.tabs.TabItem
@@ -151,15 +159,16 @@
                 android:id="@+id/rvPoints"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fadeScrollbars="false"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:fadeScrollbars="false"
                 android:scrollbars="vertical"
+                ads:layout_constraintTop_toBottomOf="@+id/tabLayout"
                 tools:itemCount="10"
                 tools:listitem="@layout/row_layout_score" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -169,8 +178,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         tools:visibility="gone">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -197,7 +204,7 @@
             android:text="@string/login_or_register"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:backgroundTint="@color/green"
+            app:backgroundTint="@color/green_two"
             app:cornerRadius="8dp"
             app:strokeColor="@color/white"
             app:strokeWidth="1dp" />

@@ -18,6 +18,7 @@
 
     <string name="home">Home</string>
     <string name="leagues">Leagues</string>
+    <string name="tournaments">Tournaments</string>
     <string name="score">Score</string>
     <string name="settings">Settings</string>
 
@@ -62,7 +63,9 @@
     <string name="select_answer">Select Answer</string>
 
     <string name="show_flag">Show Player\'s Country</string>
+    <string name="show_number">Show Player\'s Number</string>
     <string name="show_flag_description">The player\'s country will be displayed for 20 points. Do you confirm?</string>
+    <string name="show_number_description">The player\'s number will be displayed for 20 points. Do you confirm?</string>
 
     <string name="show_score">Login or register to compete with other users.</string>
     <string name="show_league">Login or register to play league mode.</string>
@@ -70,7 +73,7 @@
 
     <string name="competitive_mode">Main Game</string>
     <string name="online_mode">Online Mode</string>
-    <string name="league_mode">League Mode</string>
+    <string name="league_mode">Tournament Mode</string>
     <string name="rank_list_by_best_scores">Best Scores</string>
     <string name="rank_list_by_total_points">Total Points</string>
     <string name="high_score">High Score Table</string>
@@ -113,6 +116,7 @@
     <string name="unknown_host_exception">Unable to make a connection. Please check your internet.</string>
     <string name="connection_shutdown_exception">Connection shutdown. Please check your internet.</string>
     <string name="io_exception">Server is unreachable, please try again later.</string>
+    <string name="internet_connection_problem">Internet connection error!</string>
     <string name="rival_disconnect">Rival left session!</string>
     <string name="match_start">Match started!</string>
     <string name="rival_is_not_found">Rival is not found!</string>
@@ -124,5 +128,9 @@
     <string name="draw">Tie</string>
     <string name="defeat">Defeat</string>
     <string name="won_and_50_point">Won. 50 points are yours!</string>
-
+    <string name="your_answer">Your Answer</string>
+    <string name="rival_answer">Rival\'s Answer</string>
+    <string name="waiting_person">Waiting: %1$s</string>
+    <string name="clues">Hint Area</string>
+    <string name="level_is_passed_description">You found the missing player in this team. You may encounter this team again in adventure mode.</string>
 </resources>

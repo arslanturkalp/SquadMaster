@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.Fragment
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedTutorial
@@ -16,7 +15,9 @@ import com.umtualgames.squadmaster.ui.leagues.LeaguesFragment
 import com.umtualgames.squadmaster.ui.score.ScoreFragment
 import com.umtualgames.squadmaster.ui.slide.SlideFragment
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setPortraitMode
+import com.umtualgames.squadmaster.utils.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,13 +40,15 @@ class MainActivity : BaseActivity() {
         setPortraitMode()
         initFragments()
 
-        if (!getIsShowedTutorial()) {
-            showFragment(fragmentList.last())
-            binding.bottomNavigationView.visibility = View.GONE
-            updateIsShowedTutorial(true)
-        } else {
-            showFragment(fragmentList.first())
-            binding.bottomNavigationView.visibility = View.VISIBLE
+        with(binding) {
+            if (!getIsShowedTutorial()) {
+                showFragment(fragmentList.last())
+                bottomNavigationView.setGone()
+                updateIsShowedTutorial(true)
+            } else {
+                showFragment(fragmentList.first())
+                bottomNavigationView.setVisible()
+            }
         }
         setupBottomNavigationView()
     }
@@ -53,7 +56,6 @@ class MainActivity : BaseActivity() {
     @SuppressLint("NewApi")
     fun setNotificationBadge(count: Int) {
         binding.bottomNavigationView.apply {
-
             getOrCreateBadge(menu.getItem(1).itemId).apply {
                 number = count
                 verticalOffset = 8

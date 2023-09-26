@@ -24,6 +24,7 @@ import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.squad.SquadActivity
 import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setPortraitMode
+import com.umtualgames.squadmaster.utils.setVisible
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
@@ -73,7 +74,7 @@ class ClubsActivity : BaseActivity() {
     private fun setupRecyclerViews() {
         binding.rvClubs.apply {
             adapter = clubAdapter
-            layoutManager = GridLayoutManager(context, 4)
+            layoutManager = GridLayoutManager(context, 2)
         }
     }
 
@@ -83,7 +84,7 @@ class ClubsActivity : BaseActivity() {
                 is GetSquadListViewState.LoadingState -> showProgressDialog()
                 is GetSquadListViewState.SuccessState -> {
                     dismissProgressDialog()
-                    binding.llTeam.visibility = View.VISIBLE
+                    binding.llTeam.setVisible()
                     showClubs(state.response, state.levelPass)
                 }
                 is GetSquadListViewState.ErrorState -> {
@@ -143,7 +144,9 @@ class ClubsActivity : BaseActivity() {
     private fun setupInAppReview() {
         val request = ReviewManagerFactory.create(this).requestReviewFlow()
         request.addOnCompleteListener { task ->
-            if (task.isSuccessful) { reviewInfo = task.result }
+            if (task.isSuccessful) {
+                reviewInfo = task.result
+            }
         }
     }
 

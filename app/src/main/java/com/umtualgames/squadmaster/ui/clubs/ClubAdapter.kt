@@ -10,6 +10,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.databinding.RowLayoutClubBinding
 import com.umtualgames.squadmaster.network.responses.item.Club
+import com.umtualgames.squadmaster.utils.setGone
+import com.umtualgames.squadmaster.utils.setVisible
 import javax.inject.Inject
 
 class ClubAdapter @Inject constructor(private val onClick: (Club) -> Unit) : RecyclerView.Adapter<ClubAdapter.ClubViewHolder>() {
@@ -37,16 +39,20 @@ class ClubAdapter @Inject constructor(private val onClick: (Club) -> Unit) : Rec
 
                 if (item.isLocked) {
                     ivClubLogo.alpha = 0.1f
-                    ivLocked.visibility = View.VISIBLE
+                    ivLocked.setVisible()
                 }
 
                 if (!item.isLocked) {
                     ivClubLogo.alpha = 1f
-                    ivLocked.visibility = View.GONE
+                    ivLocked.setGone()
 
                     itemView.setOnClickListener {
                         onClick.invoke(item)
                     }
+                }
+
+                if (item.id == 30303) {
+                    itemView.setGone()
                 }
 
                 ivClubLogo.apply {

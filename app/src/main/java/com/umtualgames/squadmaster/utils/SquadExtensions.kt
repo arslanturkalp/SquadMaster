@@ -4,7 +4,6 @@ import com.umtualgames.squadmaster.data.enums.PositionIdStatus
 import com.umtualgames.squadmaster.network.responses.item.Player
 
 fun ifTwoBack(defences: ArrayList<Player>): List<Player> {
-
     if (defences.count { it.positionID == PositionIdStatus.SAB.value } > 1 && defences.count() == 5) {
         val player = defences.first { it.positionID == PositionIdStatus.SAB.value }
         defences.remove(player)
@@ -15,7 +14,6 @@ fun ifTwoBack(defences: ArrayList<Player>): List<Player> {
 }
 
 fun ifTwoWinger(attackers: ArrayList<Player>): List<Player> {
-
     if (attackers.count { it.positionID == PositionIdStatus.SAK.value } > 1 && attackers.count() == 3) {
         val player = attackers.first { it.positionID == PositionIdStatus.SAK.value }
         attackers.remove(player)
