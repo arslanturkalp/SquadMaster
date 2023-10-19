@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.databinding.RowLayoutScoreBinding
-import com.umtualgames.squadmaster.network.responses.item.RankItem
+import com.umtualgames.squadmaster.domain.entities.responses.item.RankItem
 import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisible
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class ScoreAdapter @Inject constructor() : RecyclerView.Adapter<ScoreAdapter.Sco
                 tvPosition.text = (position + 1).toString()
                 tvUserName.text = item.userViewModel.username
                 tvScore.text = item.point.toString()
-                if (position == 0){
+                if (position == 0) {
                     ivFirstPosition.setVisible()
                     tvPosition.setGone()
                 } else {

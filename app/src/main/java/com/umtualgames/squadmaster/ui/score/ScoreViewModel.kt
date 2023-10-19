@@ -1,62 +1,66 @@
 package com.umtualgames.squadmaster.ui.score
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
-import com.umtualgames.squadmaster.di.Repository
-import com.umtualgames.squadmaster.network.responses.item.Token
-import com.umtualgames.squadmaster.network.responses.userpointresponses.GetRankListResponse
-import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
+import com.umtualgames.squadmaster.data.entities.models.Result
+import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.RefreshTokenResponse
+import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.GetRankListResponse
+import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.UserPointResponse
+import com.umtualgames.squadmaster.domain.usecases.GetPointUseCase
+import com.umtualgames.squadmaster.domain.usecases.GetRankListUseCase
+import com.umtualgames.squadmaster.domain.usecases.RefreshTokenUseCase
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScoreViewModel @Inject constructor(private val repository: Repository) : BaseViewModel() {
+class ScoreViewModel @Inject constructor(
+    private val getRankListUseCase: GetRankListUseCase,
+    private val getPointUseCase: GetPointUseCase,
+    private val refreshTokenUseCase: RefreshTokenUseCase
+) : BaseViewModel() {
 
-    private val viewState = MutableLiveData<ScoreViewState>()
-    val getViewState: LiveData<ScoreViewState> = viewState
+    private val _rankFlow: MutableStateFlow<Result<GetRankListResponse>> = MutableStateFlow(Result.Loading())
+    val rankFlow: StateFlow<Result<GetRankListResponse>> = _rankFlow
 
-    private fun getRankList() = viewModelScope.launch {
-        viewState.postValue(ScoreViewState.LoadingState)
-        repository.getRankList().let {
-            if (it.isSuccessful) viewState.postValue(ScoreViewState.SuccessState(it.body()!!)) else viewState.postValue(ScoreViewState.ErrorState(it.message()))
+    private val _getPointFlow: MutableStateFlow<Result<UserPointResponse>> = MutableStateFlow(Result.Loading())
+    val getPointFlow: StateFlow<Result<UserPointResponse>> = _getPointFlow
+
+    private val _refreshTokenFlow: MutableStateFlow<Result<RefreshTokenResponse>> = MutableStateFlow(Result.Loading())
+    val refreshTokenFlow: StateFlow<Result<RefreshTokenResponse>> = _refreshTokenFlow
+
+    fun getRankList() = viewModelScope.launch {
+        getRankListUseCase().collect {
+            when (it) {
+                is Result.Error -> _rankFlow.emit(it)
+                is Result.Loading -> _rankFlow.emit(it)
+                is Result.Success -> _rankFlow.emit(it)
+                is Result.Auth -> _rankFlow.emit(it)
+            }
         }
     }
 
     fun getUserPoint(userId: Int) = viewModelScope.launch {
-        viewState.postValue(ScoreViewState.LoadingState)
-        repository.getUserPoint(userId).let {
-            if (it.isSuccessful) {
-                getRankList()
-                viewState.postValue(ScoreViewState.UserPointState(it.body()!!))
-            } else {
-                refreshTokenLogin(getRefreshToken())
+        getPointUseCase(userId).collect {
+            when (it) {
+                is Result.Error -> _getPointFlow.emit(it)
+                is Result.Loading -> _getPointFlow.emit(it)
+                is Result.Success -> _getPointFlow.emit(it)
+                is Result.Auth -> _getPointFlow.emit(it)
             }
         }
     }
 
-    private fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
-        viewState.postValue(ScoreViewState.LoadingState)
-        repository.refreshTokenLogin(refreshToken).let {
-            when {
-                it.isSuccessful -> {
-                    viewState.postValue(ScoreViewState.RefreshState(it.body()!!.data.token))
-                }
-                else -> viewState.postValue(ScoreViewState.ErrorState(it.message()))
+    fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
+        refreshTokenUseCase(refreshToken).collect {
+            when (it) {
+                is Result.Error -> _refreshTokenFlow.emit(it)
+                is Result.Loading -> _refreshTokenFlow.emit(it)
+                is Result.Success -> _refreshTokenFlow.emit(it)
+                is Result.Auth -> _refreshTokenFlow.emit(it)
             }
         }
     }
-}
-
-
-sealed class ScoreViewState {
-    object LoadingState : ScoreViewState()
-    data class SuccessState(val response: GetRankListResponse) : ScoreViewState()
-    data class ErrorState(val message: String) : ScoreViewState()
-    data class WarningState(val message: String?) : ScoreViewState()
-    data class UserPointState(val response: UserPointResponse) : ScoreViewState()
-    data class RefreshState(val response: Token) : ScoreViewState()
 }

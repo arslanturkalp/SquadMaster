@@ -1,16 +1,16 @@
 package com.umtualgames.squadmaster.ui.slide
 
-import com.umtualgames.squadmaster.ui.base.BaseFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.data.models.SlideModel
-import com.umtualgames.squadmaster.databinding.FragmentSlideBinding
-import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.data.entities.models.SlideModel
+import com.umtualgames.squadmaster.databinding.FragmentSlideBinding
+import com.umtualgames.squadmaster.ui.base.BaseFragment
+import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisible
 

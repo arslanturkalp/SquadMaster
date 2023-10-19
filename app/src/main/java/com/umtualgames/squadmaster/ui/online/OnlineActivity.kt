@@ -21,19 +21,18 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.google.gson.Gson
 import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.adapter.PotentialAnswersAdapter
+import com.umtualgames.squadmaster.utils.adapter.PotentialAnswersAdapter
 import com.umtualgames.squadmaster.application.SessionManager.clearUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.getUserName
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
-import com.umtualgames.squadmaster.data.enums.PositionIdStatus
-import com.umtualgames.squadmaster.data.enums.PositionTypeIdStatus
+import com.umtualgames.squadmaster.data.entities.enums.PositionIdStatus
+import com.umtualgames.squadmaster.data.entities.enums.PositionTypeIdStatus
 import com.umtualgames.squadmaster.databinding.ActivityOnlineBinding
-import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
-import com.umtualgames.squadmaster.network.responses.item.Player
-import com.umtualgames.squadmaster.network.responses.item.PotentialAnswer
-import com.umtualgames.squadmaster.network.responses.playerresponses.GetFirstElevenBySquadResponse
+import com.umtualgames.squadmaster.domain.entities.responses.item.Player
+import com.umtualgames.squadmaster.domain.entities.responses.item.PotentialAnswer
+import com.umtualgames.squadmaster.domain.entities.responses.playerresponses.GetFirstElevenBySquadResponse
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.online.compare.CompareFragment
@@ -115,7 +114,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
 
     override fun onStop() {
         super.onStop()
-        webSocket?.close(1000,"")
+        webSocket?.close(1000, "")
         viewModel.leaveRoom(getUserName())
     }
 
@@ -224,7 +223,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                     updateToken(state.response.accessToken)
                     updateRefreshToken(state.response.refreshToken)
 
-                    viewModel.updatePoint(UpdatePointRequest(getUserID(), 50))
+                    viewModel.updatePoint(com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest(getUserID(), 50))
                     onBackPressedDispatcher.onBackPressed()
                 }
 
@@ -426,7 +425,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                 if (text.contains("oyundan ayrıldı")) {
                     if (text.substringBefore("oyundan ayrıldı").trim() != getUserName()) {
                         showAlertDialogTheme(getString(R.string.rival_disconnect), String.format(getString(R.string.disconnect_won_10_point)), onPositiveButtonClick = {
-                            viewModel.updatePoint(UpdatePointRequest(getUserID(), 10))
+                            viewModel.updatePoint(com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest(getUserID(), 10))
                             startActivity(MainActivity.createIntent(this@OnlineActivity))
                         })
                     }
@@ -501,7 +500,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                         }
 
                         override fun onFinish() {
-                            with(binding){
+                            with(binding) {
                                 tvStatusOpponent.text = getString(R.string.match_start)
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     llSearchingOpponent.setGone()
@@ -538,7 +537,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
                 if (text.contains("oyundan ayrıldı")) {
                     if (text.substringBefore("oyundan ayrıldı").trim() != getUserName()) {
                         showAlertDialogTheme(getString(R.string.rival_disconnect), String.format(getString(R.string.disconnect_won_10_point)), onPositiveButtonClick = {
-                            viewModel.updatePoint(UpdatePointRequest(getUserID(), 10))
+                            viewModel.updatePoint(com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest(getUserID(), 10))
                             startActivity(MainActivity.createIntent(this@OnlineActivity))
                         })
                     }

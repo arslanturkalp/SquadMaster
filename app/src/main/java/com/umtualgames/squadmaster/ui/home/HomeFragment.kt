@@ -11,15 +11,18 @@ import android.view.animation.RotateAnimation
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.clearScore
 import com.umtualgames.squadmaster.application.SessionManager.clearWrongCount
+import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
-import com.umtualgames.squadmaster.data.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.FragmentHomeNewBinding
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.game.GameActivity
@@ -28,6 +31,7 @@ import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -66,18 +70,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                     clearWrongCount()
                 }
             }
-            /*
-            cvStartOnline.apply {
-                if (getIsOnlineModeActive()) {
-                    alpha = 1f
-                    setOnClickListener {
-                        startActivity(OnlineActivity.createIntent(requireContext()))
-                    }
-                } else {
-                    alpha = 0.2f
-                    isClickable = false
-                }
-            }*/
             cvLeague.apply {
                 setOnClickListener {
                     (activity as MainActivity).apply {
@@ -130,48 +122,91 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun setupObservers() {
-        viewModel.getViewState.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is HomeViewState.LoadingState -> {
-                    showProgress()
-                    binding.apply {
-                        tvBestScore.text = 0.toString()
-                        tvTotalScore.text = 0.toString()
+        lifecycleScope.launch {
+            viewModel.apply {
+                launch {
+                    getPointFlow.collect {
+                        when (it) {
+                            is Result.Error -> {
+                                dismissProgress()
+                                showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
+                            }
+                            is Result.Loading -> {
+                                binding.apply {
+                                    tvBestScore.text = 0.toString()
+                                    tvTotalScore.text = 0.toString()
+                                }
+                                showProgress()
+                            }
+                            is Result.Success -> {
+                                dismissProgress()
+                                getLeagues(getUserID())
+                                binding.apply {
+                                    it.body!!.data.apply {
+                                        tvBestScore.text = bestPoint.toString()
+                                        tvTotalScore.text = point.toString()
+                                    }
+                                }
+                            }
+                            is Result.Auth -> {
+                                dismissProgress()
+                                refreshTokenLogin(getRefreshToken())
+                            }
+                        }
                     }
                 }
-                is HomeViewState.UserPointState -> {
-                    dismissProgress()
-                    binding.apply {
-                        tvBestScore.text = state.response.data.bestPoint.toString()
-                        tvTotalScore.text = state.response.data.point.toString()
+                launch {
+                    getLeaguesFlow.collect {
+                        when (it) {
+                            is Result.Error -> {
+                                dismissProgress()
+                                showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
+                            }
+                            is Result.Loading -> {}
+                            is Result.Success -> {
+                                dismissProgress()
+                                (activity as MainActivity).setNotificationBadge(it.body!!.data.count { league -> !league.isLocked })
+                            }
+                            is Result.Auth -> {
+                                dismissProgress()
+                                refreshTokenLogin(getRefreshToken())
+                            }
+                        }
                     }
                 }
-                is HomeViewState.WarningState -> {
-                    dismissProgress()
-                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
+                launch {
+                    refreshTokenFlow.collect {
+                        when (it) {
+                            is Result.Error -> {
+                                dismissProgress()
+                                showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
+                            }
+                            is Result.Loading -> showProgress()
+                            is Result.Success -> {
+                                dismissProgress()
+                                it.body!!.apply {
+                                    if (isSuccess) {
+                                        updateToken(data.token.accessToken)
+                                        updateRefreshToken(data.token.refreshToken)
+
+                                        viewModel.getUserPoint(getUserID())
+                                    } else {
+                                        returnToSplash()
+                                    }
+                                }
+                            }
+                            is Result.Auth -> {
+                                dismissProgress()
+                                returnToSplash()
+                            }
+                        }
+                    }
                 }
-                is HomeViewState.ErrorState -> {
-                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
-                }
-                is HomeViewState.RefreshState -> {
-                    updateToken(state.response.accessToken)
-                    updateRefreshToken(state.response.refreshToken)
-                    viewModel.getUserPoint(getUserID())
-                }
-                is HomeViewState.LeagueSuccessState -> {
-                    (activity as MainActivity).setNotificationBadge(state.response.count { !it.isLocked })
-                }
-                is HomeViewState.RoomCountState -> {
-                    //binding.tvActiveUserCount.text = String.format(getString(R.string.waiting_person), state.response)
-                }
-                is HomeViewState.ReturnSplashState -> {
-                    dismissProgress()
-                    startActivity(SplashActivity.createIntent(requireContext(), false))
-                }
-                else -> {}
             }
         }
     }
+
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext(), false))
 
     private fun showProgress() {
         binding.swipeRefreshLayout.isRefreshing = true

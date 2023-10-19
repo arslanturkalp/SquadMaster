@@ -44,7 +44,7 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
 
         with(binding) {
             tvUserName.text = getUserName()
-            
+
             if (!getIsShowedTutorial()) {
                 btnAbout.setGone()
             }

@@ -2,7 +2,6 @@ package com.umtualgames.squadmaster.ui.game
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +13,7 @@ import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.getUnknownImage
 import com.umtualgames.squadmaster.databinding.RowLayoutPlayerBinding
-import com.umtualgames.squadmaster.network.responses.item.Player
+import com.umtualgames.squadmaster.domain.entities.responses.item.Player
 import com.umtualgames.squadmaster.utils.ifContains
 import com.umtualgames.squadmaster.utils.setGone
 import javax.inject.Inject
@@ -84,7 +83,7 @@ class GameAdapter @Inject constructor() : RecyclerView.Adapter<GameAdapter.Squad
                 } else {
                     tvPlayerName.apply {
                         text = item.displayName
-                        textSize = if (item.displayName.length > 23) 10f else if(item.displayName.length > 17) 11f else 12f
+                        textSize = if (item.displayName.length > 23) 10f else if (item.displayName.length > 17) 11f else 12f
                     }
 
                     ivPlayer.apply {

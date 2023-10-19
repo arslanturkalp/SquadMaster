@@ -1,7 +1,7 @@
 package com.umtualgames.squadmaster.utils
 
-import com.umtualgames.squadmaster.data.enums.PositionIdStatus
-import com.umtualgames.squadmaster.network.responses.item.Player
+import com.umtualgames.squadmaster.data.entities.enums.PositionIdStatus
+import com.umtualgames.squadmaster.domain.entities.responses.item.Player
 
 fun ifTwoBack(defences: ArrayList<Player>): List<Player> {
     if (defences.count { it.positionID == PositionIdStatus.SAB.value } > 1 && defences.count() == 5) {

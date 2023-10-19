@@ -7,7 +7,6 @@ import android.media.AudioManager.RINGER_MODE_NORMAL
 import android.media.AudioManager.RINGER_MODE_SILENT
 import android.media.AudioManager.RINGER_MODE_VIBRATE
 import android.os.*
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
@@ -17,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -27,14 +27,17 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.adapter.PotentialAnswersAdapter
+import com.umtualgames.squadmaster.utils.adapter.PotentialAnswersAdapter
+import com.umtualgames.squadmaster.application.Constants.AD_UNIT_ID_GAME
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedNumber
 import com.umtualgames.squadmaster.application.SessionManager.clearUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.clearWrongCount
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedNumber
+import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getScore
+import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.getWrongCount
 import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedNumber
@@ -44,18 +47,22 @@ import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SessionManager.updateUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.updateUnknownImage
 import com.umtualgames.squadmaster.application.SessionManager.updateWrongCount
-import com.umtualgames.squadmaster.application.SquadMasterApp.Companion.TAG
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.ActivitySquadBinding
-import com.umtualgames.squadmaster.network.responses.item.Player
-import com.umtualgames.squadmaster.network.responses.item.PotentialAnswer
+import com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest
+import com.umtualgames.squadmaster.domain.entities.responses.item.League
+import com.umtualgames.squadmaster.domain.entities.responses.item.Player
+import com.umtualgames.squadmaster.domain.entities.responses.item.PotentialAnswer
 import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
+import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.gameover.GameOverFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.yellowcard.YellowCardFragment
 import com.umtualgames.squadmaster.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GameActivity : BaseActivity() {
@@ -73,7 +80,7 @@ class GameActivity : BaseActivity() {
     private val potentialAnswersAdapter by lazy { PotentialAnswersAdapter(false) { controlAnswer(it) } }
     private var mInterstitialAd: InterstitialAd? = null
 
-    private var isAllFabButtonsVisible: Boolean  = false
+    private var isAllFabButtonsVisible: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,38 +178,78 @@ class GameActivity : BaseActivity() {
     }
 
     private fun setupObservers() {
-        viewModel.getViewState.observe(this) { state ->
-            when (state) {
-                is GameViewState.LoadingState -> showProgressDialog()
-                is GameViewState.SuccessState -> {
-                    dismissProgressDialog()
-                    with(state.response.data) {
-                        setList(playerList, potentialAnswerList)
-                        binding.tvTeamName.text = squad.name
+        lifecycleScope.launch {
+            viewModel.apply {
+                launch {
+                    squadFlow.collect {
+                        when (it) {
+                            is Result.Error -> dismissProgressDialog()
+                            is Result.Loading -> showProgressDialog()
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                it.body!!.data.apply {
+                                    binding.tvTeamName.text = squad.name
+                                    setList(playerList, potentialAnswerList)
+                                }
+                            }
+                            is Result.Auth -> {
+                                dismissProgressDialog()
+                                refreshTokenLogin(getRefreshToken())
+                            }
+                        }
                     }
                 }
-                is GameViewState.ErrorState -> {
-                    dismissProgressDialog()
-                }
-                is GameViewState.WarningState -> {
-                    dismissProgressDialog()
-                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
-                }
-                is GameViewState.RefreshState -> {
-                    dismissProgressDialog()
-                    with(state.response) {
-                        updateToken(accessToken)
-                        updateRefreshToken(refreshToken)
+
+                launch {
+                    updatePointFlow.collect {
+                        when (it) {
+                            is Result.Error -> dismissProgressDialog()
+                            is Result.Loading -> showProgressDialog()
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                GameOverFragment.apply { newInstance(score = it.body?.data?.lastPoint!!).show(this@GameActivity) }
+                                if (mInterstitialAd != null) {
+                                    mInterstitialAd?.show(this@GameActivity)
+                                }
+                            }
+                            is Result.Auth -> {
+                                dismissProgressDialog()
+                                refreshTokenLogin(getRefreshToken())
+                            }
+                        }
                     }
-                    viewModel.getSquad()
                 }
-                is GameViewState.ReturnSplashState -> {
-                    dismissProgressDialog()
-                    startActivity(SplashActivity.createIntent(this, false))
+
+                launch {
+                    refreshTokenFlow.collect {
+                        when (it) {
+                            is Result.Error -> dismissProgressDialog()
+                            is Result.Loading -> showProgressDialog()
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                it.body!!.apply {
+                                    if (isSuccess) {
+                                        updateToken(data.token.accessToken)
+                                        updateRefreshToken(data.token.refreshToken)
+                                        viewModel.getSquad()
+                                    } else {
+                                        returnToSplash()
+                                    }
+                                }
+                            }
+                            is Result.Auth -> {
+                                dismissProgressDialog()
+                                returnToSplash()
+                            }
+                        }
+                    }
                 }
-                else -> {}
             }
         }
+    }
+
+    private fun returnToSplash() {
+        startActivity(SplashActivity.createIntent(this, false))
     }
 
     private fun backToMainMenu() {
@@ -232,7 +279,6 @@ class GameActivity : BaseActivity() {
         }
         if (getWrongCount() == 3) {
             navigateToGameOver(getScore())
-            if (mInterstitialAd != null) { mInterstitialAd?.show(this) }
             clearWrongCount()
         }
     }
@@ -248,7 +294,10 @@ class GameActivity : BaseActivity() {
         imageView.startAnimation(anim)
         anim.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
-            override fun onAnimationEnd(animation: Animation?) { imageView.alpha = 0f }
+            override fun onAnimationEnd(animation: Animation?) {
+                imageView.alpha = 0f
+            }
+
             override fun onAnimationRepeat(animation: Animation?) {}
         })
     }
@@ -265,8 +314,16 @@ class GameActivity : BaseActivity() {
 
     @Suppress("DEPRECATION")
     private fun vibrate() {
-        val vib = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { (getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator } else { getSystemService(VIBRATOR_SERVICE) as Vibrator }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { vib.vibrate(VibrationEffect.createOneShot(200, 1)) } else { vib.vibrate(200) }
+        val vib = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vib.vibrate(VibrationEffect.createOneShot(200, 1))
+        } else {
+            vib.vibrate(200)
+        }
     }
 
     private fun setList(squad: List<Player>, potentialAnswers: List<PotentialAnswer>) {
@@ -352,12 +409,12 @@ class GameActivity : BaseActivity() {
     }
 
     private fun controlAnswer(potentialAnswer: PotentialAnswer) {
-        binding.apply {
-            if (potentialAnswer.isAnswer) {
+        potentialAnswer.apply {
+            if (this.isAnswer) {
                 updateScore(getScore() + 10)
-                updateUnknownAnswer(potentialAnswer.displayName)
-                updateUnknownImage(potentialAnswer.imagePath)
-                navigateToAnswer(potentialAnswer.imagePath, potentialAnswer.displayName)
+                updateUnknownAnswer(this.displayName)
+                updateUnknownImage(this.imagePath)
+                navigateToAnswer(this.imagePath, this.displayName)
             } else {
                 showWrongAnswerAnimation()
             }
@@ -368,19 +425,19 @@ class GameActivity : BaseActivity() {
 
     private fun navigateToYellowCard() = YellowCardFragment().show(this@GameActivity)
 
-    private fun navigateToGameOver(score: Int) = GameOverFragment.apply { newInstance(score = score).show(this@GameActivity) }
+    private fun navigateToGameOver(score: Int) {
+        viewModel.updatePoint(UpdatePointRequest(getUserID(), score))
+    }
 
     private fun loadAds() {
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this, "ca-app-pub-5776386569149871/5560350183", adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(this, AD_UNIT_ID_GAME, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d(TAG, adError.toString())
                 mInterstitialAd = null
             }
 
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Log.d(TAG, "Ad was loaded.")
                 mInterstitialAd = interstitialAd
             }
         })

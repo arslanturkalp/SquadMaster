@@ -6,25 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.material.tabs.TabLayout
 import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
-import com.umtualgames.squadmaster.data.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.FragmentScoreBinding
-import com.umtualgames.squadmaster.network.responses.item.RankItem
+import com.umtualgames.squadmaster.domain.entities.responses.item.RankItem
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
+import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.setVisible
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -97,45 +102,88 @@ class ScoreFragment : BaseFragment() {
     }
 
     private fun setupObservers() {
-        viewModel.getViewState.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is ScoreViewState.LoadingState -> showProgressDialog()
-                is ScoreViewState.SuccessState -> {
-                    dismissProgressDialog()
-                    loadBannerAd()
-                    bestPoints = state.response.data.userBestPoints as ArrayList<RankItem>
-                    totalPoints = state.response.data.userTotalPoints as ArrayList<RankItem>
+        lifecycleScope.launch {
+            viewModel.apply {
+                launch {
+                    rankFlow.collect {
+                        when (it) {
+                            is Result.Error -> {
+                                dismissProgressDialog()
+                                showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
+                            }
+                            is Result.Loading -> {}
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                loadBannerAd()
 
-                    with(binding) {
-                        setVisibility(View.VISIBLE, cvScore, tabLayout)
-                        if (tabLayout.selectedTabPosition == 0) pointsAdapter.updateAdapter(bestPoints) else pointsAdapter.updateAdapter(totalPoints)
-                    }
-                }
-                is ScoreViewState.ErrorState -> {
-                    dismissProgressDialog()
-                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
-                }
-                is ScoreViewState.WarningState -> {
-                    dismissProgressDialog()
-                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
-                }
-                is ScoreViewState.UserPointState -> {
-                    dismissProgressDialog()
-                    with(binding) {
-                        state.response.data.apply {
-                            tvTotalScore.text = point.toString()
-                            tvBestScore.text = bestPoint.toString()
+                                it.body!!.data.apply {
+                                    bestPoints = userBestPoints as ArrayList<RankItem>
+                                    totalPoints = userTotalPoints as ArrayList<RankItem>
+                                }
+
+                                with(binding) {
+                                    setVisibility(View.VISIBLE, cvScore, tabLayout)
+                                    if (tabLayout.selectedTabPosition == 0) pointsAdapter.updateAdapter(bestPoints) else pointsAdapter.updateAdapter(totalPoints)
+                                }
+                            }
+                            is Result.Auth -> {
+                                dismissProgressDialog()
+                                refreshTokenLogin(getRefreshToken())
+                            }
                         }
                     }
                 }
-                is ScoreViewState.RefreshState -> {
-                    updateToken(state.response.accessToken)
-                    updateRefreshToken(state.response.refreshToken)
-                    viewModel.getUserPoint(getUserID())
+                launch {
+                    getPointFlow.collect {
+                        when (it) {
+                            is Result.Error -> dismissProgressDialog()
+                            is Result.Loading -> showProgressDialog()
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                with(binding) {
+                                    it.body!!.data.apply {
+                                        tvTotalScore.text = point.toString()
+                                        tvBestScore.text = bestPoint.toString()
+                                    }
+                                }
+                                viewModel.getRankList()
+                            }
+                            is Result.Auth -> {
+                                dismissProgressDialog()
+                                refreshTokenLogin(getRefreshToken())
+                            }
+                        }
+                    }
+                }
+                launch {
+                    refreshTokenFlow.collect {
+                        when (it) {
+                            is Result.Error -> dismissProgressDialog()
+                            is Result.Loading -> {}
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                it.body!!.apply {
+                                    if (isSuccess) {
+                                        updateToken(data.token.accessToken)
+                                        updateRefreshToken(data.token.refreshToken)
+                                        viewModel.getUserPoint(getUserID())
+                                    } else {
+                                        returnToSplash()
+                                    }
+                                }
+                            }
+                            is Result.Auth -> {
+                                dismissProgressDialog()
+                                returnToSplash()
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext(), false))
 
     private fun setupRecyclerViews() {
         binding.rvPoints.apply {

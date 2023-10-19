@@ -58,8 +58,7 @@
 
         <activity
             android:name=".ui.squad.SquadActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustUnspecified" />
+            android:exported="true" />
 
         <activity
             android:name=".ui.game.GameActivity"

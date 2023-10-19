@@ -101,6 +101,7 @@
     <string name="point_25">25 Puan kazandınız!</string>
     <string name="point_50">50 Puan kazandınız!</string>
     <string name="club_unlocked">Kulüp Kilidi Açıldı</string>
+    <string name="all_clubs_finished">Bu Seviyedeki Tüm Kulüpler Tamamlandı</string>
 
     <string name="need_point">%1$s kilidini açmak için %2$s puana ihtiyacın var. Ana oyun modunda puan kazanabilirsin.</string>
     <string name="watch_and_earn">Ayrıca reklam izleyerek de 50 puan kazanabilirsin.</string>

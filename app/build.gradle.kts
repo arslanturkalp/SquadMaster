@@ -82,13 +82,12 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.glide.transformations)
     implementation(libs.carouselrecyclerview)
-
     implementation(libs.bundles.network)
 
     //Analytics
-    implementation ("com.google.firebase:firebase-analytics-ktx")
-    implementation ("com.google.firebase:firebase-crashlytics-ktx")
-    implementation ("com.google.firebase:firebase-perf-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-perf-ktx")
 
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:31.2.2"))

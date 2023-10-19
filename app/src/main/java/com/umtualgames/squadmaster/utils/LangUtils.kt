@@ -2,9 +2,9 @@ package com.umtualgames.squadmaster.utils
 
 import android.content.Context
 import android.os.Build
+import com.orhanobut.hawk.Hawk
 import com.umtualgames.squadmaster.application.Constants.KEY_APP_LANG
 import com.umtualgames.squadmaster.application.SquadMasterApp
-import com.orhanobut.hawk.Hawk
 import java.util.*
 
 class LangUtils {

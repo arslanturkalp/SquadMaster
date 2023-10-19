@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.databinding.RowLayoutLeagueBinding
-import com.umtualgames.squadmaster.network.responses.item.League
+import com.umtualgames.squadmaster.domain.entities.responses.item.League
 import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.setVisible

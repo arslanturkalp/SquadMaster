@@ -11,19 +11,21 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.umtualgames.squadmaster.BuildConfig
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
-import com.umtualgames.squadmaster.application.SessionManager.updateIsOnlineModeActive
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.ActivitySplashBinding
-import com.umtualgames.squadmaster.network.requests.LoginRequest
+import com.umtualgames.squadmaster.domain.entities.requests.LoginRequest
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
@@ -54,40 +56,50 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun setupObservers() {
-        viewModel.getViewState.observe(this) { state ->
-            when (state) {
-                is SplashViewState.LoadingState -> {
-                    showProgressDialog()
-                }
-                is SplashViewState.SuccessState -> {
-                    dismissProgressDialog()
-                    if (state.response.data.find { it.settingName == "OnlineModeActive"}?.settingValue == "true") {
-                        updateIsOnlineModeActive(true)
-                    } else {
-                        updateIsOnlineModeActive(false)
-                    }
-                    if (state.response.data.find { it.settingName == "Version" }?.settingValue == BuildConfig.VERSION_NAME) {
-                        if (state.response.data.find { it.settingName == "IsOnline" }?.settingValue == "true") {
-                            goToStart()
-                        } else {
-                            showAlertDialogTheme(title = getString(R.string.warning), contentMessage = getString(R.string.is_not_online))
+        lifecycleScope.launch {
+            viewModel.apply {
+                launch {
+                    projectSettingFlow.collect {
+                        when (it) {
+                            is Result.Error -> showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
+                            is Result.Loading -> {}
+                            is Result.Success -> {
+                                it.body!!.apply {
+                                    if (BuildConfig.VERSION_NAME == data.find { setting -> setting.settingName == "Version" }?.settingValue) {
+                                        if (data.find { setting -> setting.settingName == "IsOnline" }?.settingValue == "true") {
+                                            goToStart()
+                                        } else {
+                                            showAlertDialogTheme(title = getString(R.string.warning), contentMessage = getString(R.string.is_not_online))
+                                        }
+                                    } else {
+                                        showAlertDialogTheme(title = getString(R.string.new_version_title), contentMessage = getString(R.string.new_version_available), positiveButtonTitle = getString(R.string.download), onPositiveButtonClick = {
+                                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${applicationContext.packageName}")))
+                                        })
+                                    }
+                                }
+                            }
+                            is Result.Auth -> {}
                         }
-                    } else {
-                        showAlertDialogTheme(title = getString(R.string.new_version_title), contentMessage = getString(R.string.new_version_available), positiveButtonTitle = getString(R.string.download), onPositiveButtonClick = {
-                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${applicationContext.packageName}")))
-                        })
                     }
                 }
-                is SplashViewState.ErrorState -> {
-                    dismissProgressDialog()
-                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
+
+                launch {
+                    loginFlow.collect {
+                        when (it) {
+                            is Result.Error -> {
+                                showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
+                            }
+                            is Result.Loading -> {}
+                            is Result.Success -> {
+                                it.body!!.data.token.apply {
+                                    updateToken(accessToken)
+                                }
+                                viewModel.getProjectSettings()
+                            }
+                            is Result.Auth -> {}
+                        }
+                    }
                 }
-                is SplashViewState.AdminState -> {
-                    dismissProgressDialog()
-                    updateToken(state.response.data.token.accessToken)
-                    viewModel.getProjectSettings()
-                }
-                else -> {}
             }
         }
     }
@@ -97,6 +109,7 @@ class SplashActivity : BaseActivity() {
             startActivity(StartActivity.createIntent(false, this))
         }, 500)
     }
+
     companion object {
 
         private const val EXTRAS_IS_FROM_CHANGE_LANGUAGE = "EXTRAS_IS_FROM_CHANGE_LANGUAGE"

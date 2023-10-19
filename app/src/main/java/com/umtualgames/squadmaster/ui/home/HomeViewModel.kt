@@ -1,85 +1,66 @@
 package com.umtualgames.squadmaster.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
-import com.umtualgames.squadmaster.application.SessionManager.getUserID
-import com.umtualgames.squadmaster.di.Repository
-import com.umtualgames.squadmaster.network.responses.item.League
-import com.umtualgames.squadmaster.network.responses.item.Token
-import com.umtualgames.squadmaster.network.responses.userpointresponses.UserPointResponse
+import com.umtualgames.squadmaster.data.entities.models.Result
+import com.umtualgames.squadmaster.domain.entities.responses.leagueresponses.GetLeaguesResponse
+import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.RefreshTokenResponse
+import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.UserPointResponse
+import com.umtualgames.squadmaster.domain.usecases.GetLeaguesUseCase
+import com.umtualgames.squadmaster.domain.usecases.GetPointUseCase
+import com.umtualgames.squadmaster.domain.usecases.RefreshTokenUseCase
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: Repository) : BaseViewModel() {
+class HomeViewModel @Inject constructor(
+    private val getPointUseCase: GetPointUseCase,
+    private val getLeaguesUseCase: GetLeaguesUseCase,
+    private val refreshTokenUseCase: RefreshTokenUseCase
+) : BaseViewModel() {
 
-    private val viewState = MutableLiveData<HomeViewState>()
-    val getViewState: LiveData<HomeViewState> = viewState
+    private val _getPointFlow: MutableStateFlow<Result<UserPointResponse>> = MutableStateFlow(Result.Loading())
+    val getPointFlow: StateFlow<Result<UserPointResponse>> = _getPointFlow
 
-    fun getUserPoint(userId: Int) = viewModelScope.launch {
-        viewState.postValue(HomeViewState.LoadingState)
-        repository.getUserPoint(userId).let {
-            when {
-                it.isSuccessful -> {
-                    getLeagues()
-                    getRoomCount()
-                    viewState.postValue(HomeViewState.UserPointState(it.body()!!))
-                }
+    private val _getLeaguesFlow: MutableStateFlow<Result<GetLeaguesResponse>> = MutableStateFlow(Result.Loading())
+    val getLeaguesFlow: StateFlow<Result<GetLeaguesResponse>> = _getLeaguesFlow
 
-                it.code() != 200 -> viewState.postValue(HomeViewState.WarningState(it.message()))
-                else -> refreshTokenLogin(getRefreshToken())
+    private val _refreshTokenFlow: MutableStateFlow<Result<RefreshTokenResponse>> = MutableStateFlow(Result.Loading())
+    val refreshTokenFlow: StateFlow<Result<RefreshTokenResponse>> = _refreshTokenFlow
+
+    fun getUserPoint(userID: Int) = viewModelScope.launch {
+        getPointUseCase(userID).collect {
+            when (it) {
+                is Result.Error -> _getPointFlow.emit(it)
+                is Result.Loading -> _getPointFlow.emit(it)
+                is Result.Success -> _getPointFlow.emit(it)
+                is Result.Auth -> _getPointFlow.emit(it)
             }
         }
     }
 
-    private fun getLeagues() = viewModelScope.launch {
-        viewState.postValue(HomeViewState.LeagueLoadingState)
-        repository.getLeagues(getUserID()).let {
-            if (it.isSuccessful) {
-                viewState.postValue(HomeViewState.LeagueSuccessState(it.body()!!.data))
-            } else {
-                viewState.postValue(HomeViewState.ErrorState(it.message()))
+    fun getLeagues(userID: Int) = viewModelScope.launch {
+        getLeaguesUseCase(userID).collect {
+            when (it) {
+                is Result.Error -> _getLeaguesFlow.emit(it)
+                is Result.Loading -> _getLeaguesFlow.emit(it)
+                is Result.Success -> _getLeaguesFlow.emit(it)
+                is Result.Auth -> _getLeaguesFlow.emit(it)
             }
         }
     }
 
-    private fun getRoomCount() = viewModelScope.launch {
-        viewState.postValue(HomeViewState.LoadingState)
-        repository.getRooms().let {
-            when (it.body()?.statusCode) {
-                200 -> viewState.postValue(HomeViewState.RoomCountState(it.body()?.data?.availableCount!!))
-                300 -> viewState.postValue(HomeViewState.RoomCountState(0))
+    fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
+        refreshTokenUseCase(refreshToken).collect {
+            when (it) {
+                is Result.Error -> _refreshTokenFlow.emit(it)
+                is Result.Loading -> _refreshTokenFlow.emit(it)
+                is Result.Success -> _refreshTokenFlow.emit(it)
+                is Result.Auth -> _refreshTokenFlow.emit(it)
             }
         }
     }
-
-    private fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
-        viewState.postValue(HomeViewState.LoadingState)
-        repository.refreshTokenLogin(refreshToken).let {
-            when {
-                it.isSuccessful -> {
-                    viewState.postValue(HomeViewState.RefreshState(it.body()!!.data.token))
-                }
-
-                it.code() != 200 -> viewState.postValue(HomeViewState.ReturnSplashState)
-                else -> viewState.postValue(HomeViewState.ErrorState(it.message()))
-            }
-        }
-    }
-}
-
-sealed class HomeViewState {
-    object LoadingState : HomeViewState()
-    object LeagueLoadingState : HomeViewState()
-    object ReturnSplashState : HomeViewState()
-    data class ErrorState(val message: String) : HomeViewState()
-    data class WarningState(val message: String?) : HomeViewState()
-    data class UserPointState(val response: UserPointResponse) : HomeViewState()
-    data class LeagueSuccessState(val response: List<League>) : HomeViewState()
-    data class RoomCountState(val response: Int) : HomeViewState()
-    data class RefreshState(val response: Token) : HomeViewState()
 }

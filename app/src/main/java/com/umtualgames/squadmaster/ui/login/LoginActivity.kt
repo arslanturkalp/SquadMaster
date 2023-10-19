@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.updatePassword
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.ActivityLoginBinding
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
@@ -17,6 +19,7 @@ import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {
@@ -47,32 +50,42 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun setupObservers() {
+        lifecycleScope.launch {
+            viewModel.apply {
+                loginFlow.collect {
+                    when (it) {
+                        is Result.Error -> {
+                            dismissProgressDialog()
+                            showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
+                        }
+                        is Result.Loading -> showProgressDialog()
+                        is Result.Success -> {
+                            dismissProgressDialog()
+                            it.body!!.apply {
+                                if (statusCode == 200) {
+                                    updateToken(data.token.accessToken)
+                                    updateRefreshToken(data.token.refreshToken)
+                                    updateUserID(data.id)
+
+                                    with(binding) {
+                                        updateUserName(etUserName.text.toString())
+                                        updatePassword(etPassword.text.toString())
+                                    }
+
+                                    goToMain()
+                                } else {
+                                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.body.message)
+                                }
+                            }
+                        }
+                        is Result.Auth -> dismissProgressDialog()
+                    }
+                }
+            }
+        }
         viewModel.getViewState.observe(this) { state ->
             when (state) {
                 is LoginViewState.LoadingState -> showProgressDialog()
-                is LoginViewState.SuccessState -> {
-                    dismissProgressDialog()
-                    if (state.response.statusCode == 200) {
-                        updateToken(state.response.data.token.accessToken)
-                        updateRefreshToken(state.response.data.token.refreshToken)
-                        updateUserID(state.response.data.id)
-
-                        updateUserName(binding.etUserName.text.toString())
-                        updatePassword(binding.etPassword.text.toString())
-
-                        goToMain()
-                    } else {
-                        showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.response.message)
-                    }
-                }
-                is LoginViewState.ErrorState -> {
-                    dismissProgressDialog()
-                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
-                }
-                is LoginViewState.WarningState -> {
-                    dismissProgressDialog()
-                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
-                }
                 is LoginViewState.ValidationState -> {
                     dismissProgressDialog()
                     showAlertDialogTheme(title = getString(R.string.warning), contentMessage = state.validationErrorList.joinToString(separator = "\n") { getString(it) })

@@ -1,8 +1,6 @@
 package com.umtualgames.squadmaster.ui.base
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.ui.generic.GenericProgressDialog
 
 open class BaseActivity : AppCompatActivity() {

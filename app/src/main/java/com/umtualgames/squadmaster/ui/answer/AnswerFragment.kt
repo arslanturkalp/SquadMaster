@@ -1,21 +1,17 @@
 package com.umtualgames.squadmaster.ui.answer
 
-import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
-import com.umtualgames.squadmaster.application.SessionManager.updateToken
-import com.umtualgames.squadmaster.data.models.MessageEvent
-import com.umtualgames.squadmaster.ui.game.GameActivity
-import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.data.entities.models.MessageEvent
 import com.umtualgames.squadmaster.databinding.FragmentAnswerBinding
+import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
+import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
@@ -25,37 +21,50 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
 
     private val binding by lazy { FragmentAnswerBinding.inflate(layoutInflater) }
 
-    private val viewModel by viewModels<AnswerViewModel>()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
+
         return binding.root.also {
             arguments?.let { bundle ->
+                val playerName = bundle.getString("KEY_PLAYER_NAME")
+                val imagePath = bundle.getString("KEY_IMAGE_PATH")
+                val isUnlockedClub = bundle.getBoolean("KEY_IS_UNLOCKED_CLUB")
+                val isAllClubsFinished = bundle.getBoolean("KEY_IS_ALL_CLUBS_FINISHED")
+                val isFromInfiniteMode = bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")
+
                 with(binding) {
-                    tvPlayerName.text = bundle.getString("KEY_PLAYER_NAME")
+                    tvPlayerName.text = playerName
                     ivPlayerPhoto.apply {
                         Glide.with(context)
-                            .asBitmap()
-                            .load(bundle.getString("KEY_IMAGE_PATH"))
-                            .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                            .load(imagePath)
+                            .fitCenter()
                             .into(this)
                     }
 
-                    if (bundle.getBoolean("KEY_IS_UNLOCKED_CLUB")) {
+                    if (isUnlockedClub) {
                         this@AnswerFragment.isCancelable = true
+                        ivPlayerPhoto.scaleType = ImageView.ScaleType.FIT_XY
                         tvTitle.text = getString(R.string.club_unlocked)
                     }
 
+                    if (isAllClubsFinished) {
+                        this@AnswerFragment.isCancelable = true
+                        ivPlayerPhoto.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_two))
+                        tvTitle.text = getString(R.string.all_clubs_finished)
+                    }
+
                     btnNext.apply {
-                        text = if (bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")) { getString(R.string.next_level) } else { getString(R.string.txt_continue) }
+                        text = if (isFromInfiniteMode) {
+                            getString(R.string.next_level)
+                        } else {
+                            getString(R.string.txt_continue)
+                        }
                         setOnClickListener {
-                            if (bundle.getBoolean("KEY_IS_FROM_INFINITE_MODE")) {
+                            if (isFromInfiniteMode) {
                                 context?.startActivity((GameActivity.createIntent(context)))
-                            }
-                            else if (bundle.getBoolean("KEY_IS_UNLOCKED_CLUB")) {
+                            } else if (isUnlockedClub) {
                                 dismiss()
-                            }
-                            else {
+                            } else {
                                 EventBus.getDefault().post(MessageEvent("League Update"))
                                 activity?.onBackPressedDispatcher?.onBackPressed()
                             }
@@ -70,27 +79,6 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         checkLanguage(requireContext())
-        setupObservers()
-    }
-
-    private fun setupObservers() {
-        viewModel.getViewState.observe(this) { state ->
-            when (state) {
-                is AnswerViewState.LoadingState -> showProgressDialog()
-                is AnswerViewState.ErrorState -> {
-                    dismissProgressDialog()
-                }
-                is AnswerViewState.WarningState -> {
-                    dismissProgressDialog()
-                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
-                }
-                is AnswerViewState.RefreshState -> {
-                    dismissProgressDialog()
-                    updateToken(state.response.accessToken)
-                    updateRefreshToken(state.response.refreshToken)
-                }
-            }
-        }
     }
 
     companion object {
@@ -100,15 +88,16 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
 
         private const val KEY_IS_FROM_INFINITE_MODE = "KEY_IS_FROM_INFINITE_MODE"
         private const val KEY_IS_UNLOCKED_CLUB = "KEY_IS_UNLOCKED_CLUB"
+        private const val KEY_IS_ALL_CLUBS_FINISHED = "KEY_IS_ALL_CLUBS_FINISHED"
 
-        fun newInstance(playerName: String, imagePath: String, isFromInfiniteMode: Boolean = false, isUnlockedClub: Boolean = false): AnswerFragment = AnswerFragment().apply {
-
+        fun newInstance(playerName: String, imagePath: String, isFromInfiniteMode: Boolean = false, isUnlockedClub: Boolean = false, isAllClubsFinished: Boolean = false): AnswerFragment = AnswerFragment().apply {
             this.isCancelable = false
             arguments = Bundle().apply {
                 putString(KEY_PLAYER_NAME, playerName)
                 putString(KEY_IMAGE_PATH, imagePath)
                 putBoolean(KEY_IS_FROM_INFINITE_MODE, isFromInfiniteMode)
                 putBoolean(KEY_IS_UNLOCKED_CLUB, isUnlockedClub)
+                putBoolean(KEY_IS_ALL_CLUBS_FINISHED, isAllClubsFinished)
             }
         }
     }

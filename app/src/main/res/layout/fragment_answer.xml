@@ -27,15 +27,15 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivPlayerPhoto"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:background="@color/white"
         android:elevation="4dp"
         android:padding="3dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize20Percent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/ic_launcher_background"
         app:strokeColor="@color/white"
         app:strokeWidth="1dp" />

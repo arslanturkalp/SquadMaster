@@ -3,30 +3,32 @@ package com.umtualgames.squadmaster.ui.clubs
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
-import com.umtualgames.squadmaster.data.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.FragmentClubsBinding
-import com.umtualgames.squadmaster.network.responses.item.Club
-import com.umtualgames.squadmaster.network.responses.item.League
+import com.umtualgames.squadmaster.domain.entities.responses.item.Club
+import com.umtualgames.squadmaster.domain.entities.responses.item.League
 import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
+import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.squad.SquadActivity
 import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.setVisible
-import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -79,55 +81,63 @@ class ClubsActivity : BaseActivity() {
     }
 
     private fun setupObservers() {
-        viewModel.getViewState.observe(this) { state ->
-            when (state) {
-                is GetSquadListViewState.LoadingState -> showProgressDialog()
-                is GetSquadListViewState.SuccessState -> {
-                    dismissProgressDialog()
-                    binding.llTeam.setVisible()
-                    showClubs(state.response, state.levelPass)
+        lifecycleScope.launch {
+            viewModel.apply {
+                launch {
+                    squadListFlow.collect {
+                        when (it) {
+                            is Result.Error -> dismissProgressDialog()
+                            is Result.Loading -> showProgressDialog()
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                binding.llTeam.setVisible()
+                                showClubs(it.body!!.data, it.body.levelPass)
+                            }
+                            is Result.Auth -> viewModel.refreshTokenLogin(getRefreshToken())
+                        }
+                    }
                 }
-                is GetSquadListViewState.ErrorState -> {
-                    dismissProgressDialog()
-                }
-                is GetSquadListViewState.WarningState -> {
-                    dismissProgressDialog()
-                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
-                }
-                is GetSquadListViewState.RefreshState -> {
-                    dismissProgressDialog()
-                    updateToken(state.response.accessToken)
-                    updateRefreshToken(state.response.refreshToken)
-
-                    viewModel.getSquadListByLeague(intent.getDataExtra<League>(EXTRAS_LEAGUE).id, getUserID())
+                launch {
+                    refreshTokenFlow.collect {
+                        when (it) {
+                            is Result.Error -> dismissProgressDialog()
+                            is Result.Loading -> showProgressDialog()
+                            is Result.Success -> {
+                                dismissProgressDialog()
+                                it.body!!.apply {
+                                    if (isSuccess) {
+                                        updateToken(data.token.accessToken)
+                                        updateRefreshToken(data.token.refreshToken)
+                                        viewModel.getSquadListByLeague(intent.getDataExtra<League>(EXTRAS_LEAGUE).id, getUserID())
+                                    } else {
+                                        returnToSplash()
+                                    }
+                                }
+                            }
+                            is Result.Auth -> returnToSplash()
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun showClubs(clubs: List<Club>, levelPass: Boolean) {
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(this, false))
 
-        clubs.forEach { club ->
-            club.isPassed = false
-        }
-        if (clubs.count { !it.isLocked } > 1) {
-            clubs.forEach { club ->
-                if (!club.isLocked) {
-                    club.isPassed = true
-                }
-            }
-        }
-        if (clubs.count { it.isLocked } > 0) {
-            clubs.last { !it.isLocked }.isPassed = false
-        }
+    private fun showClubs(clubs: List<Club>, levelPass: Boolean) {
 
         lastLockedClub = clubs.last { !it.isLocked }
 
-        if (levelPass) {
+        if (clubs.all { it.isPassed }) {
+            val league = intent.getDataExtra<League>(EXTRAS_LEAGUE)
+            AnswerFragment.newInstance(league.name, league.imagePath, isAllClubsFinished = true).show(supportFragmentManager, "")
+        }
+
+        if (levelPass && !clubs.all { it.isPassed }) {
             AnswerFragment.newInstance(lastLockedClub!!.name, lastLockedClub!!.imagePath!!, isUnlockedClub = true).show(supportFragmentManager, "")
         }
 
-        if (!clubs.last().isLocked) {
+        if (clubs.last().isPassed) {
             if (reviewInfo != null) {
                 val flow = ReviewManagerFactory.create(this).launchReviewFlow(this, reviewInfo!!)
                 flow.addOnCompleteListener { }
@@ -138,7 +148,7 @@ class ClubsActivity : BaseActivity() {
     }
 
     private fun openSquad(club: Club) {
-        startActivity((SquadActivity.createIntent(this, club, club.isPassed!!)))
+        startActivity((SquadActivity.createIntent(this, club, club.isPassed)))
     }
 
     private fun setupInAppReview() {

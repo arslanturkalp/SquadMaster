@@ -7,11 +7,10 @@
     android:layout_marginTop="4dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
+    android:background="@drawable/bg_green_with_radius_ten"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/bg_green_with_radius_ten"
     android:foreground="@drawable/bg_ripple_effect"
-    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <RelativeLayout
@@ -43,13 +42,26 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvClubName"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:fontFamily="@font/josefin_sans"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/josefin_sans"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="13sp"
         tools:text="Manchester City" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivFinished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-4dp"
+        android:layout_marginEnd="-4dp"
+        android:elevation="12dp"
+        android:src="@drawable/ic_approved"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </LinearLayout>

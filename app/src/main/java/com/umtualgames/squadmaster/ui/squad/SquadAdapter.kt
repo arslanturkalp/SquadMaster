@@ -13,7 +13,7 @@ import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.getUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.getUnknownImage
 import com.umtualgames.squadmaster.databinding.RowLayoutPlayerBinding
-import com.umtualgames.squadmaster.network.responses.item.Player
+import com.umtualgames.squadmaster.domain.entities.responses.item.Player
 import com.umtualgames.squadmaster.utils.ifContains
 import com.umtualgames.squadmaster.utils.setGone
 import javax.inject.Inject
@@ -85,7 +85,7 @@ class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.Squ
                 } else {
                     tvPlayerName.apply {
                         text = item.displayName
-                        textSize = if (item.displayName.length > 23) 12f else if(item.displayName.length > 17) 13f else 14f
+                        textSize = if (item.displayName.length > 23) 12f else if (item.displayName.length > 17) 13f else 14f
                     }
 
                     ivPlayer.apply {

@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.gms.ads.AdRequest
@@ -17,24 +20,29 @@ import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SquadMasterApp
-import com.umtualgames.squadmaster.data.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.MessageEvent
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.FragmentLeaguesBinding
-import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
-import com.umtualgames.squadmaster.network.responses.item.League
+import com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest
+import com.umtualgames.squadmaster.domain.entities.responses.item.League
 import com.umtualgames.squadmaster.ui.base.BaseFragment
 import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
+import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -80,7 +88,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
         binding.apply {
             btnLoginOrRegister.setOnClickListener { requireContext().startActivity(StartActivity.createIntent(true, requireContext())) }
-            ivRefresh.setOnClickListener { viewModel.getLeagues(getUserID()) }
+            ivRefresh.setOnClickListener { viewModel.getUserPoint(getUserID()) }
         }
     }
 
@@ -100,57 +108,92 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     }
 
     private fun setupObservers() {
-        viewModel.getViewState.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is LeaguesViewState.LoadingState -> showProgressDialog()
-                is LeaguesViewState.SuccessState -> {
-                    dismissProgressDialog()
-                    showLeagues(state.response)
-                }
-
-                is LeaguesViewState.ErrorState -> {
-                    dismissProgressDialog()
-                    showAlertDialogTheme(title = getString(R.string.error), contentMessage = state.message)
-                }
-
-                is LeaguesViewState.WarningState -> {
-                    dismissProgressDialog()
-                    state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
-                }
-
-                is LeaguesViewState.RefreshState -> {
-                    dismissProgressDialog()
-                    state.response.data.token.apply {
-                        updateToken(accessToken)
-                        updateRefreshToken(refreshToken)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.apply {
+                    launch(Dispatchers.Main) {
+                        getLeaguesFlow.collect {
+                            when (it) {
+                                is Result.Error -> dismissProgressDialog()
+                                is Result.Loading -> {}
+                                is Result.Success -> {
+                                    dismissProgressDialog()
+                                    showLeagues(it.body!!.data)
+                                }
+                                is Result.Auth -> {
+                                    dismissProgressDialog()
+                                    refreshTokenLogin(getRefreshToken())
+                                }
+                            }
+                        }
                     }
-                }
 
-                is LeaguesViewState.UserPointLoadingState -> {}
-                is LeaguesViewState.UpdateState -> {
-                    EventBus.getDefault().post("Score Update")
-                }
-                is LeaguesViewState.RefreshTokenState -> {
-                    updateToken(state.response.accessToken)
-                    updateRefreshToken(state.response.refreshToken)
-                    viewModel.getUserPoint(getUserID())
-                }
-                is LeaguesViewState.ReturnSplashState -> {
-                    dismissProgressDialog()
-                    startActivity(SplashActivity.createIntent(requireContext(), false))
-                }
-                is LeaguesViewState.UserPointState -> {
-                    dismissProgressDialog()
-                    with(binding) {
-                        state.response.data.apply {
-                            tvBestScore.text = bestPoint.toString()
-                            tvTotalScore.text = point.toString()
+                    launch {
+                        updatePointFlow.collect {
+                            when (it) {
+                                is Result.Error -> dismissProgressDialog()
+                                is Result.Loading -> {}
+                                is Result.Success -> dismissProgressDialog()
+                                is Result.Auth -> {
+                                    dismissProgressDialog()
+                                    refreshTokenLogin(getRefreshToken())
+                                }
+                            }
+                        }
+                    }
+
+                    launch(Dispatchers.Main) {
+                        getPointFlow.collect {
+                            when (it) {
+                                is Result.Error -> dismissProgressDialog()
+                                is Result.Loading -> showProgressDialog()
+                                is Result.Success -> {
+                                    dismissProgressDialog()
+                                    with(binding) {
+                                        it.body!!.data.apply {
+                                            tvBestScore.text = bestPoint.toString()
+                                            tvTotalScore.text = point.toString()
+                                        }
+                                        getLeagues(getUserID())
+                                    }
+                                }
+                                is Result.Auth -> {
+                                    dismissProgressDialog()
+                                    refreshTokenLogin(getRefreshToken())
+                                }
+                            }
+                        }
+                    }
+
+                    launch {
+                        refreshTokenFlow.collect {
+                            when (it) {
+                                is Result.Error -> dismissProgressDialog()
+                                is Result.Loading -> {}
+                                is Result.Success -> {
+                                    dismissProgressDialog()
+                                    it.body!!.apply {
+                                        if (isSuccess) {
+                                            updateToken(data.token.accessToken)
+                                            updateRefreshToken(data.token.refreshToken)
+                                        } else {
+                                            returnToSplash()
+                                        }
+                                    }
+                                }
+                                is Result.Auth -> {
+                                    dismissProgressDialog()
+                                    returnToSplash()
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext(), false))
 
     private fun openClubs(league: League) {
         context?.startActivity((ClubsActivity.createIntent(context, league)))
@@ -196,7 +239,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
-        if (event.message == "League Update") {
+        if (event.message == "League Update" || event.message == "Score Update") {
             viewModel.getUserPoint(getUserID())
         }
     }

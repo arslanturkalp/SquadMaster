@@ -30,8 +30,7 @@ import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityStartBinding
-import com.umtualgames.squadmaster.network.requests.LoginRequest
-import com.umtualgames.squadmaster.network.requests.RegisterRequest
+import com.umtualgames.squadmaster.domain.entities.requests.LoginRequest
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.login.LoginActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
@@ -74,7 +73,7 @@ class StartActivity : BaseActivity() {
         if (getUserName() != "" && getPassword() != "") {
             if (!intent.getDataExtra<Boolean>(EXTRAS_FROM_GUEST)) {
                 binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnLoginAsGuest, btnGoogleSignIn, btnSignUp, tvOr, tvDontHaveAnAccount) }
-                viewModel.signIn(LoginRequest(username = getUserName(), password = getPassword()))
+                viewModel.signIn(com.umtualgames.squadmaster.domain.entities.requests.LoginRequest(username = getUserName(), password = getPassword()))
             }
         }
 
@@ -89,13 +88,13 @@ class StartActivity : BaseActivity() {
                     negativeButtonTitle = getString(R.string.yes),
                     positiveButtonTitle = getString(R.string.no),
                     onNegativeButtonClick = {
-                        viewModel.signIn(LoginRequest(username = ADMIN_USER, password = ADMIN_PASSWORD))
+                        viewModel.signIn(com.umtualgames.squadmaster.domain.entities.requests.LoginRequest(username = ADMIN_USER, password = ADMIN_PASSWORD))
                         updateUserName(ADMIN_USER)
                         updatePassword(ADMIN_PASSWORD)
                     })
             }
             btnGoogleSignIn.setOnClickListener {
-                viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
+                viewModel.loginAdmin(com.umtualgames.squadmaster.domain.entities.requests.LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
             }
         }
     }
@@ -121,7 +120,7 @@ class StartActivity : BaseActivity() {
             val account = completedTask.getResult(ApiException::class.java)
             val userName = account.email.orEmpty().substringBefore("@").lowercase()
             viewModel.register(
-                RegisterRequest(
+                com.umtualgames.squadmaster.domain.entities.requests.RegisterRequest(
                     name = account.givenName.orEmpty(),
                     surname = account.familyName.orEmpty(),
                     username = userName,

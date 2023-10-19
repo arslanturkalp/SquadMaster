@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.application.SessionManager
 import com.umtualgames.squadmaster.di.Repository
-import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
-import com.umtualgames.squadmaster.network.responses.item.Token
+import com.umtualgames.squadmaster.domain.entities.responses.item.Token
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,7 +17,7 @@ class CompareViewModel @Inject constructor(private val repository: Repository) :
     private val viewState = MutableLiveData<CompareViewState>()
     val getViewState: LiveData<CompareViewState> = viewState
 
-    fun updatePoint(updatePointRequest: UpdatePointRequest) = viewModelScope.launch {
+    fun updatePoint(updatePointRequest: com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest) = viewModelScope.launch {
         viewState.postValue(CompareViewState.UserPointLoadingState)
         repository.updatePoint(updatePointRequest).let {
             if (it.isSuccessful) viewState.postValue(CompareViewState.UpdateState) else refreshTokenLogin(SessionManager.getRefreshToken())

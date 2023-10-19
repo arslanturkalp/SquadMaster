@@ -6,10 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.di.Repository
-import com.umtualgames.squadmaster.network.requests.LoginRequest
-import com.umtualgames.squadmaster.network.requests.RegisterRequest
-import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
-import com.umtualgames.squadmaster.network.responses.loginresponses.RegisterResponse
+import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.RegisterResponse
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -29,11 +27,11 @@ class RegisterViewModel @Inject constructor(private val repository: Repository) 
         registerValidation(name, username, password, email)
         when (getErrorList().isNotEmpty()) {
             true -> viewState.postValue(RegisterViewState.ValidationState(getErrorList()))
-            false -> requestRegister(RegisterRequest(name, surname, username, password, email))
+            false -> requestRegister(com.umtualgames.squadmaster.domain.entities.requests.RegisterRequest(name, surname, username, password, email))
         }
     }
 
-    private fun requestRegister(registerRequest: RegisterRequest) = viewModelScope.launch {
+    private fun requestRegister(registerRequest: com.umtualgames.squadmaster.domain.entities.requests.RegisterRequest) = viewModelScope.launch {
         viewState.postValue(RegisterViewState.LoadingState)
         repository.register(registerRequest).let {
             if (it.isSuccessful) {
@@ -44,7 +42,7 @@ class RegisterViewModel @Inject constructor(private val repository: Repository) 
         }
     }
 
-    fun loginAdmin (loginRequest: LoginRequest) = viewModelScope.launch {
+    fun loginAdmin(loginRequest: com.umtualgames.squadmaster.domain.entities.requests.LoginRequest) = viewModelScope.launch {
         repository.login(loginRequest).let {
             if (it.isSuccessful) {
                 viewState.postValue(RegisterViewState.AdminState(it.body()!!))

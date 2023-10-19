@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.application.SessionManager
 import com.umtualgames.squadmaster.di.Repository
-import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
-import com.umtualgames.squadmaster.network.responses.item.Token
-import com.umtualgames.squadmaster.network.responses.roomresponses.CreateRoomResponse
-import com.umtualgames.squadmaster.network.responses.roomresponses.GetRoomsResponse
-import com.umtualgames.squadmaster.network.responses.roomresponses.JoinRoomResponse
-import com.umtualgames.squadmaster.network.responses.roomresponses.LeaveRoomResponse
+import com.umtualgames.squadmaster.domain.entities.responses.item.Token
+import com.umtualgames.squadmaster.domain.entities.responses.roomresponses.CreateRoomResponse
+import com.umtualgames.squadmaster.domain.entities.responses.roomresponses.GetRoomsResponse
+import com.umtualgames.squadmaster.domain.entities.responses.roomresponses.JoinRoomResponse
+import com.umtualgames.squadmaster.domain.entities.responses.roomresponses.LeaveRoomResponse
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -68,7 +67,7 @@ class OnlineViewModel @Inject constructor(private val repository: Repository) : 
         }
     }
 
-    fun updatePoint(updatePointRequest: UpdatePointRequest) = viewModelScope.launch {
+    fun updatePoint(updatePointRequest: com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest) = viewModelScope.launch {
         viewState.postValue(OnlineViewState.UserPointLoadingState)
         repository.updatePoint(updatePointRequest).let {
             if (it.isSuccessful) viewState.postValue(OnlineViewState.UpdateState) else refreshTokenLogin(SessionManager.getRefreshToken())

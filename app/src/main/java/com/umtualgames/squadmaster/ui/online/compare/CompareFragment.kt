@@ -23,8 +23,7 @@ import com.umtualgames.squadmaster.application.SessionManager
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SquadMasterApp
 import com.umtualgames.squadmaster.databinding.FragmentCompareBinding
-import com.umtualgames.squadmaster.network.requests.UpdatePointRequest
-import com.umtualgames.squadmaster.network.responses.item.Player
+import com.umtualgames.squadmaster.domain.entities.responses.item.Player
 import com.umtualgames.squadmaster.ui.base.BaseBottomSheetDialogFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
@@ -98,7 +97,7 @@ class CompareFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardListe
                         if (bundle.getParcelableDataExtra<Player>(KEY_CORRECT_ANSWER)?.displayName == bundle.getString("KEY_MY_CHOOSE_NAME")) {
                             tvMatchStatus.text = getString(R.string.won_and_50_point)
                             tvMatchStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_two))
-                            viewModel.updatePoint(UpdatePointRequest(getUserID(), 50))
+                            viewModel.updatePoint(com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest(getUserID(), 50))
                         }
                     }
 
@@ -138,7 +137,7 @@ class CompareFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardListe
                     SessionManager.updateToken(state.response.accessToken)
                     SessionManager.updateRefreshToken(state.response.refreshToken)
 
-                    viewModel.updatePoint(UpdatePointRequest(getUserID(), 50))
+                    viewModel.updatePoint(com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest(getUserID(), 50))
                 }
 
                 is CompareViewState.ReturnSplashState -> {

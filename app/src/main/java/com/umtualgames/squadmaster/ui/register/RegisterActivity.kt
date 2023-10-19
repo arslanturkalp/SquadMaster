@@ -11,7 +11,6 @@ import com.umtualgames.squadmaster.application.Constants.ADMIN_PASSWORD
 import com.umtualgames.squadmaster.application.Constants.ADMIN_USER
 import com.umtualgames.squadmaster.application.SessionManager.updateToken
 import com.umtualgames.squadmaster.databinding.ActivityRegisterBinding
-import com.umtualgames.squadmaster.network.requests.LoginRequest
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.login.LoginActivity
 import com.umtualgames.squadmaster.utils.setPortraitMode
@@ -35,7 +34,7 @@ class RegisterActivity : BaseActivity() {
         setPortraitMode()
         setupObservers()
 
-        viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
+        viewModel.loginAdmin(com.umtualgames.squadmaster.domain.entities.requests.LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
 
         binding.apply {
 

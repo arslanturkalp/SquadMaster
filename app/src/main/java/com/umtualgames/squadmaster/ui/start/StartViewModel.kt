@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.di.Repository
-import com.umtualgames.squadmaster.network.requests.LoginRequest
-import com.umtualgames.squadmaster.network.requests.RegisterRequest
-import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
-import com.umtualgames.squadmaster.network.responses.loginresponses.RegisterResponse
+import com.umtualgames.squadmaster.domain.entities.requests.LoginRequest
+import com.umtualgames.squadmaster.domain.entities.requests.RegisterRequest
+import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.RegisterResponse
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

@@ -5,35 +5,42 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.R
+import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.di.Repository
-import com.umtualgames.squadmaster.network.requests.LoginRequest
-import com.umtualgames.squadmaster.network.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.domain.entities.requests.LoginRequest
+import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.LoginResponse
+import com.umtualgames.squadmaster.domain.usecases.LoginUseCase
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: Repository): BaseViewModel() {
-    
+class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) : BaseViewModel() {
+
     private val viewState = MutableLiveData<LoginViewState>()
     val getViewState: LiveData<LoginViewState> = viewState
 
+    private val _loginFlow: MutableStateFlow<Result<LoginResponse>> = MutableStateFlow(Result.Loading())
+    val loginFlow: StateFlow<Result<LoginResponse>> = _loginFlow
+
     fun login(username: String, password: String) {
         loginValidation(username, password)
-        when (getErrorList().isNotEmpty()){
+        when (getErrorList().isNotEmpty()) {
             true -> viewState.postValue(LoginViewState.ValidationState(getErrorList()))
             false -> requestLogin(LoginRequest(username, password))
         }
     }
 
-    private fun requestLogin(loginRequest: LoginRequest) = viewModelScope.launch{
-        viewState.postValue(LoginViewState.LoadingState)
-        repository.login(loginRequest).let {
-            when {
-                it.isSuccessful -> viewState.postValue(LoginViewState.SuccessState(it.body()!!))
-                it.code() != 200 -> viewState.postValue(LoginViewState.WarningState(it.message()))
-                else -> viewState.postValue(LoginViewState.ErrorState(it.message()))
+    private fun requestLogin(loginRequest: LoginRequest) = viewModelScope.launch {
+        loginUseCase(loginRequest).collect {
+            when (it) {
+                is Result.Error -> _loginFlow.emit(it)
+                is Result.Loading -> _loginFlow.emit(it)
+                is Result.Success -> _loginFlow.emit(it)
+                is Result.Auth -> _loginFlow.emit(it)
             }
         }
     }
@@ -53,8 +60,5 @@ class LoginViewModel @Inject constructor(private val repository: Repository): Ba
 
 sealed class LoginViewState {
     object LoadingState : LoginViewState()
-    data class SuccessState(val response: LoginResponse) : LoginViewState()
-    data class ErrorState(val message: String) : LoginViewState()
-    data class WarningState(val message: String?) : LoginViewState()
     data class ValidationState(val validationErrorList: List<Int>) : LoginViewState()
 }
