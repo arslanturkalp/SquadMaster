@@ -83,7 +83,7 @@ class GameAdapter @Inject constructor() : RecyclerView.Adapter<GameAdapter.Squad
                 } else {
                     tvPlayerName.apply {
                         text = item.displayName
-                        textSize = if (item.displayName.length > 23) 10f else if (item.displayName.length > 17) 11f else 12f
+                        textSize = if (item.displayName.length > 23) 12f else if (item.displayName.length > 17) 13f else 14f
                     }
 
                     ivPlayer.apply {

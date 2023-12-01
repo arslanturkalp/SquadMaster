@@ -77,7 +77,6 @@
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:layout_weight="0.2"
-                    android:background="@drawable/bg_white"
                     tools:src="@drawable/ic_flag" />
 
             </LinearLayout>
@@ -283,15 +282,16 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/green_two"
                 android:visibility="gone"
+                app:srcCompat="@drawable/ic_football_jersey"
                 app:fabSize="normal"
-                app:tint="@color/white" />
+                app:tint="@null" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="32dp"
-                android:text="0"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:visibility="gone"

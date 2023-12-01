@@ -13,6 +13,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.BillingResponseCode
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryProductDetailsParams
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.OnUserEarnedRewardListener
@@ -36,12 +47,10 @@ import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.start.StartActivity
-import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -58,6 +67,10 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
 
     private var mRewardedInterstitialAd: RewardedInterstitialAd? = null
 
+    private lateinit var billingClient: BillingClient
+
+    private lateinit var purchaseUpdateListener: PurchasesUpdatedListener
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         return binding.root
@@ -70,13 +83,28 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
         setupRecyclerViews()
         loadAds()
 
+        purchaseUpdateListener = PurchasesUpdatedListener { billingResult, purchases ->
+            if (billingResult.responseCode == BillingResponseCode.OK && purchases != null) {
+                for (pur in purchases) {
+                    handlePurchase(pur)
+                }
+            }
+        }
+
+        billingClient = BillingClient.newBuilder(requireContext())
+            .setListener(purchaseUpdateListener)
+            .enablePendingPurchases()
+            .build()
+
+
         if (!isAdminUser()) {
             binding.apply {
                 setVisibility(View.VISIBLE, rvLeagues, cvScore, ivRefresh)
                 llShowLeague.setGone()
             }
-            viewModel.getUserPoint(getUserID())
         }
+
+        viewModel.getUserPoint(getUserID())
 
         requireActivity()
             .onBackPressedDispatcher
@@ -90,6 +118,71 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
             btnLoginOrRegister.setOnClickListener { requireContext().startActivity(StartActivity.createIntent(true, requireContext())) }
             ivRefresh.setOnClickListener { viewModel.getUserPoint(getUserID()) }
         }
+    }
+
+    private fun receiveChampionsLeague() {
+        val productList = ArrayList<QueryProductDetailsParams.Product>()
+
+        productList.add(
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId("championsleague")
+                .setProductType(BillingClient.ProductType.INAPP)
+                .build()
+        )
+
+        val queryProductDetailsParams = QueryProductDetailsParams.newBuilder()
+            .setProductList(productList)
+            .build()
+
+        billingClient.queryProductDetailsAsync(queryProductDetailsParams) { _, list ->
+            launchPurchaseFlow(list[0])
+        }
+    }
+
+    private fun launchPurchaseFlow(productDetails: ProductDetails) {
+        val productList = ArrayList<BillingFlowParams.ProductDetailsParams>()
+        productList.add(
+            BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(productDetails)
+                .build()
+        )
+
+        val billingFlowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(productList).build()
+        billingClient.launchBillingFlow(requireActivity(), billingFlowParams)
+    }
+
+    private fun handlePurchase(purchase: Purchase) {
+        if (!purchase.isAcknowledged) {
+            billingClient.acknowledgePurchase(
+                AcknowledgePurchaseParams
+                    .newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+            ) {
+
+                if (it.responseCode == BillingResponseCode.OK) {
+                    for (pur in purchase.products) {
+                        if (pur.equals("championsleague")) {
+                            consumePurchase(purchase)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun consumePurchase(purchase: Purchase) {
+        val params = ConsumeParams.newBuilder()
+            .setPurchaseToken(purchase.purchaseToken)
+            .build()
+
+        billingClient.consumeAsync(params) { _, _ ->
+            unlockChampionsLeague()
+        }
+    }
+
+    private fun unlockChampionsLeague() {
+        viewModel.unlockLeague(getUserID(), 27)
     }
 
     private fun backToMainMenu() {
@@ -111,11 +204,11 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.apply {
-                    launch(Dispatchers.Main) {
+                    launch {
                         getLeaguesFlow.collect {
                             when (it) {
                                 is Result.Error -> dismissProgressDialog()
-                                is Result.Loading -> {}
+                                is Result.Loading -> showProgressDialog()
                                 is Result.Success -> {
                                     dismissProgressDialog()
                                     showLeagues(it.body!!.data)
@@ -142,11 +235,11 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
                         }
                     }
 
-                    launch(Dispatchers.Main) {
+                    launch {
                         getPointFlow.collect {
                             when (it) {
                                 is Result.Error -> dismissProgressDialog()
-                                is Result.Loading -> showProgressDialog()
+                                is Result.Loading -> {}
                                 is Result.Success -> {
                                     dismissProgressDialog()
                                     with(binding) {
@@ -188,6 +281,24 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
                             }
                         }
                     }
+
+                    launch {
+                        unlockLeagueFlow.collect {
+                            when (it) {
+                                is Result.Error -> dismissProgressDialog()
+                                is Result.Loading -> {}
+                                is Result.Success -> {
+                                    dismissProgressDialog()
+                                    showAlertDialogTheme(getString(R.string.info), getString(R.string.league_unlocked))
+                                    viewModel.getLeagues(getUserID())
+                                }
+                                is Result.Auth -> {
+                                    dismissProgressDialog()
+                                    returnToSplash()
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -200,16 +311,30 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
     }
 
     private fun showRequireDialog(league: League) {
-        showAlertDialogTheme(
-            title = getString(R.string.warning),
-            contentMessage = String.format(getString(R.string.need_point), league.name, league.point) + " " + getString(R.string.watch_and_earn),
-            showNegativeButton = true,
-            negativeButtonTitle = getString(R.string.watch_ad),
-            onNegativeButtonClick = {
-                if (mRewardedInterstitialAd != null) {
-                    mRewardedInterstitialAd?.show(activity as Activity, this@LeaguesFragment)
+        if (league.name == "Champions League Legends") {
+            billingClient.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode == BillingResponseCode.OK) {
+                        receiveChampionsLeague()
+                    }
+                }
+
+                override fun onBillingServiceDisconnected() {
+                    showAlertDialogTheme(getString(R.string.error), getString(R.string.unknown_host_exception))
                 }
             })
+        } else {
+            showAlertDialogTheme(
+                title = getString(R.string.warning),
+                contentMessage = String.format(getString(R.string.need_point), league.name, league.point) + " " + getString(R.string.watch_and_earn),
+                showNegativeButton = true,
+                negativeButtonTitle = getString(R.string.watch_ad),
+                onNegativeButtonClick = {
+                    if (mRewardedInterstitialAd != null) {
+                        mRewardedInterstitialAd?.show(activity as Activity, this@LeaguesFragment)
+                    }
+                })
+        }
     }
 
     private fun showLeagues(leagues: List<League>) {

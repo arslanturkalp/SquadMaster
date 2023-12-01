@@ -11,6 +11,8 @@ object SessionManager {
     private const val KEY_IS_SHOWED_TUTORIAL = "KEY_IS_SHOWED_TUTORIAL"
     private const val KEY_IS_USED_EXTRA_LIFE = "KEY_IS_USED_EXTRA_LIFE"
     private const val KEY_IS_ONLINE_MODE_ACTIVE = "KEY_IS_ONLINE_MODE_ACTIVE"
+    private const val KEY_IS_MUSIC_OPEN = "KEY_IS_MUSIC_OPEN"
+    private const val KEY_IS_SOUND_OPEN = "KEY_IS_SOUND_OPEN"
 
     private const val KEY_TOKEN = "KEY_TOKEN"
     private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
@@ -39,6 +41,8 @@ object SessionManager {
     private var isShowedTutorial: Boolean = false
     private var isUsedExtraLife: Boolean = false
     private var isOnlineModeActive: Boolean = false
+    private var isMusicOpen: Boolean = true
+    private var isSoundOpen: Boolean = true
 
     init {
         unknownAnswer = Hawk.get(KEY_UNKNOWN_ANSWER, "")
@@ -55,6 +59,8 @@ object SessionManager {
         isShowedTutorial = Hawk.get(KEY_IS_SHOWED_TUTORIAL, false)
         isUsedExtraLife = Hawk.get(KEY_IS_USED_EXTRA_LIFE, false)
         isOnlineModeActive = Hawk.get(KEY_IS_ONLINE_MODE_ACTIVE, false)
+        isMusicOpen = Hawk.get(KEY_IS_MUSIC_OPEN, true)
+        isSoundOpen = Hawk.get(KEY_IS_SOUND_OPEN, true)
     }
 
     fun updateUnknownAnswer(value: String) {
@@ -211,6 +217,28 @@ object SessionManager {
 
     fun clearIsOnlineModeActive() {
         updateIsOnlineModeActive(false)
+    }
+
+    fun updateIsMusicOpen(value: Boolean) {
+        Hawk.put(KEY_IS_MUSIC_OPEN, value)
+        isMusicOpen = value
+    }
+
+    fun getIsMusicOpen() = isMusicOpen
+
+    fun clearIsMusicOpen() {
+        updateIsMusicOpen(true)
+    }
+
+    fun updateIsSoundOpen(value: Boolean) {
+        Hawk.put(KEY_IS_SOUND_OPEN, value)
+        isSoundOpen = value
+    }
+
+    fun getIsSoundOpen() = isSoundOpen
+
+    fun clearIsSoundOpen() {
+        updateIsSoundOpen(true)
     }
 
 }

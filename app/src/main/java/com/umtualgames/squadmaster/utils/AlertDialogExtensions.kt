@@ -20,7 +20,7 @@ fun Fragment.showAlertDialogTheme(
     neutralButtonTitle: String? = requireContext().getString(R.string.cancel),
     onNeutralButtonClick: (() -> Unit?)? = null
 ) {
-    checkLanguage(requireContext())
+    checkLanguage(requireContext(), this.requireActivity())
     AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme).apply {
         setTitle(title)
         setMessage(contentMessage)

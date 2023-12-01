@@ -1,5 +1,7 @@
 package com.umtualgames.squadmaster.data.api
 
+import com.umtualgames.squadmaster.domain.entities.requests.LevelPassRequest
+import com.umtualgames.squadmaster.domain.entities.requests.UnlockLeagueRequest
 import com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.domain.entities.responses.item.Player
 import com.umtualgames.squadmaster.domain.entities.responses.leagueresponses.GetLeaguesResponse
@@ -12,6 +14,7 @@ import com.umtualgames.squadmaster.domain.entities.responses.roomresponses.JoinR
 import com.umtualgames.squadmaster.domain.entities.responses.roomresponses.LeaveRoomResponse
 import com.umtualgames.squadmaster.domain.entities.responses.squadresponses.GetSquadListResponse
 import com.umtualgames.squadmaster.domain.entities.responses.unlocksquadresponses.LevelPassResponse
+import com.umtualgames.squadmaster.domain.entities.responses.unlocksquadresponses.UnlockLeagueResponse
 import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.GetRankListResponse
 import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.UserPointResponse
 import retrofit2.Response
@@ -59,7 +62,10 @@ interface ApiService {
     suspend fun getSquadListByLeague(@Query("leagueID") leagueID: Int, @Query("userID") userID: Int): Response<GetSquadListResponse>
 
     @POST("UnlockSquadToUser/LevelPass")
-    suspend fun levelPass(@Body levelPassRequest: com.umtualgames.squadmaster.domain.entities.requests.LevelPassRequest): Response<LevelPassResponse>
+    suspend fun levelPass(@Body levelPassRequest: LevelPassRequest): Response<LevelPassResponse>
+
+    @POST("UnlockSquadToUser/LevelPassWithoutPoint")
+    suspend fun unlockLeague(@Body levelPassRequest: UnlockLeagueRequest): Response<UnlockLeagueResponse>
 
     @GET("UserPoint/GetUserPoint")
     suspend fun getUserPoint(@Query("userID") userID: Int): Response<UserPointResponse>

@@ -90,7 +90,7 @@ class SquadActivity : BaseActivity() {
 
         val squad = intent.getDataExtra<Club>(EXTRAS_SQUAD)
 
-        checkLanguage(this)
+        checkLanguage(this, this)
         setStatusBarColor()
         setPortraitMode()
         preventScreenshot()
@@ -101,7 +101,6 @@ class SquadActivity : BaseActivity() {
         setupRecyclerViews()
         setupObservers()
         loadAds()
-
         viewModel.getSquad(squad.name)
 
         binding.apply {
@@ -384,6 +383,11 @@ class SquadActivity : BaseActivity() {
                             if (tvScore.text.toString().toInt() >= 20) {
                                 tvNumber.text = unknownPlayer.number.toString()
                                 updateIsShowedNumber(true)
+                                fabNumber.setBackgroundColor(ContextCompat.getColor(this@SquadActivity, R.color.green))
+                                Glide.with(fabNumber.context)
+                                    .asBitmap()
+                                    .load("")
+                                    .into(fabNumber)
                                 viewModel.updatePoint(UpdatePointRequest(getUserID(), -20))
                             } else Toast.makeText(this@SquadActivity, getString(R.string.insufficient_score), Toast.LENGTH_SHORT).show()
                         },

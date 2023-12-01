@@ -134,5 +134,8 @@
     <string name="waiting_person">Bekleyen: %1$s</string>
     <string name="clues">İpucu</string>
     <string name="level_is_passed_description">Bu takımdaki eksik oyuncuyu buldunuz. Macera modunda bu takım tekrar karşına çıkabilir.</string>
+    <string name="music">Müzik</string>
+    <string name="sound">Ses</string>
+    <string name="league_unlocked">Lig kullanıma açıldı.</string>
 
 </resources>

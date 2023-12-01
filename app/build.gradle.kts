@@ -17,8 +17,8 @@ android {
         applicationId = "com.umtualgames.squadmaster"
         minSdk = 23
         targetSdk = 34
-        versionCode = 25
-        versionName = "1.3.1"
+        versionCode = 31
+        versionName = "1.5"
 
         multiDexEnabled = true
 
@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.glide.transformations)
     implementation(libs.carouselrecyclerview)
     implementation(libs.bundles.network)
+    implementation(libs.billing)
 
     //Analytics
     implementation("com.google.firebase:firebase-analytics-ktx")
@@ -90,5 +91,5 @@ dependencies {
     implementation("com.google.firebase:firebase-perf-ktx")
 
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:31.2.2"))
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 }

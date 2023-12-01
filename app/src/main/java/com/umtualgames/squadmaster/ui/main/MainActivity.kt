@@ -36,7 +36,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        checkLanguage(this)
+        checkLanguage(this, this)
         setPortraitMode()
         initFragments()
 

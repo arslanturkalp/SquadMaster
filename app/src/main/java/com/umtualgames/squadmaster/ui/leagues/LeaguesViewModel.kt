@@ -2,13 +2,16 @@ package com.umtualgames.squadmaster.ui.leagues
 
 import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.data.entities.models.Result
+import com.umtualgames.squadmaster.domain.entities.requests.UnlockLeagueRequest
 import com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest
 import com.umtualgames.squadmaster.domain.entities.responses.leagueresponses.GetLeaguesResponse
 import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.RefreshTokenResponse
+import com.umtualgames.squadmaster.domain.entities.responses.unlocksquadresponses.UnlockLeagueResponse
 import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.UserPointResponse
 import com.umtualgames.squadmaster.domain.usecases.GetLeaguesUseCase
 import com.umtualgames.squadmaster.domain.usecases.GetPointUseCase
 import com.umtualgames.squadmaster.domain.usecases.RefreshTokenUseCase
+import com.umtualgames.squadmaster.domain.usecases.UnlockLeagueUseCase
 import com.umtualgames.squadmaster.domain.usecases.UpdatePointUseCase
 import com.umtualgames.squadmaster.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +25,7 @@ class LeaguesViewModel @Inject constructor(
     private val getLeaguesUseCase: GetLeaguesUseCase,
     private val updatePointUseCase: UpdatePointUseCase,
     private val getPointUseCase: GetPointUseCase,
+    private val unlockLeagueUseCase: UnlockLeagueUseCase,
     private val refreshTokenUseCase: RefreshTokenUseCase
 ) : BaseViewModel() {
 
@@ -33,6 +37,9 @@ class LeaguesViewModel @Inject constructor(
 
     private val _getPointFlow: MutableStateFlow<Result<UserPointResponse>> = MutableStateFlow(Result.Loading())
     val getPointFlow: StateFlow<Result<UserPointResponse>> = _getPointFlow
+
+    private val _unlockLeagueFlow: MutableStateFlow<Result<UnlockLeagueResponse>> = MutableStateFlow(Result.Loading())
+    val unlockLeagueFlow: StateFlow<Result<UnlockLeagueResponse>> = _unlockLeagueFlow
 
     private val _refreshTokenFlow: MutableStateFlow<Result<RefreshTokenResponse>> = MutableStateFlow(Result.Loading())
     val refreshTokenFlow: StateFlow<Result<RefreshTokenResponse>> = _refreshTokenFlow
@@ -70,6 +77,16 @@ class LeaguesViewModel @Inject constructor(
         }
     }
 
+    fun unlockLeague(userID: Int, leagueID: Int) = viewModelScope.launch {
+        unlockLeagueUseCase(UnlockLeagueRequest(userID, leagueID)).collect{
+            when (it) {
+                is Result.Error -> _unlockLeagueFlow.emit(it)
+                is Result.Loading -> _unlockLeagueFlow.emit(it)
+                is Result.Success -> _unlockLeagueFlow.emit(it)
+                is Result.Auth -> _unlockLeagueFlow.emit(it)
+            }
+        }
+    }
 
     fun refreshTokenLogin(refreshToken: String) = viewModelScope.launch {
         refreshTokenUseCase(refreshToken).collect {

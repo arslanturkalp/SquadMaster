@@ -35,7 +35,6 @@ class LoginActivity : BaseActivity() {
         setPortraitMode()
         setupObservers()
 
-
         binding.apply {
             val userName = intent.getDataExtra<String?>(EXTRAS_USER_NAME)
             val password = intent.getDataExtra<String?>(EXTRAS_PASSWORD)
@@ -58,7 +57,7 @@ class LoginActivity : BaseActivity() {
                             dismissProgressDialog()
                             showAlertDialogTheme(title = getString(R.string.error), contentMessage = it.message)
                         }
-                        is Result.Loading -> showProgressDialog()
+                        is Result.Loading -> {}
                         is Result.Success -> {
                             dismissProgressDialog()
                             it.body!!.apply {
@@ -85,7 +84,7 @@ class LoginActivity : BaseActivity() {
         }
         viewModel.getViewState.observe(this) { state ->
             when (state) {
-                is LoginViewState.LoadingState -> showProgressDialog()
+                is LoginViewState.LoadingState -> { }
                 is LoginViewState.ValidationState -> {
                     dismissProgressDialog()
                     showAlertDialogTheme(title = getString(R.string.warning), contentMessage = state.validationErrorList.joinToString(separator = "\n") { getString(it) })

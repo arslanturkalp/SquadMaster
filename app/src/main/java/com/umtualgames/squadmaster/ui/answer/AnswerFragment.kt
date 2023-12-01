@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.data.entities.models.MessageEvent
@@ -49,7 +48,6 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
 
                     if (isAllClubsFinished) {
                         this@AnswerFragment.isCancelable = true
-                        ivPlayerPhoto.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green_two))
                         tvTitle.text = getString(R.string.all_clubs_finished)
                     }
 
@@ -78,7 +76,7 @@ class AnswerFragment : BaseBottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkLanguage(requireContext())
+        checkLanguage(requireContext(), requireActivity())
     }
 
     companion object {

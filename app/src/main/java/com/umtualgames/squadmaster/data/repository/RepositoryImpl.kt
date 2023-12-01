@@ -16,6 +16,8 @@ import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.
 import com.umtualgames.squadmaster.domain.repository.RepositoryNew
 import com.umtualgames.squadmaster.data.api.ApiService
 import com.umtualgames.squadmaster.data.api.ForTokenApiService
+import com.umtualgames.squadmaster.domain.entities.requests.UnlockLeagueRequest
+import com.umtualgames.squadmaster.domain.entities.responses.unlocksquadresponses.UnlockLeagueResponse
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(private val apiService: ApiService, private val forTokenApiService: ForTokenApiService) : RepositoryNew {
@@ -48,6 +50,19 @@ class RepositoryImpl @Inject constructor(private val apiService: ApiService, pri
 
     override suspend fun levelPass(levelPassRequest: LevelPassRequest): Result<LevelPassResponse> {
         val response = apiService.levelPass(levelPassRequest)
+        return try {
+            return if (response.isSuccessful) {
+                Result.Success(response.body(), response.code(), response.message())
+            } else if (response.code() == 401) {
+                Result.Auth(response.code(), response.message())
+            } else Result.Error(response.code(), response.message())
+        } catch (e: Exception) {
+            Result.Error(response.code(), e.message)
+        }
+    }
+
+    override suspend fun unlockLeague(unlockLeagueRequest: UnlockLeagueRequest): Result<UnlockLeagueResponse> {
+        val response = apiService.unlockLeague(unlockLeagueRequest)
         return try {
             return if (response.isSuccessful) {
                 Result.Success(response.body(), response.code(), response.message())

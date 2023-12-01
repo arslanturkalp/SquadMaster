@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.media.AudioManager.RINGER_MODE_NORMAL
 import android.media.AudioManager.RINGER_MODE_SILENT
 import android.media.AudioManager.RINGER_MODE_VIBRATE
+import android.media.MediaPlayer
 import android.os.*
 import android.view.View
 import android.view.WindowManager
@@ -27,7 +28,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.utils.adapter.PotentialAnswersAdapter
 import com.umtualgames.squadmaster.application.Constants.AD_UNIT_ID_GAME
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedNumber
@@ -35,6 +35,7 @@ import com.umtualgames.squadmaster.application.SessionManager.clearUnknownAnswer
 import com.umtualgames.squadmaster.application.SessionManager.clearWrongCount
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.getIsShowedNumber
+import com.umtualgames.squadmaster.application.SessionManager.getIsSoundOpen
 import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getScore
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
@@ -50,17 +51,16 @@ import com.umtualgames.squadmaster.application.SessionManager.updateWrongCount
 import com.umtualgames.squadmaster.data.entities.models.Result
 import com.umtualgames.squadmaster.databinding.ActivitySquadBinding
 import com.umtualgames.squadmaster.domain.entities.requests.UpdatePointRequest
-import com.umtualgames.squadmaster.domain.entities.responses.item.League
 import com.umtualgames.squadmaster.domain.entities.responses.item.Player
 import com.umtualgames.squadmaster.domain.entities.responses.item.PotentialAnswer
 import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
-import com.umtualgames.squadmaster.ui.clubs.ClubsActivity
 import com.umtualgames.squadmaster.ui.gameover.GameOverFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.yellowcard.YellowCardFragment
 import com.umtualgames.squadmaster.utils.*
+import com.umtualgames.squadmaster.utils.adapter.PotentialAnswersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -85,8 +85,6 @@ class GameActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        System.gc()
 
         setPortraitMode()
         preventScreenshot()
@@ -397,6 +395,11 @@ class GameActivity : BaseActivity() {
                             if (getScore() >= 20) {
                                 tvNumber.text = unknownPlayer.number.toString()
                                 updateIsShowedNumber(true)
+                                fabNumber.setBackgroundColor(ContextCompat.getColor(this@GameActivity, R.color.green))
+                                Glide.with(fabNumber.context)
+                                    .asBitmap()
+                                    .load("")
+                                    .into(fabNumber)
                                 updateScore(getScore() - 20)
                                 tvScore.text = getScore().toString()
 
@@ -414,8 +417,18 @@ class GameActivity : BaseActivity() {
                 updateScore(getScore() + 10)
                 updateUnknownAnswer(this.displayName)
                 updateUnknownImage(this.imagePath)
+                if (getIsSoundOpen()) MediaPlayer.create(this@GameActivity, R.raw.correct_answer).apply {
+                    isLooping = false
+                    setVolume(100f, 100f)
+                    start()
+                }
                 navigateToAnswer(this.imagePath, this.displayName)
             } else {
+                if (getIsSoundOpen()) MediaPlayer.create(this@GameActivity, R.raw.wrong_answer).apply {
+                    isLooping = false
+                    setVolume(100f, 100f)
+                    start()
+                }
                 showWrongAnswerAnimation()
             }
         }

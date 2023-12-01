@@ -50,7 +50,7 @@ class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.Squ
                 ivFlag.apply {
                     Glide.with(context)
                         .asBitmap()
-                        .load("https://flagcdn.com/w160/${ifContains(item.nationality.lowercase())}.png")
+                        .load("https://flagcdn.com/56x42/${ifContains(item.nationality.lowercase())}.png")
                         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                         .placeholder(circularProgressDrawable)
                         .into(this)
@@ -73,9 +73,7 @@ class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.Squ
                             setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
 
                             Glide.with(context)
-                                .asBitmap()
                                 .load(getUnknownImage())
-                                .skipMemoryCache(true)
                                 .placeholder(circularProgressDrawable)
                                 .into(this)
                         }
@@ -90,9 +88,7 @@ class SquadAdapter @Inject constructor() : RecyclerView.Adapter<SquadAdapter.Squ
 
                     ivPlayer.apply {
                         Glide.with(context)
-                            .asBitmap()
                             .load(item.imagePath)
-                            .skipMemoryCache(true)
                             .placeholder(circularProgressDrawable)
                             .into(this)
                     }

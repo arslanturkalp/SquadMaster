@@ -16,6 +16,7 @@
         android:backgroundTint="@color/green_two"
         android:padding="16dp"
         android:visibility="gone"
+        tools:visibility="visible"
         app:cardCornerRadius="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

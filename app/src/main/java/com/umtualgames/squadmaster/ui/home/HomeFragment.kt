@@ -1,5 +1,6 @@
 package com.umtualgames.squadmaster.ui.home
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.application.SessionManager.clearScore
 import com.umtualgames.squadmaster.application.SessionManager.clearWrongCount
+import com.umtualgames.squadmaster.application.SessionManager.getIsMusicOpen
 import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
@@ -29,6 +31,8 @@ import com.umtualgames.squadmaster.ui.game.GameActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
+import com.umtualgames.squadmaster.utils.BackgroundSoundService
+import com.umtualgames.squadmaster.utils.setVisible
 import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -55,10 +59,19 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         rotateBall()
         setupObservers()
 
+        if (getIsMusicOpen()) {
+            requireContext().apply { this.startService(Intent(this, BackgroundSoundService::class.java)) }
+        }
+
         askNotificationPermission()
 
         if (!isAdminUser()) {
+            binding.apply {
+                cvScore.setVisible()
+            }
             viewModel.getUserPoint(getUserID())
+        } else {
+            dismissProgress()
         }
 
         with(binding) {

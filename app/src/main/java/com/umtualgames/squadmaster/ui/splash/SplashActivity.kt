@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
@@ -39,7 +37,7 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        checkLanguage(this)
+        checkLanguage(this, this)
         setupObservers()
         rotateBall()
 
@@ -105,9 +103,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun goToStart() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(StartActivity.createIntent(false, this))
-        }, 500)
+        startActivity(StartActivity.createIntent(false, this))
     }
 
     companion object {

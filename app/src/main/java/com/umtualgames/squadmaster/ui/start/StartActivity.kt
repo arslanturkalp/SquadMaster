@@ -37,7 +37,11 @@ import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.register.RegisterActivity
 import com.umtualgames.squadmaster.ui.settings.SettingsFragment
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
-import com.umtualgames.squadmaster.utils.*
+import com.umtualgames.squadmaster.utils.addOnBackPressedListener
+import com.umtualgames.squadmaster.utils.getDataExtra
+import com.umtualgames.squadmaster.utils.setPortraitMode
+import com.umtualgames.squadmaster.utils.setVisibility
+import com.umtualgames.squadmaster.utils.showAlertDialogTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,7 +77,7 @@ class StartActivity : BaseActivity() {
         if (getUserName() != "" && getPassword() != "") {
             if (!intent.getDataExtra<Boolean>(EXTRAS_FROM_GUEST)) {
                 binding.apply { setVisibility(View.GONE, tvLogo, btnLogin, btnLoginAsGuest, btnGoogleSignIn, btnSignUp, tvOr, tvDontHaveAnAccount) }
-                viewModel.signIn(com.umtualgames.squadmaster.domain.entities.requests.LoginRequest(username = getUserName(), password = getPassword()))
+                viewModel.signIn(LoginRequest(username = getUserName(), password = getPassword()))
             }
         }
 
@@ -88,13 +92,13 @@ class StartActivity : BaseActivity() {
                     negativeButtonTitle = getString(R.string.yes),
                     positiveButtonTitle = getString(R.string.no),
                     onNegativeButtonClick = {
-                        viewModel.signIn(com.umtualgames.squadmaster.domain.entities.requests.LoginRequest(username = ADMIN_USER, password = ADMIN_PASSWORD))
+                        viewModel.signIn(LoginRequest(username = ADMIN_USER, password = ADMIN_PASSWORD))
                         updateUserName(ADMIN_USER)
                         updatePassword(ADMIN_PASSWORD)
                     })
             }
             btnGoogleSignIn.setOnClickListener {
-                viewModel.loginAdmin(com.umtualgames.squadmaster.domain.entities.requests.LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
+                viewModel.loginAdmin(LoginRequest(ADMIN_USER, ADMIN_PASSWORD))
             }
         }
     }

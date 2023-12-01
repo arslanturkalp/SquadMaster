@@ -10,9 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.umtualgames.squadmaster.databinding.RowLayoutLeagueBinding
 import com.umtualgames.squadmaster.domain.entities.responses.item.League
-import com.umtualgames.squadmaster.utils.setGone
 import com.umtualgames.squadmaster.utils.setVisibility
-import com.umtualgames.squadmaster.utils.setVisible
 import javax.inject.Inject
 
 class LeaguesAdapter @Inject constructor(private val onClick: (League) -> Unit, private val onLockedClick: (League) -> Unit) : RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder>() {
@@ -40,8 +38,8 @@ class LeaguesAdapter @Inject constructor(private val onClick: (League) -> Unit, 
 
                 if (item.isLocked) {
                     ivLeague.alpha = 0.1f
+                    tvLeagueName.alpha = 0.1f
                     setVisibility(View.VISIBLE, ivLocked, llPoint)
-                    tvLeagueName.setGone()
                     binding.cvCard.setOnClickListener {
                         onLockedClick.invoke(item)
                     }
@@ -50,8 +48,8 @@ class LeaguesAdapter @Inject constructor(private val onClick: (League) -> Unit, 
                     }
                 } else {
                     ivLeague.alpha = 1f
+                    tvLeagueName.alpha = 1f
                     setVisibility(View.INVISIBLE, ivLocked, llPoint)
-                    tvLeagueName.setVisible()
                     binding.cvCard.setOnClickListener {
                         onClick.invoke(item)
                     }

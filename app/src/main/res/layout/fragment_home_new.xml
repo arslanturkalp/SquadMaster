@@ -26,11 +26,13 @@
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/green_two"
                 android:padding="16dp"
+                android:visibility="gone"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="@color/white"
-                app:strokeWidth="1dp">
+                app:strokeWidth="1dp"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -111,9 +113,9 @@
                 android:id="@+id/llLogo"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:orientation="horizontal"
                 android:layout_marginTop="64dp"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@id/cvStart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

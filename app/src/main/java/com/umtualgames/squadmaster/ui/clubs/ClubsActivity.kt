@@ -27,6 +27,7 @@ import com.umtualgames.squadmaster.ui.squad.SquadActivity
 import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.setPortraitMode
 import com.umtualgames.squadmaster.utils.setVisible
+import com.umtualgames.squadmaster.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -130,11 +131,11 @@ class ClubsActivity : BaseActivity() {
 
         if (clubs.all { it.isPassed }) {
             val league = intent.getDataExtra<League>(EXTRAS_LEAGUE)
-            AnswerFragment.newInstance(league.name, league.imagePath, isAllClubsFinished = true).show(supportFragmentManager, "")
+            AnswerFragment.newInstance(league.name, league.imagePath, isAllClubsFinished = true).show(this)
         }
 
         if (levelPass && !clubs.all { it.isPassed }) {
-            AnswerFragment.newInstance(lastLockedClub!!.name, lastLockedClub!!.imagePath!!, isUnlockedClub = true).show(supportFragmentManager, "")
+            AnswerFragment.newInstance(lastLockedClub!!.name, lastLockedClub!!.imagePath!!, isUnlockedClub = true).show(this)
         }
 
         if (clubs.last().isPassed) {

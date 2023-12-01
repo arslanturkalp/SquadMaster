@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.umtualgames.squadmaster.R
 import com.umtualgames.squadmaster.data.entities.models.Result
-import com.umtualgames.squadmaster.di.Repository
 import com.umtualgames.squadmaster.domain.entities.requests.LoginRequest
 import com.umtualgames.squadmaster.domain.entities.responses.loginresponses.LoginResponse
 import com.umtualgames.squadmaster.domain.usecases.LoginUseCase
