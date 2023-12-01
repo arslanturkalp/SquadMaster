@@ -16,12 +16,7 @@ class SquadMasterApp : Application() {
         Hawk.init(instance).build()
         MobileAds.initialize(this)
 
-        OneSignal.initWithContext(this)
-        OneSignal.setAppId(ONESIGNAL_APP_ID)
-    }
-
-    fun getContext(): Context {
-        return applicationContext
+        OneSignal.initWithContext(this, ONESIGNAL_APP_ID)
     }
 
     override fun attachBaseContext(base: Context) {
