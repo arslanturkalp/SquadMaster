@@ -40,6 +40,7 @@ import com.umtualgames.squadmaster.application.SessionManager.getRefreshToken
 import com.umtualgames.squadmaster.application.SessionManager.getScore
 import com.umtualgames.squadmaster.application.SessionManager.getUserID
 import com.umtualgames.squadmaster.application.SessionManager.getWrongCount
+import com.umtualgames.squadmaster.application.SessionManager.isAdminUser
 import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.updateIsShowedNumber
 import com.umtualgames.squadmaster.application.SessionManager.updateRefreshToken
@@ -205,7 +206,7 @@ class GameActivity : BaseActivity() {
                             is Result.Loading -> showProgressDialog()
                             is Result.Success -> {
                                 dismissProgressDialog()
-                                GameOverFragment.apply { newInstance(score = it.body?.data?.lastPoint!!).show(this@GameActivity) }
+                                GameOverFragment.apply { newInstance(score = it.body?.data?.lastPoint!!).showAllowingStateLoss(this@GameActivity) }
                                 if (mInterstitialAd != null) {
                                     mInterstitialAd?.show(this@GameActivity)
                                 }
@@ -439,7 +440,12 @@ class GameActivity : BaseActivity() {
     private fun navigateToYellowCard() = YellowCardFragment().show(this@GameActivity)
 
     private fun navigateToGameOver(score: Int) {
-        viewModel.updatePoint(UpdatePointRequest(getUserID(), score))
+        if (isAdminUser()) {
+            GameOverFragment.apply { newInstance(score = score).showAllowingStateLoss(this@GameActivity) }
+        } else {
+            viewModel.updatePoint(UpdatePointRequest(getUserID(), score))
+        }
+
     }
 
     private fun loadAds() {

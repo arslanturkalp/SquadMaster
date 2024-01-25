@@ -5,7 +5,6 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
     id("com.google.dagger.hilt.android")
 }
 
@@ -17,8 +16,8 @@ android {
         applicationId = "com.umtualgames.squadmaster"
         minSdk = 23
         targetSdk = 34
-        versionCode = 31
-        versionName = "1.5"
+        versionCode = 32
+        versionName = "1.5.1"
 
         multiDexEnabled = true
 
@@ -43,6 +42,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -84,11 +84,9 @@ dependencies {
     implementation(libs.carouselrecyclerview)
     implementation(libs.bundles.network)
     implementation(libs.billing)
-
-    //Analytics
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-perf-ktx")
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.perf)
 
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
