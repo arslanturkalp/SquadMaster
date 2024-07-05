@@ -219,7 +219,7 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext(), false))
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext()))
 
     private fun showProgress() {
         binding.swipeRefreshLayout.isRefreshing = true
@@ -244,9 +244,6 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    override fun onRefresh() {
-        viewModel.getUserPoint(getUserID())
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -256,5 +253,9 @@ class HomeFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+    }
+
+    override fun onRefresh() {
+        viewModel.getUserPoint(getUserID())
     }
 }

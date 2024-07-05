@@ -17,7 +17,7 @@
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-5776386569149871/3736681362" />
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/svScore"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -170,7 +170,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/llShowScore"

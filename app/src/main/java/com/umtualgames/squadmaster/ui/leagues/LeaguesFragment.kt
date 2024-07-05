@@ -304,7 +304,7 @@ class LeaguesFragment : BaseFragment(), OnUserEarnedRewardListener {
         }
     }
 
-    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext(), false))
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext()))
 
     private fun openClubs(league: League) {
         context?.startActivity((ClubsActivity.createIntent(context, league)))

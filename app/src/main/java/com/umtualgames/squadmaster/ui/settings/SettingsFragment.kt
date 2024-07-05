@@ -141,7 +141,7 @@ class SettingsFragment : BaseBottomSheetDialogFragment() {
         navigateToSplash()
     }
 
-    private fun navigateToSplash(isFromChangeLanguage: Boolean = true) {
-        startActivity(SplashActivity.createIntent(requireContext(), isFromChangeLanguage))
+    private fun navigateToSplash() {
+        startActivity(SplashActivity.createIntent(requireContext()))
     }
 }

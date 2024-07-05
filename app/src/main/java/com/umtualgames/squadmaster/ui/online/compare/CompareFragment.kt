@@ -142,7 +142,7 @@ class CompareFragment : BaseBottomSheetDialogFragment(), OnUserEarnedRewardListe
 
                 is CompareViewState.ReturnSplashState -> {
                     dismissProgressDialog()
-                    startActivity(SplashActivity.createIntent(requireContext(), false))
+                    startActivity(SplashActivity.createIntent(requireContext()))
                 }
 
                 is CompareViewState.UpdateState -> {

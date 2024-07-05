@@ -183,7 +183,7 @@ class ScoreFragment : BaseFragment() {
         }
     }
 
-    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext(), false))
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(requireContext()))
 
     private fun setupRecyclerViews() {
         binding.rvPoints.apply {

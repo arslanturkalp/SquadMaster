@@ -108,11 +108,9 @@ class SplashActivity : BaseActivity() {
 
     companion object {
 
-        private const val EXTRAS_IS_FROM_CHANGE_LANGUAGE = "EXTRAS_IS_FROM_CHANGE_LANGUAGE"
 
-        fun createIntent(context: Context, isFromChangeLanguage: Boolean = false): Intent {
+        fun createIntent(context: Context): Intent {
             return Intent(context, SplashActivity::class.java).apply {
-                putExtra(EXTRAS_IS_FROM_CHANGE_LANGUAGE, isFromChangeLanguage)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }

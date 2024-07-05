@@ -20,6 +20,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
 
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5776386569149871~4179271161" />

@@ -31,6 +31,7 @@ import com.umtualgames.squadmaster.application.SessionManager.updateUserID
 import com.umtualgames.squadmaster.application.SessionManager.updateUserName
 import com.umtualgames.squadmaster.databinding.ActivityStartBinding
 import com.umtualgames.squadmaster.domain.entities.requests.LoginRequest
+import com.umtualgames.squadmaster.domain.entities.requests.RegisterRequest
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.login.LoginActivity
 import com.umtualgames.squadmaster.ui.main.MainActivity
@@ -124,7 +125,7 @@ class StartActivity : BaseActivity() {
             val account = completedTask.getResult(ApiException::class.java)
             val userName = account.email.orEmpty().substringBefore("@").lowercase()
             viewModel.register(
-                com.umtualgames.squadmaster.domain.entities.requests.RegisterRequest(
+                RegisterRequest(
                     name = account.givenName.orEmpty(),
                     surname = account.familyName.orEmpty(),
                     username = userName,
@@ -160,7 +161,7 @@ class StartActivity : BaseActivity() {
                     state.message?.let { showAlertDialogTheme(title = getString(R.string.warning), contentMessage = it) }
                     clearUserName()
                     clearPassword()
-                    startActivity(SplashActivity.createIntent(this, false))
+                    startActivity(SplashActivity.createIntent(this))
                 }
                 is StartViewState.ErrorState -> {
                     dismissProgressDialog()

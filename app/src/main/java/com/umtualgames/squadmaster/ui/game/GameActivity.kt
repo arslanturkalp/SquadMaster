@@ -7,7 +7,11 @@ import android.media.AudioManager.RINGER_MODE_NORMAL
 import android.media.AudioManager.RINGER_MODE_SILENT
 import android.media.AudioManager.RINGER_MODE_VIBRATE
 import android.media.MediaPlayer
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
@@ -22,7 +26,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.flexbox.*
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -60,8 +68,19 @@ import com.umtualgames.squadmaster.ui.gameover.GameOverFragment
 import com.umtualgames.squadmaster.ui.main.MainActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.ui.yellowcard.YellowCardFragment
-import com.umtualgames.squadmaster.utils.*
 import com.umtualgames.squadmaster.utils.adapter.PotentialAnswersAdapter
+import com.umtualgames.squadmaster.utils.addOnBackPressedListener
+import com.umtualgames.squadmaster.utils.ifContains
+import com.umtualgames.squadmaster.utils.ifExists10Number
+import com.umtualgames.squadmaster.utils.ifTwoBack
+import com.umtualgames.squadmaster.utils.ifTwoWinger
+import com.umtualgames.squadmaster.utils.setOpacity
+import com.umtualgames.squadmaster.utils.setPortraitMode
+import com.umtualgames.squadmaster.utils.setVisibility
+import com.umtualgames.squadmaster.utils.setVisible
+import com.umtualgames.squadmaster.utils.show
+import com.umtualgames.squadmaster.utils.showAlertDialogTheme
+import com.umtualgames.squadmaster.utils.showAllowingStateLoss
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -88,7 +107,6 @@ class GameActivity : BaseActivity() {
         setContentView(binding.root)
 
         setPortraitMode()
-        preventScreenshot()
         setStatusBarColor()
         clearUnknownAnswer()
         clearIsShowedFlag()
@@ -141,8 +159,6 @@ class GameActivity : BaseActivity() {
             statusBarColor = ContextCompat.getColor(this@GameActivity, R.color.pitch_green)
         }
     }
-
-    private fun preventScreenshot() = window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
     private fun setupRecyclerViews() {
         with(binding) {
@@ -248,7 +264,7 @@ class GameActivity : BaseActivity() {
     }
 
     private fun returnToSplash() {
-        startActivity(SplashActivity.createIntent(this, false))
+        startActivity(SplashActivity.createIntent(this))
     }
 
     private fun backToMainMenu() {

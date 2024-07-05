@@ -103,7 +103,7 @@
     <string name="club_unlocked">Club Unlocked</string>
     <string name="all_clubs_finished">All Clubs Passed In This Tournament</string>
 
-    <string name="need_point">You need %2$s points to unlock %1$s. You can earn point by play main game mode.</string>
+    <string name="need_point">You need %2$d points to unlock %1$s. You can earn point by play main game mode.</string>
     <string name="watch_and_earn">You can also earn 50 points by watching ads.</string>
     <string name="watch_ad">Earn 50 Point</string>
 

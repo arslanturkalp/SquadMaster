@@ -229,7 +229,7 @@ class OnlineActivity : BaseActivity(), LifecycleObserver {
 
                 is OnlineViewState.ReturnSplashState -> {
                     dismissProgressDialog()
-                    startActivity(SplashActivity.createIntent(this, false))
+                    startActivity(SplashActivity.createIntent(this))
                 }
 
                 is OnlineViewState.UpdateState -> {

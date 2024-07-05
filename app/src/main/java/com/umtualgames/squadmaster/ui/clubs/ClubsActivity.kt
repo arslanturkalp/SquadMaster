@@ -123,7 +123,7 @@ class ClubsActivity : BaseActivity() {
         }
     }
 
-    private fun returnToSplash() = startActivity(SplashActivity.createIntent(this, false))
+    private fun returnToSplash() = startActivity(SplashActivity.createIntent(this))
 
     private fun showClubs(clubs: List<Club>, levelPass: Boolean) {
 

@@ -24,7 +24,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.umtualgames.squadmaster.R
-import com.umtualgames.squadmaster.utils.adapter.PotentialAnswersAdapter
 import com.umtualgames.squadmaster.application.Constants.AD_UNIT_ID_SQUAD
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedFlag
 import com.umtualgames.squadmaster.application.SessionManager.clearIsShowedNumber
@@ -51,6 +50,7 @@ import com.umtualgames.squadmaster.ui.answer.AnswerFragment
 import com.umtualgames.squadmaster.ui.base.BaseActivity
 import com.umtualgames.squadmaster.ui.splash.SplashActivity
 import com.umtualgames.squadmaster.utils.LangUtils.Companion.checkLanguage
+import com.umtualgames.squadmaster.utils.adapter.PotentialAnswersAdapter
 import com.umtualgames.squadmaster.utils.getDataExtra
 import com.umtualgames.squadmaster.utils.ifContains
 import com.umtualgames.squadmaster.utils.ifExists10Number
@@ -93,7 +93,6 @@ class SquadActivity : BaseActivity() {
         checkLanguage(this, this)
         setStatusBarColor()
         setPortraitMode()
-        preventScreenshot()
         clearUnknownAnswer()
         clearIsShowedFlag()
         clearIsShowedNumber()
@@ -143,8 +142,6 @@ class SquadActivity : BaseActivity() {
             statusBarColor = ContextCompat.getColor(this@SquadActivity, R.color.pitch_green)
         }
     }
-
-    private fun preventScreenshot() = window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
 
     private fun setupRecyclerViews() {
         with(binding) {
@@ -287,7 +284,7 @@ class SquadActivity : BaseActivity() {
     }
 
     private fun returnToSplash() {
-        startActivity(SplashActivity.createIntent(this, false))
+        startActivity(SplashActivity.createIntent(this))
     }
 
     private fun setScore(point: Int?) {

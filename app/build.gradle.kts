@@ -17,7 +17,7 @@ android {
         minSdk = 23
         targetSdk = 34
         versionCode = 32
-        versionName = "1.5.1"
+        versionName = "1.6"
 
         multiDexEnabled = true
 
@@ -87,7 +87,5 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.perf)
-
-    //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation(platform(libs.firebase.bom))
 }

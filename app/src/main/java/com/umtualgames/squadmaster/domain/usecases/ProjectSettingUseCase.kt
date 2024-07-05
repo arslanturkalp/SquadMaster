@@ -6,6 +6,7 @@ import com.umtualgames.squadmaster.domain.entities.responses.userpointresponses.
 import com.umtualgames.squadmaster.domain.repository.RepositoryNew
 import javax.inject.Inject
 
-class ProjectSettingUseCase @Inject constructor(private val repository: RepositoryNew) : BaseUseCase<Any, ProjectSettingsResponse>() {
+class ProjectSettingUseCase @Inject constructor(private val repository: RepositoryNew) :
+    BaseUseCase<Any, ProjectSettingsResponse>() {
     override suspend fun getData(params: Any?) = repository.getProjectSettings()
 }
