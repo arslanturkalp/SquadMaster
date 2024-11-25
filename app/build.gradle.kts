@@ -10,14 +10,14 @@ plugins {
 
 android {
     namespace = "com.umtualgames.squadmaster"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.umtualgames.squadmaster"
         minSdk = 23
-        targetSdk = 34
-        versionCode = 32
-        versionName = "1.6"
+        targetSdk = 35
+        versionCode = 34
+        versionName = "1.6.1"
 
         multiDexEnabled = true
 
@@ -87,5 +87,6 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.perf)
+    implementation(libs.unityads)
     implementation(platform(libs.firebase.bom))
 }
