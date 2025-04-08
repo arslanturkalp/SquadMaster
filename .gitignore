@@ -89,3 +89,7 @@ app/src/main/java/com/umtualgames/squadmaster/application/Constants.kt
 .idea/misc.xml
 .idea/kotlinc.xml
 .idea/compiler.xml
+
+# Other 
+app/src/main/java/com/umtualgames/squadmaster/application/Constants.kt
+
