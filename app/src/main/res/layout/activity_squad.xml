@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/football_pitch"
+    android:paddingTop="30dp"
     android:visibility="visible">
 
     <com.google.android.material.card.MaterialCardView
@@ -282,8 +283,8 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/green_two"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_football_jersey"
                 app:fabSize="normal"
+                app:srcCompat="@drawable/ic_football_jersey"
                 app:tint="@null" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -324,11 +325,11 @@
         android:layout_above="@id/cdAnswer"
         android:layout_centerHorizontal="true"
         android:background="@drawable/bg_green_with_radius_ten_not_border"
+        android:fontFamily="@font/text_me_one"
         android:padding="2dp"
         android:text="@string/select_answer"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:fontFamily="@font/text_me_one"
         android:textSize="14sp"
         android:visibility="visible" />
 
@@ -354,20 +355,20 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
-            tools:visibility="gone"
-            tools:listitem="@layout/row_layout_player" />
+            tools:listitem="@layout/row_layout_player"
+            tools:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvLevelPassed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:fontFamily="@font/text_me_one"
-            android:visibility="gone"
             android:padding="16dp"
-            tools:visibility="visible"
+            android:text="@string/level_is_passed_description"
+            android:textColor="@color/white"
             android:textSize="16sp"
-            android:text="@string/level_is_passed_description" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </com.google.android.material.card.MaterialCardView>
 

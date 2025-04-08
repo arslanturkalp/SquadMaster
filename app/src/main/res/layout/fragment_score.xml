@@ -28,7 +28,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical">
+            android:paddingBottom="16dp"
+            android:orientation="vertical"
+            android:paddingTop="30dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cvScore"
